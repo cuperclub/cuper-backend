@@ -1,0 +1,2 @@
+class TransactionInputsController < ApplicationController
+end

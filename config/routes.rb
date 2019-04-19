@@ -1,4 +1,11 @@
 Rails.application.routes.draw do
+  resources :transaction_outputs
+  resources :transaction_inputs
+  resources :promotions
+  resources :offices
+  resources :categories
+  resources :companies
+  resources :employees
   root to: redirect("/apipie")
   apipie
   mount_devise_token_auth_for 'User', at: 'auth'
