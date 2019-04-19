@@ -44,6 +44,8 @@ GEM
       tzinfo (~> 1.1)
     addressable (2.6.0)
       public_suffix (>= 2.0.2, < 4.0)
+    apipie-rails (0.5.15)
+      rails (>= 4.1)
     arel (9.0.0)
     bcrypt (3.1.12)
     bootsnap (1.4.3)
@@ -224,6 +226,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  apipie-rails
   bootsnap (>= 1.1.0)
   byebug
   capybara
