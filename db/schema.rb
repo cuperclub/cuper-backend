@@ -39,6 +39,10 @@ ActiveRecord::Schema.define(version: 2019_04_21_022313) do
   create_table "offices", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "name"
+    t.string "email"
+    t.string "address"
+    t.boolean "active", default: false
   end
 
   create_table "promotions", force: :cascade do |t|
