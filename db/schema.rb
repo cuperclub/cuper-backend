@@ -48,6 +48,16 @@ ActiveRecord::Schema.define(version: 2019_04_21_022313) do
   create_table "promotions", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "title"
+    t.string "description"
+    t.string "terms"
+    t.string "image"
+    t.string "background"
+    t.integer "totalRewards", default: 0
+    t.integer "pointsRequired", default: 0
+    t.datetime "startAt"
+    t.datetime "endAt"
+    t.boolean "unlimited", default: false
   end
 
   create_table "transaction_inputs", force: :cascade do |t|
