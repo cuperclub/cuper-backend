@@ -12,4 +12,10 @@
 #
 
 class Employee < ApplicationRecord
+
+  begin :relationships
+    belongs_to :user
+    belongs_to :company
+    has_many :transaction_inputs
+  end
 end

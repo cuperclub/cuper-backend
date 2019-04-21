@@ -12,4 +12,10 @@
 #
 
 class TransactionInput < ApplicationRecord
+
+  begin :relationships
+    belongs_to :user
+    belongs_to :employee
+  end
+
 end

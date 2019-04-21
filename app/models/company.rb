@@ -8,4 +8,9 @@
 #
 
 class Company < ApplicationRecord
+
+  begin :relationships
+    has_many :employees
+  end
+
 end
