@@ -7,6 +7,7 @@
 #  updated_at    :datetime         not null
 #  points        :float
 #  invoiceNumber :string
+#  promotion_id  :bigint(8)
 #
 
 require 'rails_helper'

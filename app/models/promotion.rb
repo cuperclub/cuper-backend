@@ -22,5 +22,6 @@ class Promotion < ApplicationRecord
   
   begin :relationships
     belongs_to :office
+    has_many :transaction_outputs
   end
 end
