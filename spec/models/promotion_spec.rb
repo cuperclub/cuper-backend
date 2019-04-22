@@ -15,6 +15,7 @@
 #  startAt        :datetime
 #  endAt          :datetime
 #  unlimited      :boolean          default(FALSE)
+#  office_id      :bigint(8)
 #
 
 require 'rails_helper'

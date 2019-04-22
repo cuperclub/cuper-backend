@@ -15,7 +15,12 @@
 #  startAt        :datetime
 #  endAt          :datetime
 #  unlimited      :boolean          default(FALSE)
+#  office_id      :bigint(8)
 #
 
 class Promotion < ApplicationRecord
+  
+  begin :relationships
+    belongs_to :office
+  end
 end

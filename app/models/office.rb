@@ -12,4 +12,8 @@
 #
 
 class Office < ApplicationRecord
+
+  begin :relationships
+    has_many :promotions
+  end
 end

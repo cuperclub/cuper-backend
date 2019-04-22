@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_04_22_195134) do
+ActiveRecord::Schema.define(version: 2019_04_22_195925) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -58,6 +58,8 @@ ActiveRecord::Schema.define(version: 2019_04_22_195134) do
     t.datetime "startAt"
     t.datetime "endAt"
     t.boolean "unlimited", default: false
+    t.bigint "office_id"
+    t.index ["office_id"], name: "index_promotions_on_office_id"
   end
 
   create_table "transaction_inputs", force: :cascade do |t|
@@ -113,4 +115,5 @@ ActiveRecord::Schema.define(version: 2019_04_22_195134) do
   add_foreign_key "employees", "users"
   add_foreign_key "transaction_inputs", "employees"
   add_foreign_key "transaction_inputs", "users"
+  add_foreign_key "promotions", "offices"
 end
