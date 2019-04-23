@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_04_22_201329) do
+ActiveRecord::Schema.define(version: 2019_04_23_154544) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -18,11 +18,23 @@ ActiveRecord::Schema.define(version: 2019_04_22_201329) do
   create_table "categories", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "name"
+    t.integer "points_per_dollar", default: 1
   end
 
   create_table "companies", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "ruc"
+    t.string "economic_activity"
+    t.string "contributor_type"
+    t.string "legal_representative"
+    t.string "business_name"
+    t.string "logo"
+    t.string "slogan"
+    t.boolean "active", default: false
+    t.bigint "user_id"
+    t.index ["user_id"], name: "index_companies_on_user_id"
   end
 
   create_table "employees", force: :cascade do |t|
@@ -113,6 +125,7 @@ ActiveRecord::Schema.define(version: 2019_04_22_201329) do
     t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true
   end
 
+  add_foreign_key "companies", "users"
   add_foreign_key "employees", "companies"
   add_foreign_key "employees", "users"
   add_foreign_key "promotions", "offices"
