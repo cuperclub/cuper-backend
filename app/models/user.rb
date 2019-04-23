@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-
 # == Schema Information
 #
 # Table name: users
@@ -28,8 +27,8 @@
 #  tokens                 :json
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
+#  nationalId             :string
 #
-
 
 class User < ActiveRecord::Base
   # Include default devise modules. Others available are:

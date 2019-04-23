@@ -26,6 +26,7 @@
 #  tokens                 :json
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
+#  nationalId             :string
 #
 
 require 'rails_helper'

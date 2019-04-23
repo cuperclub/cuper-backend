@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_04_20_000728) do
+ActiveRecord::Schema.define(version: 2019_04_21_022313) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -38,6 +38,12 @@ ActiveRecord::Schema.define(version: 2019_04_20_000728) do
   create_table "employees", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "user_id"
+    t.bigint "company_id"
+    t.string "role"
+    t.boolean "active", default: false
+    t.index ["company_id"], name: "index_employees_on_company_id"
+    t.index ["user_id"], name: "index_employees_on_user_id"
   end
 
   create_table "offices", force: :cascade do |t|
@@ -53,6 +59,12 @@ ActiveRecord::Schema.define(version: 2019_04_20_000728) do
   create_table "transaction_inputs", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "user_id"
+    t.bigint "employee_id"
+    t.float "points"
+    t.string "invoiceNumber"
+    t.index ["employee_id"], name: "index_transaction_inputs_on_employee_id"
+    t.index ["user_id"], name: "index_transaction_inputs_on_user_id"
   end
 
   create_table "transaction_outputs", force: :cascade do |t|
@@ -84,10 +96,15 @@ ActiveRecord::Schema.define(version: 2019_04_20_000728) do
     t.json "tokens"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "nationalId"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true
   end
 
+  add_foreign_key "employees", "companies"
+  add_foreign_key "employees", "users"
+  add_foreign_key "transaction_inputs", "employees"
+  add_foreign_key "transaction_inputs", "users"
 end
