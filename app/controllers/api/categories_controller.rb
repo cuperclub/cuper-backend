@@ -1,6 +1,13 @@
 module Api
   class CategoriesController < BaseController
 
+    def index
+      categories = Category.all
+      render :categories,
+            status: :created,
+            locals: { categories: categories }
+    end
+
     def_param_group :category do
       param :name, String,
             required: true
