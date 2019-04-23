@@ -39,5 +39,8 @@ class User < ActiveRecord::Base
 
   begin :relationships
     has_one :company
+    has_one :employee
+    has_many :transaction_inputs
   end
+
 end

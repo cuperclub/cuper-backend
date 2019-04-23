@@ -20,6 +20,7 @@ class Company < ApplicationRecord
 
   begin :relationships
     belongs_to :user
+    has_many :employees
   end
 
   begin :validations
