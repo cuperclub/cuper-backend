@@ -54,11 +54,13 @@ company = Company.create(
 Employee.create(
   user: cashier,
   company: company,
-  role: 'cashier'
+  role: 'cashier',
+  active: 'true'
 )
 
 Employee.create(
   user: partner,
   company: company,
-  role: 'partner'
+  role: 'partner',
+  active: 'true'
 )
