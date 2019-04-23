@@ -13,6 +13,7 @@
 #  logo                 :string
 #  slogan               :string
 #  active               :boolean          default(FALSE)
+#  user_id              :bigint(8)
 #
 
 FactoryBot.define do
