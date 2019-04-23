@@ -27,18 +27,38 @@ if Category.count == 0
   end
 end
 
-User.create(
-  email: 'krabs@example.com',
-  nickname: 'MrKrabs',
-  name: 'Mr. Krabs',
+partner = User.create(
+  email: 'partner@example.com',
+  nickname: 'partner',
+  name: 'Partner',
   password: "12345678"
 )
 
-Company.create(
+cashier = User.create(
+  email: 'cashier@example.com',
+  nickname: 'chasier',
+  name: 'Chasier',
+  password: "12345678"
+)
+
+company = Company.create(
   ruc: '9999999999',
   economic_activity: 'Restaurant',
   business_name: 'The Krusty krab.',
   legal_representative: "Mr. Krabs",
   slogan:"Come spend your money here!",
-  category_id: Category.first.id
+  category: Category.first
+  slogan:"Come spend your money here!"
+)
+
+Employee.create(
+  user: cashier,
+  company: company,
+  role: 'cashier'
+)
+
+Employee.create(
+  user: partner,
+  company: company,
+  role: 'partner'
 )
