@@ -35,8 +35,8 @@ module Api
       company = Company.new(company_params)
 
       if company.save
-        render :create,
-              status: :created, 
+        render :company,
+              status: :created,
               locals: { company: company }
       else
         render json: company.errors,
@@ -47,8 +47,9 @@ module Api
     def show
       company = Company.find(params[:id])
       if company
-        render json: company,
-              status: :accepted
+        render :company,
+                status: :accepted,
+                locals: { company: company }
       else
         render json: nil,
               status: :not_found
