@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_04_23_191922) do
+ActiveRecord::Schema.define(version: 2019_04_23_192819) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -92,8 +92,10 @@ ActiveRecord::Schema.define(version: 2019_04_23_191922) do
     t.string "invoiceNumber"
     t.bigint "promotion_id"
     t.bigint "employee_id"
+    t.bigint "user_id"
     t.index ["employee_id"], name: "index_transaction_outputs_on_employee_id"
     t.index ["promotion_id"], name: "index_transaction_outputs_on_promotion_id"
+    t.index ["user_id"], name: "index_transaction_outputs_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -135,4 +137,5 @@ ActiveRecord::Schema.define(version: 2019_04_23_191922) do
   add_foreign_key "transaction_inputs", "users"
   add_foreign_key "transaction_outputs", "employees"
   add_foreign_key "transaction_outputs", "promotions"
+  add_foreign_key "transaction_outputs", "users"
 end
