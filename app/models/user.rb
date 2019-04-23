@@ -41,6 +41,7 @@ class User < ActiveRecord::Base
     has_one :company
     has_one :employee
     has_many :transaction_inputs
+    has_many :transaction_outputs
   end
 
 end
