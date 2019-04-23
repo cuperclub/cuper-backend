@@ -8,10 +8,12 @@
 #  points        :float
 #  invoiceNumber :string
 #  promotion_id  :bigint(8)
+#  employee_id   :bigint(8)
 #
 
 class TransactionOutput < ApplicationRecord
   begin :relationships
     belongs_to :promotion
+    belongs_to :employee
   end
 end

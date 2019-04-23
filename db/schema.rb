@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_04_23_154544) do
+ActiveRecord::Schema.define(version: 2019_04_23_191922) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -91,6 +91,8 @@ ActiveRecord::Schema.define(version: 2019_04_23_154544) do
     t.float "points"
     t.string "invoiceNumber"
     t.bigint "promotion_id"
+    t.bigint "employee_id"
+    t.index ["employee_id"], name: "index_transaction_outputs_on_employee_id"
     t.index ["promotion_id"], name: "index_transaction_outputs_on_promotion_id"
   end
 
@@ -131,5 +133,6 @@ ActiveRecord::Schema.define(version: 2019_04_23_154544) do
   add_foreign_key "promotions", "offices"
   add_foreign_key "transaction_inputs", "employees"
   add_foreign_key "transaction_inputs", "users"
+  add_foreign_key "transaction_outputs", "employees"
   add_foreign_key "transaction_outputs", "promotions"
 end

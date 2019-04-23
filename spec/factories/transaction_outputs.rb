@@ -8,6 +8,7 @@
 #  points        :float
 #  invoiceNumber :string
 #  promotion_id  :bigint(8)
+#  employee_id   :bigint(8)
 #
 
 FactoryBot.define do
