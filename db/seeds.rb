@@ -27,7 +27,7 @@ if Category.count == 0
   end
 end
 
-krab = User.create(
+User.create(
   email: 'krabs@example.com',
   nickname: 'MrKrabs',
   name: 'Mr. Krabs',
@@ -40,5 +40,5 @@ Company.create(
   business_name: 'The Krusty krab.',
   legal_representative: "Mr. Krabs",
   slogan:"Come spend your money here!",
-  user_id: krab.id
+  category_id: Category.first.id
 )

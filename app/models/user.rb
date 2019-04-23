@@ -38,7 +38,6 @@ class User < ActiveRecord::Base
   include DeviseTokenAuth::Concerns::User
 
   begin :relationships
-    has_one :company
     has_one :employee
     has_many :transaction_inputs
   end
