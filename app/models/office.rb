@@ -9,11 +9,13 @@
 #  email      :string
 #  address    :string
 #  active     :boolean          default(FALSE)
+#  company_id :bigint(8)
 #
 
 class Office < ApplicationRecord
 
   begin :relationships
+    belongs_to :company
     has_many :promotions
   end
 end

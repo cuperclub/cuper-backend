@@ -21,6 +21,7 @@ class Company < ApplicationRecord
   begin :relationships
     belongs_to :user
     has_many :employees
+    has_many :offices
   end
 
   begin :validations

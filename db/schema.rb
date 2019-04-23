@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_04_23_192819) do
+ActiveRecord::Schema.define(version: 2019_04_23_193336) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -55,6 +55,8 @@ ActiveRecord::Schema.define(version: 2019_04_23_192819) do
     t.string "email"
     t.string "address"
     t.boolean "active", default: false
+    t.bigint "company_id"
+    t.index ["company_id"], name: "index_offices_on_company_id"
   end
 
   create_table "promotions", force: :cascade do |t|
@@ -132,6 +134,7 @@ ActiveRecord::Schema.define(version: 2019_04_23_192819) do
   add_foreign_key "companies", "users"
   add_foreign_key "employees", "companies"
   add_foreign_key "employees", "users"
+  add_foreign_key "offices", "companies"
   add_foreign_key "promotions", "offices"
   add_foreign_key "transaction_inputs", "employees"
   add_foreign_key "transaction_inputs", "users"
