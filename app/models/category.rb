@@ -10,4 +10,8 @@
 #
 
 class Category < ApplicationRecord
+
+  begin :relationships
+    has_many :companies
+  end
 end

@@ -14,6 +14,7 @@
 #  slogan               :string
 #  active               :boolean          default(FALSE)
 #  user_id              :bigint(8)
+#  category_id          :bigint(8)
 #
 
 require 'rails_helper'

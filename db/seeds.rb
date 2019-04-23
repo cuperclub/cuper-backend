@@ -12,6 +12,21 @@ User.create(
   password: "12345678"
 )
 
+if Category.count == 0
+  [
+    "Comida",
+    "Medicina",
+    "Electrodomesticos",
+    "Servicios profesionales",
+    "Floristeria"
+  ].each do |category_name|
+    Category.where(
+      name: category_name,
+      points_per_dollar: 1
+    ).first_or_create
+  end
+end
+
 krab = User.create(
   email: 'krabs@example.com',
   nickname: 'MrKrabs',

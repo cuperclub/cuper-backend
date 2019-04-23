@@ -14,11 +14,13 @@
 #  slogan               :string
 #  active               :boolean          default(FALSE)
 #  user_id              :bigint(8)
+#  category_id          :bigint(8)
 #
 
 class Company < ApplicationRecord
 
   begin :relationships
+    belongs_to :category
     belongs_to :user
     has_many :employees
   end
