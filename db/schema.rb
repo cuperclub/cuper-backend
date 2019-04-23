@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_04_21_022313) do
+ActiveRecord::Schema.define(version: 2019_04_22_201329) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -39,11 +39,27 @@ ActiveRecord::Schema.define(version: 2019_04_21_022313) do
   create_table "offices", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "name"
+    t.string "email"
+    t.string "address"
+    t.boolean "active", default: false
   end
 
   create_table "promotions", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "title"
+    t.string "description"
+    t.string "terms"
+    t.string "image"
+    t.string "background"
+    t.integer "totalRewards", default: 0
+    t.integer "pointsRequired", default: 0
+    t.datetime "startAt"
+    t.datetime "endAt"
+    t.boolean "unlimited", default: false
+    t.bigint "office_id"
+    t.index ["office_id"], name: "index_promotions_on_office_id"
   end
 
   create_table "transaction_inputs", force: :cascade do |t|
@@ -60,6 +76,10 @@ ActiveRecord::Schema.define(version: 2019_04_21_022313) do
   create_table "transaction_outputs", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.float "points"
+    t.string "invoiceNumber"
+    t.bigint "promotion_id"
+    t.index ["promotion_id"], name: "index_transaction_outputs_on_promotion_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -95,6 +115,8 @@ ActiveRecord::Schema.define(version: 2019_04_21_022313) do
 
   add_foreign_key "employees", "companies"
   add_foreign_key "employees", "users"
+  add_foreign_key "promotions", "offices"
   add_foreign_key "transaction_inputs", "employees"
   add_foreign_key "transaction_inputs", "users"
+  add_foreign_key "transaction_outputs", "promotions"
 end
