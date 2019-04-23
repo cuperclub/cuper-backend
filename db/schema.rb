@@ -115,8 +115,8 @@ ActiveRecord::Schema.define(version: 2019_04_22_201329) do
 
   add_foreign_key "employees", "companies"
   add_foreign_key "employees", "users"
+  add_foreign_key "promotions", "offices"
   add_foreign_key "transaction_inputs", "employees"
   add_foreign_key "transaction_inputs", "users"
-  add_foreign_key "promotions", "offices"
   add_foreign_key "transaction_outputs", "promotions"
 end
