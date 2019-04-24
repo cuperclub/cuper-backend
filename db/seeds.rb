@@ -51,8 +51,7 @@ company = Company.create(
   business_name: 'The Krusty krab.',
   legal_representative: "Mr. Krabs",
   slogan:"Come spend your money here!",
-  category: Category.first
-  slogan:"Come spend your money here!"
+  category: Category.first,
 )
 
 Employee.create(
