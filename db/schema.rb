@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_04_23_193336) do
+ActiveRecord::Schema.define(version: 2019_04_23_212107) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -33,8 +33,8 @@ ActiveRecord::Schema.define(version: 2019_04_23_193336) do
     t.string "logo"
     t.string "slogan"
     t.boolean "active", default: false
-    t.bigint "user_id"
-    t.index ["user_id"], name: "index_companies_on_user_id"
+    t.bigint "category_id"
+    t.index ["category_id"], name: "index_companies_on_category_id"
   end
 
   create_table "employees", force: :cascade do |t|
@@ -131,7 +131,7 @@ ActiveRecord::Schema.define(version: 2019_04_23_193336) do
     t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true
   end
 
-  add_foreign_key "companies", "users"
+  add_foreign_key "companies", "categories"
   add_foreign_key "employees", "companies"
   add_foreign_key "employees", "users"
   add_foreign_key "offices", "companies"

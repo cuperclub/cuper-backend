@@ -10,4 +10,14 @@
 #
 
 class Category < ApplicationRecord
+
+  begin :relationships
+    has_many :companies
+  end
+
+  begin :validations
+    validates :name,
+              :points_per_dollar,
+              presence: true
+  end
 end

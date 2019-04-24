@@ -12,7 +12,22 @@ User.create(
   password: "12345678"
 )
 
-krab = User.create(
+if Category.count == 0
+  [
+    "Comida",
+    "Medicina",
+    "Electrodomesticos",
+    "Servicios profesionales",
+    "Floristeria"
+  ].each do |category_name|
+    Category.where(
+      name: category_name,
+      points_per_dollar: 1
+    ).first_or_create
+  end
+end
+
+User.create(
   email: 'krabs@example.com',
   nickname: 'MrKrabs',
   name: 'Mr. Krabs',
@@ -25,5 +40,5 @@ Company.create(
   business_name: 'The Krusty krab.',
   legal_representative: "Mr. Krabs",
   slogan:"Come spend your money here!",
-  user_id: krab.id
+  category_id: Category.first.id
 )

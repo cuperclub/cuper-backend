@@ -13,13 +13,13 @@
 #  logo                 :string
 #  slogan               :string
 #  active               :boolean          default(FALSE)
-#  user_id              :bigint(8)
+#  category_id          :bigint(8)
 #
 
 class Company < ApplicationRecord
 
   begin :relationships
-    belongs_to :user
+    belongs_to :category
     has_many :employees
     has_many :offices
   end
@@ -27,6 +27,7 @@ class Company < ApplicationRecord
   begin :validations
     validates :ruc,
               :business_name,
+              :category_id,
               presence: true
   end
 end
