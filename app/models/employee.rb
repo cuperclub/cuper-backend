@@ -17,5 +17,6 @@ class Employee < ApplicationRecord
     belongs_to :user
     belongs_to :company
     has_many :transaction_inputs
+    has_many :transaction_outputs
   end
 end

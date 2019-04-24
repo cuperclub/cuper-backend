@@ -55,6 +55,8 @@ ActiveRecord::Schema.define(version: 2019_04_23_212107) do
     t.string "email"
     t.string "address"
     t.boolean "active", default: false
+    t.bigint "company_id"
+    t.index ["company_id"], name: "index_offices_on_company_id"
   end
 
   create_table "promotions", force: :cascade do |t|
@@ -91,7 +93,11 @@ ActiveRecord::Schema.define(version: 2019_04_23_212107) do
     t.float "points"
     t.string "invoiceNumber"
     t.bigint "promotion_id"
+    t.bigint "employee_id"
+    t.bigint "user_id"
+    t.index ["employee_id"], name: "index_transaction_outputs_on_employee_id"
     t.index ["promotion_id"], name: "index_transaction_outputs_on_promotion_id"
+    t.index ["user_id"], name: "index_transaction_outputs_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -128,8 +134,11 @@ ActiveRecord::Schema.define(version: 2019_04_23_212107) do
   add_foreign_key "companies", "categories"
   add_foreign_key "employees", "companies"
   add_foreign_key "employees", "users"
+  add_foreign_key "offices", "companies"
   add_foreign_key "promotions", "offices"
   add_foreign_key "transaction_inputs", "employees"
   add_foreign_key "transaction_inputs", "users"
+  add_foreign_key "transaction_outputs", "employees"
   add_foreign_key "transaction_outputs", "promotions"
+  add_foreign_key "transaction_outputs", "users"
 end
