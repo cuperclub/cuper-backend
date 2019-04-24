@@ -44,4 +44,9 @@ class User < ActiveRecord::Base
     has_many :transaction_outputs
   end
 
+  begin :validations
+    validates :email, presence: true, uniqueness: true
+    validates :nationalId, presence: true, uniqueness: true
+  end
+
 end

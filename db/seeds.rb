@@ -9,7 +9,8 @@ User.create(
   email: 'admin@example.com',
   nickname: 'admin',
   name: 'Admin User',
-  password: "12345678"
+  password: "12345678",
+  nationalId: '1234567890'
 )
 
 if Category.count == 0
@@ -31,14 +32,16 @@ partner = User.create(
   email: 'partner@example.com',
   nickname: 'partner',
   name: 'Partner',
-  password: "12345678"
+  password: "12345678",
+  nationalId: '1234567891'
 )
 
 cashier = User.create(
   email: 'cashier@example.com',
   nickname: 'chasier',
   name: 'Chasier',
-  password: "12345678"
+  password: "12345678",
+  nationalId: '1234567892'
 )
 
 company = Company.create(
