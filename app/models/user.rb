@@ -39,8 +39,14 @@ class User < ActiveRecord::Base
 
   begin :relationships
     has_one :employee
+    has_one :company, through: :employee
     has_many :transaction_inputs
     has_many :transaction_outputs
+  end
+
+  begin :validations
+    validates :email, presence: true, uniqueness: true
+    validates :nationalId, presence: true, uniqueness: true
   end
 
 end

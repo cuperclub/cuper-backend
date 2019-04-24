@@ -9,7 +9,8 @@ User.create(
   email: 'admin@example.com',
   nickname: 'admin',
   name: 'Admin User',
-  password: "12345678"
+  password: "12345678",
+  nationalId: '1234567890'
 )
 
 if Category.count == 0
@@ -27,18 +28,42 @@ if Category.count == 0
   end
 end
 
-User.create(
-  email: 'krabs@example.com',
-  nickname: 'MrKrabs',
-  name: 'Mr. Krabs',
-  password: "12345678"
+partner = User.create(
+  email: 'partner@example.com',
+  nickname: 'partner',
+  name: 'Partner',
+  password: "12345678",
+  nationalId: '1234567891'
 )
 
-Company.create(
+cashier = User.create(
+  email: 'cashier@example.com',
+  nickname: 'chasier',
+  name: 'Chasier',
+  password: "12345678",
+  nationalId: '1234567892'
+)
+
+
+company = Company.create(
   ruc: '9999999999',
   economic_activity: 'Restaurant',
   business_name: 'The Krusty krab.',
   legal_representative: "Mr. Krabs",
   slogan:"Come spend your money here!",
-  category_id: Category.first.id
+  category: Category.first,
+)
+
+Employee.create(
+  user: cashier,
+  company: company,
+  role: 'cashier',
+  active: 'true'
+)
+
+Employee.create(
+  user: partner,
+  company: company,
+  role: 'partner',
+  active: 'true'
 )

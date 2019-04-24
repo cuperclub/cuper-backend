@@ -19,15 +19,14 @@
 class Company < ApplicationRecord
 
   begin :relationships
-    belongs_to :category
     has_many :employees
+    has_many :users, through: :employees
     has_many :offices
+    belongs_to :category
   end
 
   begin :validations
-    validates :ruc,
-              :business_name,
-              :category_id,
-              presence: true
+    validates :ruc, presence: true, uniqueness: true
+    validates :business_name, :economic_activity, :legal_representative, :category_id, presence: true
   end
 end
