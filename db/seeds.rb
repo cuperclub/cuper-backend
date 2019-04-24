@@ -44,6 +44,7 @@ cashier = User.create(
   nationalId: '1234567892'
 )
 
+
 company = Company.create(
   ruc: '9999999999',
   economic_activity: 'Restaurant',

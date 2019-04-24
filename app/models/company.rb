@@ -23,6 +23,7 @@ class Company < ApplicationRecord
     has_many :employees
     has_many :users, through: :employees
     has_many :offices
+    belongs_to :category
   end
 
   begin :validations
