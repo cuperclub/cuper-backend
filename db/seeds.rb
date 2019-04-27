@@ -10,7 +10,8 @@ User.create(
   nickname: 'admin',
   name: 'Admin User',
   password: "12345678",
-  nationalId: '1234567890'
+  national_id: '1234567890',
+  is_admin: true
 )
 
 if Category.count == 0
@@ -33,7 +34,7 @@ partner = User.create(
   nickname: 'partner',
   name: 'Partner',
   password: "12345678",
-  nationalId: '1234567891'
+  national_id: '1234567891'
 )
 
 cashier = User.create(
@@ -41,7 +42,7 @@ cashier = User.create(
   nickname: 'chasier',
   name: 'Chasier',
   password: "12345678",
-  nationalId: '1234567892'
+  national_id: '1234567892'
 )
 
 

@@ -26,7 +26,8 @@
 #  tokens                 :json
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
-#  nationalId             :string
+#  national_id            :string
+#  is_admin               :boolean          default(FALSE)
 #
 
 FactoryBot.define do

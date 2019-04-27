@@ -3,5 +3,6 @@ json.call(
     :id,
     :name,
     :email,
-    :nationalId
+    :national_id,
+    :is_admin
   )
