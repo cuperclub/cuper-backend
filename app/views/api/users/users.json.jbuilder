@@ -1,7 +1,6 @@
-json.users do
-    json.array!(
-        users,
-        partial: "user",
-        as: :user
-    )
-end
+json.array!(
+    users,
+    partial: "user",
+    as: :user
+)
+
