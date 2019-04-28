@@ -1,5 +1,17 @@
 module Api
   class CategoriesController < BaseController
+    before_action :find_category,
+                  except: [:index, :create]
+
+    api :GET,
+        "/categories",
+        "Get all categories"
+    example %q{
+      "category":[{
+        "name":"Food",
+        "points_per_dollar":"2"
+      }]
+    }
 
     def index
       categories = Category.all
@@ -28,7 +40,6 @@ module Api
 
     def create
       category = Category.new(category_params)
-
       if category.save
         render :category,
               status: :created,
@@ -39,24 +50,56 @@ module Api
       end
     end
 
+    api :GET,
+        "/categories/:id",
+        "Get a category"
+    param :id, Integer, required: true
+    example %q{
+      "category":{
+        "name":"Food",
+        "points_per_dollar":"2"
+      }
+    }
+
     def show
-      category = Category.find(params[:id])
-      if category
+      render :category,
+              status: :accepted,
+              locals: { category: @category }
+    end
+
+    api :PUT,
+        "/categories/:id",
+        "Edit a category"
+    param :id, Integer, required: true
+    example %q{
+      "category":{
+        "name":"Food",
+        "points_per_dollar":"2"
+      }
+    }
+
+    def update
+      if @category.update(category_params)
         render :category,
                 status: :accepted,
-                locals: { category: category }
+                locals: { category: @category }
       else
-        render json: nil,
-              status: :not_found
+        render json: @category.errors,
+              status: :unprocessable_entity
       end
     end
 
     private
 
+    def find_category
+      @category = Category.find(params[:id])
+    end
+
     def category_params
       params.require(:category).permit(
         :name,
-        :points_per_dollar
+        :points_per_dollar,
+        :active
       )
     end
   end
