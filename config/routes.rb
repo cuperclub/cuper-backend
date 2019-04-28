@@ -18,5 +18,6 @@ Rails.application.routes.draw do
     end
     resources :companies,
               only: [:create, :update, :show]
+    resources :users
   end
 end
