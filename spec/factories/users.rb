@@ -31,7 +31,22 @@
 #
 
 FactoryBot.define do
+  # factory :user do
+
+  # end
+
   factory :user do
+
+    name { "user" }
+    email { "user@example.com" }
+    password { "123123123" }
+    national_id { "1" }
+
+    trait :admin do
+      email { "admin@example.com" }
+      national_id { "2" }
+      is_admin { true }
+    end
 
   end
 end
