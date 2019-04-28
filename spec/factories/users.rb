@@ -26,11 +26,27 @@
 #  tokens                 :json
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
-#  nationalId             :string
+#  national_id            :string
+#  is_admin               :boolean          default(FALSE)
 #
 
 FactoryBot.define do
+  # factory :user do
+
+  # end
+
   factory :user do
+
+    name { "user" }
+    email { "user@example.com" }
+    password { "123123123" }
+    national_id { "1" }
+
+    trait :admin do
+      email { "admin@example.com" }
+      national_id { "2" }
+      is_admin { true }
+    end
 
   end
 end

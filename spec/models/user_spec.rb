@@ -26,7 +26,8 @@
 #  tokens                 :json
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
-#  nationalId             :string
+#  national_id            :string
+#  is_admin               :boolean          default(FALSE)
 #
 
 require 'rails_helper'
@@ -34,6 +35,6 @@ require 'rails_helper'
 RSpec.describe User, type: :model do
   it "missing obligatory fields is invalid" do
     user = build(:user)
-    expect(user).to be_invalid
+    expect(user).to be_valid
   end
 end

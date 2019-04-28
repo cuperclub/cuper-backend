@@ -16,5 +16,6 @@ Rails.application.routes.draw do
     resources :categories
     resources :companies,
               only: [:create, :update, :show]
+    resources :users
   end
 end

@@ -27,7 +27,8 @@
 #  tokens                 :json
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
-#  nationalId             :string
+#  national_id            :string
+#  is_admin               :boolean          default(FALSE)
 #
 
 class User < ActiveRecord::Base
@@ -46,7 +47,7 @@ class User < ActiveRecord::Base
 
   begin :validations
     validates :email, presence: true, uniqueness: true
-    validates :nationalId, presence: true, uniqueness: true
+    validates :national_id, presence: true, uniqueness: true
   end
 
 end
