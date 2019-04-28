@@ -1,5 +1,7 @@
 module Api
   class CompaniesController < BaseController
+    before_action :find_company,
+                  except: [:create]
 
     def_param_group :user_company do
       param :ruc, String, required: true
@@ -33,7 +35,6 @@ module Api
 
     def create
       company = Company.new(company_params)
-
       if company.save
         render :company,
               status: :created,
@@ -44,19 +45,55 @@ module Api
       end
     end
 
+    api :GET,
+        "/companies/:id",
+        "Get a company"
+    param :id, Integer, required: true
+    example %q{
+      "company":{
+        "ruc":"5184135690",
+        "business_name":"The Krusty krab.",
+        "contributor_type":"Natural",
+        "economic_activity":"Restaurant",
+        "legal_representative":"Mr. Krabs",
+        "logo":null,
+        "slogan":"a cool slogan",
+      }
+    }
+
     def show
-      company = Company.find(params[:id])
-      if company
+      render :company,
+              status: :accepted,
+              locals: { company: @company }
+    end
+
+    api :PUT,
+        "/companies/:id",
+        "Edit a company"
+    param :id, Integer, required: true
+    example %q{
+      "company":{
+        "business_name":"The Krusty krab 2.",
+        "slogan":"My new cool slogan",
+      }
+    }
+
+    def update
+      if @company.update(company_params)
         render :company,
                 status: :accepted,
-                locals: { company: company }
+                locals: { company: @company }
       else
-        render json: nil,
-              status: :not_found
+        render json: @company.errors,
+              status: :unprocessable_entity
       end
     end
 
     private
+
+    def find_company
+      @company = Company.find(params[:id])
+    end
 
     def company_params
       params.require(:company).permit(
@@ -66,7 +103,8 @@ module Api
         :economic_activity,
         :legal_representative,
         :logo,
-        :slogan
+        :slogan,
+        :category_id
       )
     end
   end
