@@ -1,6 +1,6 @@
 json.category do
   json.partial!(
-    'api/categories/category',
+    'api/admin/categories/category',
     category: category
   )
 end
