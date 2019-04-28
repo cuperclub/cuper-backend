@@ -15,9 +15,10 @@ Rails.application.routes.draw do
   namespace :api, defaults: { format: :json } do
     namespace :admin do
       resources :categories
+      resources :companies, only: [:index, :show]
     end
-    resources :companies,
-              only: [:create, :update, :show]
+    # resources :companies,
+    #           only: [:create, :update, :show]
     resources :users
   end
 end
