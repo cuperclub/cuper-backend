@@ -1,7 +1,7 @@
 json.categories do
   json.array!(
     categories,
-    partial: "category",
+    partial: "api/shared/category",
     as: :category
   )
 end

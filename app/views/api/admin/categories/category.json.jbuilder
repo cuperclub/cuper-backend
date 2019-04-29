@@ -1,6 +1,4 @@
-json.category do
-  json.partial!(
-    'api/admin/categories/category',
-    category: category
-  )
-end
+json.partial!(
+  'api/shared/category',
+  category: category
+)
