@@ -7,6 +7,7 @@
 #  updated_at        :datetime         not null
 #  name              :string
 #  points_per_dollar :integer          default(1)
+#  active            :boolean          default(TRUE)
 #
 
 class Category < ApplicationRecord

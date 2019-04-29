@@ -2,5 +2,6 @@ json.call(
   category,
   :id,
   :name,
-  :points_per_dollar
+  :points_per_dollar,
+  :active
 )
