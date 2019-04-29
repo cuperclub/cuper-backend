@@ -1,7 +1,7 @@
 json.companies do
   json.array!(
     companies,
-    partial: "company",
+    partial: "api/shared/company",
     as: :company
   )
 end

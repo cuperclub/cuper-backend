@@ -1,4 +1,4 @@
 json.partial!(
-  'api/partner/companies/company',
+  "api/shared/company",
   company: company
 )
