@@ -17,8 +17,11 @@ Rails.application.routes.draw do
       resources :categories
       resources :companies, only: [:index, :show]
     end
-    # resources :companies,
-    #           only: [:create, :update, :show]
+
+    namespace :partner do
+      resource :company, only: [:update, :show]
+    end
+
     resources :users
   end
 end
