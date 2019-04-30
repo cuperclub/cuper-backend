@@ -18,4 +18,8 @@ class Office < ApplicationRecord
     belongs_to :company
     has_many :promotions
   end
+
+  begin :validations
+    validates :name, :address, :company_id, presence: true
+  end
 end
