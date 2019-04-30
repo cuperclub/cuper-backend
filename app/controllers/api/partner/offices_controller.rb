@@ -29,7 +29,7 @@ module Api
       end
 
       api :POST,
-          "/admin/offices",
+          "/partner/offices",
           "Submit a office entity. Response includes the errors if any."
       param_group :office
       example %q{
@@ -53,7 +53,7 @@ module Api
       end
 
       api :GET,
-          "/admin/offices/:id",
+          "/partner/offices/:id",
           "Get a office"
       param :id, Integer, required: true
       example %q{
@@ -72,7 +72,7 @@ module Api
       end
 
       api :PUT,
-      "/admin/offices/:id",
+      "/partner/offices/:id",
       "Edit a office"
       param :id, Integer, required: true
       example %q{

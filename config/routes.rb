@@ -4,7 +4,6 @@ Rails.application.routes.draw do
 
   resources :transaction_outputs
   resources :transaction_inputs
-  resources :promotions
 
   resources :employees
   mount_devise_token_auth_for 'User', at: 'auth'
@@ -18,7 +17,9 @@ Rails.application.routes.draw do
 
     namespace :partner do
       resource :company, only: [:update, :show]
-      resources :offices, only: [:index, :create, :show, :update]
+      resources :offices, only: [:index, :create, :show, :update] do
+        resources :promotions, only: [:index, :create, :show, :update]
+      end
     end
 
     resources :users
