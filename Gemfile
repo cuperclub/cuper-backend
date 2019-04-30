@@ -61,3 +61,6 @@ gem 'rack-cors', '~> 0.4', require: 'rack/cors'
 gem 'apipie-rails'
 
 gem 'rails-erd', group: :development
+
+gem "pundit"
+

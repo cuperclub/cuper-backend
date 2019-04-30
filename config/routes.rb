@@ -13,6 +13,7 @@ Rails.application.routes.draw do
     namespace :admin do
       resources :categories
       resources :companies, only: [:index, :show]
+      resources :users, only: [:index]
     end
 
     namespace :partner do
@@ -21,7 +22,5 @@ Rails.application.routes.draw do
         resources :promotions, only: [:index, :create, :show, :update]
       end
     end
-
-    resources :users
   end
 end

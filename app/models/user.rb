@@ -50,4 +50,16 @@ class User < ActiveRecord::Base
     validates :national_id, presence: true, uniqueness: true
   end
 
+  def is_employee
+    !!employee
+  end
+
+  def is_cashier
+    !!(employee and employee.role == 'cashier')
+  end
+
+  def is_partner
+    !!(employee and employee.role == 'partner')
+  end
+
 end
