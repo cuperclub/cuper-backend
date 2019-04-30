@@ -62,6 +62,17 @@ office = Office.create(
   company: company,
 )
 
+Promotion.create(
+  title: 'Hamburguesas 2x1',
+  description: 'Aprovecha esta mega oferta',
+  terms: 'Valido los días Lunes',
+  totalRewards: 10,
+  pointsRequired: 100,
+  startAt: Time.now,
+  endAt: Time.now + 72*60*60, #valido x 3 dias
+  office: office,
+)
+
 Employee.create(
   user: cashier,
   company: company,

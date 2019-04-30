@@ -19,9 +19,13 @@
 #
 
 class Promotion < ApplicationRecord
-  
+
   begin :relationships
     belongs_to :office
     has_many :transaction_outputs
+  end
+
+  begin :validations
+    validates :office_id, :title, :totalRewards, :pointsRequired, :terms, :startAt, :endAt, presence: true
   end
 end
