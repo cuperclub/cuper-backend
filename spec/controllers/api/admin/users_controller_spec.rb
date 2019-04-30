@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Api::UsersController, type: :controller do
+RSpec.describe Api::Admin::UsersController, type: :controller do
 
   describe "GET #index" do
     let(:admin) { create :user, :admin }

@@ -14,13 +14,12 @@ Rails.application.routes.draw do
     namespace :admin do
       resources :categories
       resources :companies, only: [:index, :show]
+      resources :users, only: [:index]
     end
 
     namespace :partner do
       resource :company, only: [:update, :show]
       resources :offices, only: [:index, :create, :show, :update]
     end
-
-    resources :users
   end
 end
