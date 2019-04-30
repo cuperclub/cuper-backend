@@ -55,6 +55,13 @@ company = Company.create(
   category: Category.first,
 )
 
+office = Office.create(
+  name: 'Sucursal 1',
+  email:'sucursal_1@example.com',
+  address:'24 de Mayo',
+  company: company,
+)
+
 Employee.create(
   user: cashier,
   company: company,

@@ -1,6 +1,7 @@
 module Api
   module Partner
     class CompaniesController < BaseController
+      before_action :authenticate_user!
 
       api :GET,
           "/partner/company",
@@ -18,7 +19,6 @@ module Api
       }
 
       def show
-        current_user = User.first(2).last #TODO: Get current_user
         company = current_user.company
         render :company,
                 status: :accepted,
@@ -36,7 +36,6 @@ module Api
       }
 
       def update
-        current_user = User.first(2).last #TODO: Get current_user
         company = current_user.company
         if company.update(company_params)
           render :company,

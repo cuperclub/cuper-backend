@@ -7,12 +7,12 @@ module Api
       api :GET,
           "/admin/categories",
           "Get all categories"
-    example %q{
-      "category":[{
-        "name":"Food",
-        "points_per_dollar":"2"
-      }]
-    }
+      example %q{
+        "category":[{
+          "name":"Food",
+          "points_per_dollar":"2"
+        }]
+      }
 
       def index
         categories = Category.all

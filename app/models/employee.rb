@@ -19,4 +19,8 @@ class Employee < ApplicationRecord
     has_many :transaction_inputs
     has_many :transaction_outputs
   end
+
+  begin :validations
+    validates :user_id, :company_id, presence: true
+  end
 end
