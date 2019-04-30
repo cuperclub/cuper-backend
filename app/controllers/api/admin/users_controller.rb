@@ -6,26 +6,9 @@ module Api
 
       def index
         users = User.all
+        authorize users, policy_class: UserPolicy
         render :users,
               locals: { users: users }
-      end
-
-      def new
-      end
-
-      def create
-      end
-
-      def update
-      end
-
-      def edit
-      end
-
-      def destroy
-      end
-
-      def show
       end
     end
   end
