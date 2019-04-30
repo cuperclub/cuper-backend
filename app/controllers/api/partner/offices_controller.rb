@@ -1,6 +1,7 @@
 module Api
   module Partner
     class OfficesController < BaseController
+      before_action :authenticate_user!
 
       api :GET,
           "/partner/offices",
@@ -14,7 +15,6 @@ module Api
       }
 
       def index
-        current_user = User.first(2).last #TODO: Get current_user
         offices = current_user.company.offices
         render :offices,
               status: :created,
@@ -65,7 +65,6 @@ module Api
       }
 
       def show
-        current_user = User.first(2).last #TODO: Get current_user
         office = current_user.company.offices.find(params[:id])
         render :office,
                 status: :accepted,
@@ -84,7 +83,6 @@ module Api
       }
 
       def update
-        current_user = User.first(2).last #TODO: Get current_user
         office = current_user.company.offices.find(params[:id])
         if office.update(office_params)
           render :office,
