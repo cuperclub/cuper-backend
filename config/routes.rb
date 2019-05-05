@@ -5,7 +5,6 @@ Rails.application.routes.draw do
   resources :transaction_outputs
   resources :transaction_inputs
 
-  resources :employees
   mount_devise_token_auth_for 'User', at: 'auth'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 
@@ -21,6 +20,7 @@ Rails.application.routes.draw do
       resources :offices, only: [:index, :create, :show, :update] do
         resources :promotions, only: [:index, :create, :show, :update]
       end
+      resources :employees, only: [:index, :show, :update]
     end
   end
 end
