@@ -5,11 +5,13 @@ Rails.application.routes.draw do
   resources :transaction_outputs
   resources :transaction_inputs
 
-  resources :employees
   mount_devise_token_auth_for 'User', at: 'auth'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 
   namespace :api, defaults: { format: :json } do
+
+    resources :companies, only: [:index]
+
     namespace :admin do
       resources :categories
       resources :companies, only: [:index, :show]
@@ -20,6 +22,11 @@ Rails.application.routes.draw do
       resource :company, only: [:update, :show]
       resources :offices, only: [:index, :create, :show, :update] do
         resources :promotions, only: [:index, :create, :show, :update]
+      end
+      resources :employees, only: [:index, :show] do
+        member do
+          put :update_state
+        end
       end
     end
   end

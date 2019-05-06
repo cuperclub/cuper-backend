@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_04_28_210752) do
+ActiveRecord::Schema.define(version: 2019_05_05_174016) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -68,10 +68,10 @@ ActiveRecord::Schema.define(version: 2019_04_28_210752) do
     t.string "terms"
     t.string "image"
     t.string "background"
-    t.integer "totalRewards", default: 0
-    t.integer "pointsRequired", default: 0
-    t.datetime "startAt"
-    t.datetime "endAt"
+    t.integer "total_rewards", default: 0
+    t.integer "points_required", default: 0
+    t.datetime "start_at"
+    t.datetime "end_at"
     t.boolean "unlimited", default: false
     t.bigint "office_id"
     t.index ["office_id"], name: "index_promotions_on_office_id"
@@ -83,7 +83,7 @@ ActiveRecord::Schema.define(version: 2019_04_28_210752) do
     t.bigint "user_id"
     t.bigint "employee_id"
     t.float "points"
-    t.string "invoiceNumber"
+    t.string "invoice_number"
     t.index ["employee_id"], name: "index_transaction_inputs_on_employee_id"
     t.index ["user_id"], name: "index_transaction_inputs_on_user_id"
   end
@@ -92,7 +92,7 @@ ActiveRecord::Schema.define(version: 2019_04_28_210752) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.float "points"
-    t.string "invoiceNumber"
+    t.string "invoice_number"
     t.bigint "promotion_id"
     t.bigint "employee_id"
     t.bigint "user_id"
