@@ -1,7 +1,8 @@
 module Api
   module Admin
     class CompaniesController < BaseController
-      before_action :find_company,
+      before_action :authenticate_user!,
+                    :find_company,
                     except: [:index]
 
       api :GET,
