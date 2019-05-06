@@ -20,7 +20,11 @@ Rails.application.routes.draw do
       resources :offices, only: [:index, :create, :show, :update] do
         resources :promotions, only: [:index, :create, :show, :update]
       end
-      resources :employees, only: [:index, :show, :update]
+      resources :employees, only: [:index, :show] do
+        member do
+          put :update_state
+        end
+      end
     end
   end
 end

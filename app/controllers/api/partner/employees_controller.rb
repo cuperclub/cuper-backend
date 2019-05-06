@@ -51,7 +51,7 @@ module Api
       end
 
       api :PUT,
-      "/partner/employees/:id",
+      "/partner/employees/:id/update_state",
       "Edit a employee"
       param :id, Integer, required: true
       example %q{
@@ -60,9 +60,9 @@ module Api
         }
       }
 
-      def update
+      def update_state
         employee = current_user.company.employees.find(params[:id])
-        if employee.update(employee_params)
+        if employee.update(employee_access_params)
           render :employee,
                   status: :accepted,
                   locals: { employee: employee }
@@ -74,7 +74,7 @@ module Api
 
       private
 
-      def employee_params
+      def employee_access_params
         params.require(:employee).permit(
           :active
         )
