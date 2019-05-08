@@ -20,6 +20,10 @@
 
 FactoryBot.define do
   factory :promotion do
-    
+    office
+    title { "New title" }
+    terms { "New terms" }
+    start_at { DateTime.now }
+    end_at { DateTime.now + 3.months }
   end
 end

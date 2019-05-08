@@ -14,6 +14,8 @@
 
 FactoryBot.define do
   factory :office do
-    
+    company
+    name { "Sucursal 1" }
+    address { "Corner 1" }
   end
 end

@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   namespace :api, defaults: { format: :json } do
 
     resources :companies, only: [:index]
+    resources :promotions, only: [:index, :show]
 
     namespace :admin do
       resources :categories
