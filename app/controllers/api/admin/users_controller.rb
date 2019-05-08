@@ -6,7 +6,7 @@ module Api
 
       def index
         role = params[:role]
-        users = role ? Employee.where(role: role).map(&:user) : User.all
+        users = role ? User.by_role(role) : User.all
         authorize users, policy_class: UserPolicy
         render :users,
                locals: { users: users }
