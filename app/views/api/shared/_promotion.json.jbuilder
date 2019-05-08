@@ -4,8 +4,8 @@ json.call(
   :title,
   :description,
   :terms,
-  :totalRewards,
-  :pointsRequired,
-  :startAt,
-  :endAt,
+  :total_rewards,
+  :points_required,
+  :start_at,
+  :end_at,
 )

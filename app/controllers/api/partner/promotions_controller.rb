@@ -12,8 +12,8 @@ module Api
           "title": 'Hamburguesas 2x1',
           "description": 'Aprovecha esta mega oferta',
           "terms": 'Valido los días Lunes',
-          "totalRewards": 10,
-          "pointsRequired": 100,
+          "total_rewards": 10,
+          "points_required": 100,
         }]
       }
 
@@ -29,7 +29,7 @@ module Api
               required: true
         param :description, String,
               required: true
-        param :totalRewards, Integer,
+        param :total_rewards, Integer,
               required: true
       end
 
@@ -42,8 +42,8 @@ module Api
           "title": 'Pizzas Familiares',
           "description": 'Aprovecha este oferton',
           "terms": 'Valido los días Jueves',
-          "totalRewards": 10,
-          "pointsRequired": 100,
+          "total_rewards": 10,
+          "points_required": 100,
         }
       }
 
@@ -69,8 +69,8 @@ module Api
           "title": 'Pizzas Familiares',
           "description": 'Aprovecha este oferton',
           "terms": 'Valido los días Jueves',
-          "totalRewards": 10,
-          "pointsRequired": 100,
+          "total_rewards": 10,
+          "points_required": 100,
         }
       }
 
@@ -89,7 +89,7 @@ module Api
         "promotion":{
           "title": 'Pizzas Medianas 2x1',
           "description": 'Aprovecha este oferton unico por el día del padre',
-          "totalRewards": 20,
+          "total_rewards": 20,
         }
       }
 
@@ -112,10 +112,10 @@ module Api
           :title,
           :description,
           :terms,
-          :totalRewards,
-          :pointsRequired,
-          :startAt,
-          :endAt,
+          :total_rewards,
+          :points_required,
+          :start_at,
+          :end_at,
           :office_id
         )
       end
@@ -126,4 +126,3 @@ module Api
     end
   end
 end
-

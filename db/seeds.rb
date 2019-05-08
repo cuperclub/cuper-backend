@@ -66,10 +66,10 @@ Promotion.create(
   title: 'Hamburguesas 2x1',
   description: 'Aprovecha esta mega oferta',
   terms: 'Valido los días Lunes',
-  totalRewards: 10,
-  pointsRequired: 100,
-  startAt: Time.now,
-  endAt: Time.now + 72*60*60, #valido x 3 dias
+  total_rewards: 10,
+  points_required: 100,
+  start_at: Time.now,
+  end_at: Time.now + 72*60*60, #valido x 3 dias
   office: office,
 )
 
