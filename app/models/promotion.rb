@@ -26,6 +26,6 @@ class Promotion < ApplicationRecord
   end
 
   begin :validations
-    validates :office_id, :title, :totalRewards, :pointsRequired, :terms, :startAt, :endAt, presence: true
+    validates :office_id, :title, :total_rewards, :points_required, :terms, :start_at, :end_at, presence: true
   end
 end
