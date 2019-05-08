@@ -1,7 +1,4 @@
-json.promotions do
-  json.array!(
-    promotions,
-    partial: "api/shared/promotion",
-    as: :promotion
-  )
-end
+json.partial!(
+  "api/shared/promotions",
+  promotions: promotions
+)
