@@ -15,7 +15,13 @@ Rails.application.routes.draw do
     namespace :admin do
       resources :categories
       resources :companies, only: [:index, :show]
-      resources :users, only: [:index]
+      resources :users, only: [:index] do
+        collection do
+          get "/by_role/:role",
+              to: "users#index",
+              as: :by_role
+        end
+      end
     end
 
     namespace :partner do
