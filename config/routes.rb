@@ -15,11 +15,10 @@ Rails.application.routes.draw do
     namespace :admin do
       resources :categories
       resources :companies, only: [:index, :show]
-      resources :users, only: [:index] do
+      resources :users do
         collection do
-          get "/by_role/:role",
-              to: "users#index",
-              as: :by_role
+          get "/:role",
+              to: "users#index"
         end
       end
     end
