@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   namespace :api, defaults: { format: :json } do
 
     resources :companies, only: [:index]
+    resources :promotions, only: [:index, :show]
 
     namespace :admin do
       resources :categories
@@ -19,9 +20,11 @@ Rails.application.routes.draw do
     end
 
     namespace :partner do
-      resource :company, only: [:update, :show]
+      resource :company, only: [:update, :show] do
+        resources :promotions, only: [:index, :show]
+      end
       resources :offices, only: [:index, :create, :show, :update] do
-        resources :promotions, only: [:index, :create, :show, :update]
+        resources :promotions, only: [:create, :update]
       end
       resources :employees, only: [:index, :show] do
         member do
