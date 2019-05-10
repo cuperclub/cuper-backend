@@ -1,3 +1,4 @@
+require "pry"
 module Auth
   class PasswordsController < DeviseTokenAuth::PasswordsController
     extend BaseDoc
@@ -5,7 +6,7 @@ module Auth
     resource_description do
       name "Auth::Passwords"
       short "password reset"
-      description "#{Rails.application.credentials[Rails.env.to_sym][:gmail_user]} password recovery functionality handled by [`devise_token_auth` gem](https://github.com/lynndylanhurley/devise_token_auth)"
+      description "password recovery functionality handled by [`devise_token_auth` gem](https://github.com/lynndylanhurley/devise_token_auth)"
     end
 
     doc_for :create do
@@ -14,6 +15,15 @@ module Auth
           "reset password providing email"
       param :email, String, required: true
       param :redirect_url, String, required: true
+    end
+
+    def create
+      self.resource = resource_class.send_reset_password_instructions(resource_params)
+      if successfully_sent?(resource)
+        render json: {status: 'ok'}, status: :ok
+      else
+        render json: {error: ['Error occurred']}, status: :internal_server_error
+      end
     end
 
     doc_for :edit do
