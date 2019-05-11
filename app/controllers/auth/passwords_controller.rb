@@ -1,4 +1,3 @@
-require "pry"
 module Auth
   class PasswordsController < DeviseTokenAuth::PasswordsController
     extend BaseDoc
@@ -33,6 +32,9 @@ module Auth
       description "this is the URL generated in the reset password feature. will allow user to update password"
       param :redirect_url, String, required: true
       param :reset_password_token, String, required: true
+    end
+
+    def edit
     end
 
     doc_for :update do
