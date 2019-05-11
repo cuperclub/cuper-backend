@@ -38,6 +38,11 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
   include DeviseTokenAuth::Concerns::User
 
+
+  scope :by_role, -> (role) {
+    includes(:employee).where('employees.role' => role)
+  }
+
   begin :relationships
     has_one :employee
     has_one :company, through: :employee
@@ -60,6 +65,10 @@ class User < ActiveRecord::Base
 
   def is_partner
     !!(employee and employee.role == 'partner')
+  end
+
+  def is_client
+    !employee
   end
 
 end

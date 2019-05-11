@@ -5,7 +5,16 @@ Rails.application.routes.draw do
   resources :transaction_outputs
   resources :transaction_inputs
 
-  mount_devise_token_auth_for 'User', at: 'auth'
+  # mount_devise_token_auth_for 'User', at: 'auth'
+
+  mount_devise_token_auth_for(
+    "User",
+    at: "auth",
+    controllers: {
+      passwords: "auth/passwords"
+    }
+  )
+
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 
   namespace :api, defaults: { format: :json } do
@@ -16,7 +25,12 @@ Rails.application.routes.draw do
     namespace :admin do
       resources :categories
       resources :companies, only: [:index, :show]
-      resources :users, only: [:index]
+      resources :users do
+        collection do
+          get "/:role",
+              to: "users#index"
+        end
+      end
     end
 
     namespace :partner do
