@@ -18,6 +18,10 @@
 
 FactoryBot.define do
   factory :company do
-
+    category
+    ruc { "123123123" }
+    economic_activity { "Sea food" }
+    business_name { "Rumberitos" }
+    legal_representative { "Perico de los Palotes" }
   end
 end

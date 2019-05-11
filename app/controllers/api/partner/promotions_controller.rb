@@ -2,7 +2,8 @@ module Api
   module Partner
     class PromotionsController < BaseController
       before_action :authenticate_user!,
-                    :find_office
+      before_action :find_office, only: [:create, :update]
+      before_action :find_company, only: [:index, :show]
 
       api :GET,
           "/partner/offices/:office_id/promotions",
@@ -18,7 +19,7 @@ module Api
       }
 
       def index
-        promotions = @office.promotions
+        promotions = @company.promotions
         render :promotions,
               status: :created,
               locals: { promotions: promotions }
@@ -75,7 +76,7 @@ module Api
       }
 
       def show
-        promotion = @office.promotions.find(params[:id])
+        promotion = @company.promotions.find(params[:id])
         render :promotion,
                 status: :accepted,
                 locals: { promotion: promotion }
@@ -122,6 +123,10 @@ module Api
 
       def find_office
         @office = current_user.company.offices.find(params[:office_id])
+      end
+
+      def find_company
+        @company = current_user.company
       end
     end
   end
