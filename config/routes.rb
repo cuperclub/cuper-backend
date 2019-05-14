@@ -21,6 +21,7 @@ Rails.application.routes.draw do
 
     resources :companies, only: [:index]
     resources :promotions, only: [:index, :show]
+    resource :users, only: [:update]
 
     namespace :admin do
       resources :categories
