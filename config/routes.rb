@@ -22,11 +22,15 @@ Rails.application.routes.draw do
     resources :companies, only: [:index]
     resources :promotions, only: [:index, :show]
     resource :users, only: [:update]
+    resources :users, only: [:update]
 
     namespace :admin do
       resources :categories
       resources :companies, only: [:index, :show]
       resources :users do
+        member do
+          put :toggle_status
+        end
         collection do
           get "/:role",
               to: "users#index"

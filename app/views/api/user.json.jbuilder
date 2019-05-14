@@ -4,5 +4,5 @@ json.call(
   :name,
   :email,
   :national_id,
-  :is_admin
+  :active
 )

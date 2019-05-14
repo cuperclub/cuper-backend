@@ -29,6 +29,7 @@
 #  updated_at             :datetime         not null
 #  national_id            :string
 #  is_admin               :boolean          default(FALSE)
+#  active                 :boolean          default(TRUE)
 #
 
 class User < ActiveRecord::Base
