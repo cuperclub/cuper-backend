@@ -34,7 +34,7 @@ Rails.application.routes.draw do
     end
 
     namespace :partner do
-      resource :company, only: [:update, :show] do
+      resource :company, only: [:create, :update, :show] do
         resources :promotions, only: [:index, :show]
       end
       resources :offices, only: [:index, :create, :show, :update] do

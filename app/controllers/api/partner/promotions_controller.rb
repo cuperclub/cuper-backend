@@ -1,7 +1,7 @@
 module Api
   module Partner
     class PromotionsController < BaseController
-      before_action :authenticate_user!,
+      before_action :authenticate_user!
       before_action :find_office, only: [:create, :update]
       before_action :find_company, only: [:index, :show]
 
