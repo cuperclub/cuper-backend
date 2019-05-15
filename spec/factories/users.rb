@@ -49,5 +49,10 @@ FactoryBot.define do
       is_admin { true }
     end
 
+    trait :partner do
+      email { "partner@example.com" }
+      national_id { "3" }
+    end
+
   end
 end
