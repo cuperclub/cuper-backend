@@ -21,11 +21,16 @@ Rails.application.routes.draw do
 
     resources :companies, only: [:index]
     resources :promotions, only: [:index, :show]
+    resource :users, only: [:update]
+    resources :users, only: [:update]
 
     namespace :admin do
       resources :categories
       resources :companies, only: [:index, :show]
       resources :users do
+        member do
+          put :toggle_status
+        end
         collection do
           get "/:role",
               to: "users#index"
@@ -34,7 +39,7 @@ Rails.application.routes.draw do
     end
 
     namespace :partner do
-      resource :company, only: [:update, :show] do
+      resource :company, only: [:create, :update, :show] do
         resources :promotions, only: [:index, :show]
       end
       resources :offices, only: [:index, :create, :show, :update] do
