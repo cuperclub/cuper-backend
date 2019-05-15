@@ -29,6 +29,7 @@
 #  national_id            :string
 #  is_admin               :boolean          default(FALSE)
 #  active                 :boolean          default(TRUE)
+#  points                 :float            default(0.0)
 #
 
 FactoryBot.define do

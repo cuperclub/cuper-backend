@@ -64,3 +64,6 @@ gem 'rails-erd', group: :development
 
 gem "pundit"
 
+gem 'pry-rails', :group => :development
+
+

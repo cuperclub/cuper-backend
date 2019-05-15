@@ -18,4 +18,12 @@ class TransactionInput < ApplicationRecord
     belongs_to :employee
   end
 
+  after_create :update_user_points
+
+
+  def update_user_points
+    self.user.points = self.user.points + self.points
+    self.user.save()
+  end
+
 end
