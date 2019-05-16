@@ -18,12 +18,20 @@ class TransactionInput < ApplicationRecord
     belongs_to :employee
   end
 
+  validate :cannot_assign_yourself
+
   after_create :update_user_points
 
 
   def update_user_points
     self.user.points = self.user.points + self.points
     self.user.save()
+  end
+
+  def cannot_assign_yourself
+    if user == employee.user
+      errors.add(:user, "cannot assign yourself")
+    end
   end
 
 end

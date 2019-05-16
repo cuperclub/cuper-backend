@@ -53,5 +53,6 @@ Rails.application.routes.draw do
     end
 
     resources :transaction_inputs, only: [:create]
+    resources :transaction_outputs, only: [:create]
   end
 end

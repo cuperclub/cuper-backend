@@ -5,26 +5,20 @@ module Api
     def create
       transaction_input_params = params[:transaction_input]
       user = User.find_by national_id: transaction_input_params[:national_id]
-      if user
-        if user == current_user
-          render json: {errors: 'cannot assign yourself'},
-          status: :unprocessable_entity
+      transaction_input = TransactionInput.new(user: user,
+        employee: current_user.employee,
+        points: transaction_input_params[:points],
+        invoice_number: transaction_input_params[:invoice_number])
+      if transaction_input.save
+        render(
+        :transaction_input,
+        status: :created,
+        locals: { transaction_input: transaction_input }
+        )
         else
-          transaction_input = TransactionInput.create(user: user,
-            employee: current_user.employee,
-            points: transaction_input_params[:points],
-            invoice_number: transaction_input_params[:invoice_number])
-          render(
-          :transaction_input,
-          status: :created,
-          locals: { transaction_input: transaction_input }
-          )
+          render json: transaction_input.errors,
+          status: :unprocessable_entity
         end
-
-      else
-        render json: {errors: 'not found'},
-        status: :not_found
-      end
     end
   end
 end
