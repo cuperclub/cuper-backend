@@ -9,7 +9,6 @@ RSpec.describe Api::TransactionInputsController, type: :controller do
     it "returns http unprocessable_entity if the user with national_id X not found" do
       login_as employee.user
       post :create, params: {transaction_input: {national_id: "x", points: 10, invoice_number: "123123123"}} , :format => :json
-      print response.body
       expect(response).to have_http_status(:unprocessable_entity)
     end
 
@@ -22,7 +21,6 @@ RSpec.describe Api::TransactionInputsController, type: :controller do
     it "returns http unprocessable_entity if the user is assigning himself" do
       login_as employee.user
       post :create, params: {transaction_input: {national_id: employee.user.national_id, points: 10, invoice_number: "123123123"}} , :format => :json
-      print response.body
       expect(response).to have_http_status(:unprocessable_entity)
     end
   end

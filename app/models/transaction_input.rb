@@ -25,7 +25,7 @@ class TransactionInput < ApplicationRecord
 
   def update_user_points
     self.user.points = self.user.points + self.points
-    self.user.save()
+    self.user.save
   end
 
   def cannot_assign_yourself
