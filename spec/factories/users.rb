@@ -29,6 +29,7 @@
 #  national_id            :string
 #  is_admin               :boolean          default(FALSE)
 #  active                 :boolean          default(TRUE)
+#  points                 :float            default(0.0)
 #
 
 FactoryBot.define do
@@ -47,6 +48,11 @@ FactoryBot.define do
       email { "admin@example.com" }
       national_id { "2" }
       is_admin { true }
+    end
+
+    trait :partner do
+      email { "partner@example.com" }
+      national_id { "3" }
     end
 
   end

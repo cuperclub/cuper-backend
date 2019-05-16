@@ -13,6 +13,7 @@
 
 FactoryBot.define do
   factory :employee do
-    
+    company
+    user { create :user, :partner}
   end
 end
