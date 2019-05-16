@@ -33,6 +33,7 @@ group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem 'rspec-rails'
   gem 'factory_bot_rails'
+  gem 'pry-rails'
 end
 
 group :test do
@@ -63,7 +64,5 @@ gem 'apipie-rails'
 gem 'rails-erd', group: :development
 
 gem "pundit"
-
-gem 'pry-rails', :group => :development
 
 

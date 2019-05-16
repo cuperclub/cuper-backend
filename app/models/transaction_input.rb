@@ -18,14 +18,17 @@ class TransactionInput < ApplicationRecord
     belongs_to :employee
   end
 
-  validate :cannot_assign_yourself
+  begin :validations
+    validate :cannot_assign_yourself
+  end
 
-  after_create :update_user_points
-
+  begin :callbacks
+    after_create :update_user_points
+  end
 
   def update_user_points
-    self.user.points = self.user.points + self.points
-    self.user.save
+    user.points = user.points + points
+    user.save
   end
 
   def cannot_assign_yourself
