@@ -43,6 +43,9 @@ Rails.application.routes.draw do
         resources :promotions, only: [:index, :show]
       end
       resources :offices, only: [:index, :create, :show, :update] do
+        member do
+          put :toggle_status
+        end
         resources :promotions, only: [:create, :update]
       end
       resources :employees, only: [:index, :show] do
