@@ -94,6 +94,18 @@ module Api
         end
       end
 
+      def toggle_status
+        office = Office.find(params[:id])
+        authorize office, policy_class: OfficePolicy
+        office.active = !office.active
+        if office.save
+          render json: {active: office.active}, status: :ok
+        else
+          render json: office.errors,
+                status: :unprocessable_entity
+        end
+      end
+
       private
 
       def office_params
