@@ -76,7 +76,8 @@ module Api
 
       def employee_access_params
         params.require(:employee).permit(
-          :active
+          :active,
+          :feedback
         )
       end
     end

@@ -9,6 +9,7 @@
 #  company_id :bigint(8)
 #  role       :string
 #  active     :boolean          default(FALSE)
+#  feedback   :text
 #
 
 FactoryBot.define do
