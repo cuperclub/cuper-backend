@@ -9,15 +9,21 @@
 #  company_id :bigint(8)
 #  role       :string
 #  feedback   :text
-#  status     :string           default("disabled")
+#  status     :string           default("pending")
 #
 
 class Employee < ApplicationRecord
 
+  ROLES = [
+    "partner",
+    "cashier",
+  ].freeze
+
   STATUS = [
-    :approved,
-    :disabled,
-    :deleted
+    "pending",
+    "approved",
+    "disabled",
+    "deleted"
   ].freeze
 
   begin :relationships
@@ -28,6 +34,18 @@ class Employee < ApplicationRecord
   end
 
   begin :validations
-    validates :user_id, :company_id, presence: true
+    validates :user_id, :company_id, :role, presence: true
+    validates :role,
+              inclusion: { in: ROLES }
+    validates :status,
+              inclusion: { in: STATUS }
+    validate :cant_change_to_pending, on: :update
+  end
+
+
+  def cant_change_to_pending
+    if self.status == "pending"
+      errors.add(:status, "not allowed")
+    end
   end
 end

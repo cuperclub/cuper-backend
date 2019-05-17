@@ -45,7 +45,7 @@ ActiveRecord::Schema.define(version: 2019_05_17_195911) do
     t.bigint "company_id"
     t.string "role"
     t.text "feedback"
-    t.string "status", default: "disabled"
+    t.string "status", default: "pending"
     t.index ["company_id"], name: "index_employees_on_company_id"
     t.index ["user_id"], name: "index_employees_on_user_id"
   end

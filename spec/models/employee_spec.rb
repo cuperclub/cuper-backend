@@ -9,7 +9,7 @@
 #  company_id :bigint(8)
 #  role       :string
 #  feedback   :text
-#  status     :string           default("disabled")
+#  status     :string           default("pending")
 #
 
 require 'rails_helper'
