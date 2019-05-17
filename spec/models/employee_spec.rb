@@ -8,8 +8,8 @@
 #  user_id    :bigint(8)
 #  company_id :bigint(8)
 #  role       :string
-#  active     :boolean          default(FALSE)
 #  feedback   :text
+#  status     :string           default("disabled")
 #
 
 require 'rails_helper'

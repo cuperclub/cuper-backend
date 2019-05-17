@@ -8,11 +8,17 @@
 #  user_id    :bigint(8)
 #  company_id :bigint(8)
 #  role       :string
-#  active     :boolean          default(FALSE)
 #  feedback   :text
+#  status     :string           default("disabled")
 #
 
 class Employee < ApplicationRecord
+
+  STATUS = [
+    :approved,
+    :disabled,
+    :deleted
+  ].freeze
 
   begin :relationships
     belongs_to :user
