@@ -42,10 +42,14 @@ class Employee < ApplicationRecord
     validate :cant_change_to_pending, on: :update
   end
 
+  private
 
   def cant_change_to_pending
     if self.status == "pending"
-      errors.add(:status, "not allowed")
+      errors.add(
+        :status,
+        I18n.t("activerecord.errors.models.employee.cant_change", status: self.status)
+      )
     end
   end
 end
