@@ -15,6 +15,7 @@
 FactoryBot.define do
   factory :employee do
     company
+    role { "partner" }
     user { create :user, :partner}
   end
 end
