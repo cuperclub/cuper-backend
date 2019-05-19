@@ -44,13 +44,19 @@ class TransactionOutput < ApplicationRecord
 
   def user_has_enough_points
     if user && user.points - points < 0
-      errors.add(:points, "not enough points for user")
+      errors.add(
+        :points,
+        I18n.t("activerecord.errors.models.transaction_output.not_enough_points")
+      )
     end
   end
 
   def promotion_has_enough_rewards
     if promotion && !promotion.unlimited && promotion.total_rewards - 1 < 0
-      errors.add(:points, "not enough rewards for promotion")
+      errors.add(
+        :points,
+        I18n.t("activerecord.errors.models.transaction_output.not_enough_rewards")
+      )
     end
   end
 end

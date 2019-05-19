@@ -55,6 +55,10 @@ Rails.application.routes.draw do
       end
     end
 
+    namespace :cashier do
+      resource :profile, only: [:create]
+    end
+
     resources :transaction_inputs, only: [:create]
     resources :transaction_outputs, only: [:create]
   end

@@ -8,12 +8,14 @@
 #  user_id    :bigint(8)
 #  company_id :bigint(8)
 #  role       :string
-#  active     :boolean          default(FALSE)
+#  feedback   :text
+#  status     :string           default("pending")
 #
 
 FactoryBot.define do
   factory :employee do
     company
+    role { "partner" }
     user { create :user, :partner}
   end
 end

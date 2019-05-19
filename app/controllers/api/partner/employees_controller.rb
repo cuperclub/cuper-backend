@@ -56,7 +56,8 @@ module Api
       param :id, Integer, required: true
       example %q{
         "employee":{
-          "active": true
+          "status": "disabled",
+          "feedback": "employee in vacations"
         }
       }
 
@@ -76,7 +77,8 @@ module Api
 
       def employee_access_params
         params.require(:employee).permit(
-          :active
+          :status,
+          :feedback
         )
       end
     end
