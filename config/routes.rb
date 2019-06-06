@@ -11,7 +11,8 @@ Rails.application.routes.draw do
     "User",
     at: "auth",
     controllers: {
-      passwords: "auth/passwords"
+      passwords: "auth/passwords",
+      token_validations: "auth/token_validations"
     }
   )
 
