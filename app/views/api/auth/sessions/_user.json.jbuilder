@@ -1,0 +1,12 @@
+json.extract!(
+  user,
+  :id,
+  :uid,
+  :name,
+  :image,
+  :email,
+  :nickname,
+  :provider,
+  :is_partner,
+  :is_cashier
+)
