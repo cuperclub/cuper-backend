@@ -77,12 +77,12 @@ Employee.create(
   user: cashier,
   company: company,
   role: 'cashier',
-  active: 'true'
+  status: 'approved'
 )
 
 Employee.create(
   user: partner,
   company: company,
   role: 'partner',
-  active: 'true'
+  status: 'approved'
 )
