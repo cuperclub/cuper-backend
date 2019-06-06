@@ -1,10 +1,10 @@
 module Auth
-  class TokenValidationsController < DeviseTokenAuth::TokenValidationsController
+  class RegistrationsController < DeviseTokenAuth::RegistrationsController
     before_action :force_json
 
     protected
 
-    def render_validate_token_success
+    def render_create_success
       @success = true
       render "api/auth/sessions/user"
     end

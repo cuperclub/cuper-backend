@@ -6,13 +6,7 @@ json.extract!(
   :image,
   :email,
   :nickname,
-  :provider
-)
-
-json.is_partner(
-  user.is_partner
-)
-
-json.is_cashier(
-  user.is_cashier
+  :provider,
+  :is_partner,
+  :is_cashier
 )
