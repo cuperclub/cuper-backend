@@ -32,7 +32,8 @@ module Api
       params.require(:user).permit(
         :email,
         :nickname,
-        :name
+        :name,
+        :national_id
       )
     end
   end
