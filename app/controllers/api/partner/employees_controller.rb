@@ -20,7 +20,9 @@ module Api
       }
 
       def index
-        employees = current_user.company.employees
+        employees = current_user.company
+                                .employees
+                                .where.not(user: current_user)
         render :employees,
               status: :created,
               locals: { employees: employees }
