@@ -55,6 +55,7 @@ class User < ActiveRecord::Base
   begin :validations
     validates :email, presence: true, uniqueness: true
     validates :national_id, uniqueness: true, allow_nil: true
+    validates :name, presence: true
   end
 
   def is_employee
