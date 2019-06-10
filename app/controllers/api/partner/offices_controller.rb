@@ -113,6 +113,8 @@ module Api
           :name,
           :address,
           :email,
+          :lat,
+          :long,
           :company_id
         )
       end
