@@ -46,7 +46,7 @@ class User < ActiveRecord::Base
   }
 
   begin :relationships
-    has_one :employee
+    has_many :employees
     has_one :company, through: :employee
     has_many :transaction_inputs
     has_many :transaction_outputs
@@ -59,19 +59,19 @@ class User < ActiveRecord::Base
   end
 
   def is_employee
-    !!employee
+    # !!employee
   end
 
   def is_cashier
-    !!(employee and employee.role == 'cashier')
+    # !!(employee and employee.role == 'cashier')
   end
 
   def is_partner
-    !!(employee and employee.role == 'partner')
+    # !!(employee and employee.role == 'partner')
   end
 
   def is_client
-    !employee
+    # !employee
   end
 
 end

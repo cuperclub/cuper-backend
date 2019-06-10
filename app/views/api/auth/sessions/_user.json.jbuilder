@@ -6,7 +6,8 @@ json.extract!(
   :email,
   :national_id,
   :is_partner,
-  :is_cashier
+  :is_cashier,
+  :points
 )
 
 json.join_at(

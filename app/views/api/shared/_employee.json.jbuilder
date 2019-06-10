@@ -6,9 +6,9 @@ json.call(
   :feedback
 )
 
-json.user do
-  json.partial!(
-    "api/shared/user",
-    user: employee.user
-  )
-end
+# json.user do
+#   json.partial!(
+#     "api/shared/user",
+#     user: employee.user
+#   )
+# end
