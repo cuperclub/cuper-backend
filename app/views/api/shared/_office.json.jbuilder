@@ -3,5 +3,8 @@ json.call(
   :id,
   :name,
   :email,
-  :address
+  :phone,
+  :address,
+  :lat,
+  :long
 )
