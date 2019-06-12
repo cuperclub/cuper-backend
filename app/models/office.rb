@@ -10,6 +10,9 @@
 #  address    :string
 #  active     :boolean          default(FALSE)
 #  company_id :bigint(8)
+#  lat        :float
+#  long       :float
+#  phone      :string
 #
 
 class Office < ApplicationRecord
