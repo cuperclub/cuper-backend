@@ -12,6 +12,7 @@
 #  company_id :bigint(8)
 #  lat        :float
 #  long       :float
+#  phone      :string
 #
 
 FactoryBot.define do
