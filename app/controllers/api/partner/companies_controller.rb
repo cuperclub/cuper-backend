@@ -62,7 +62,8 @@ module Api
       }
 
       def show
-        company = current_user.company
+        employee = current_user.employees.find_by_role("partner")
+        company = employee.my_company
         render :company,
                 status: :accepted,
                 locals: { company: company }
