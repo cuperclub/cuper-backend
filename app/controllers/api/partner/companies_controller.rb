@@ -47,7 +47,7 @@ module Api
       end
 
       api :GET,
-          "/partner/company",
+          "/partner/company/:id",
           "Get my company"
       example %q{
         {
@@ -62,8 +62,7 @@ module Api
       }
 
       def show
-        employee = current_user.employees.find_by_role("partner")
-        company = employee.my_company
+        company = Company.find(params[:id])
         render :company,
                 status: :accepted,
                 locals: { company: company }
