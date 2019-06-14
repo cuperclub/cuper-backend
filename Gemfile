@@ -52,7 +52,6 @@ group :development do
   gem 'rb-readline'
 end
 
-
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
@@ -60,6 +59,8 @@ gem 'omniauth', '~> 1.6'
 gem 'devise_token_auth', '~> 0.1'
 gem 'rack-cors', '~> 0.4', require: 'rack/cors'
 gem 'apipie-rails'
+gem 'carrierwave', '~> 1.1'
+gem 'cloudinary'
 
 gem 'rails-erd', group: :development
 
