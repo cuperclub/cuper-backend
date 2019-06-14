@@ -13,3 +13,11 @@ json.extract!(
 json.join_at(
   (user.created_at.to_f * 1000).to_i
 )
+
+json.companies do
+  json.array!(
+    user.employees,
+    partial: "api/auth/sessions/companies",
+    as: :employee
+  )
+end
