@@ -4,10 +4,14 @@ json.call(
   :role
 )
 
+json.id(
+  employee.company.id
+)
+
 json.name(
   employee.company.business_name
 )
 
-json.id(
-  employee.company.id
+json.join_at(
+  (employee.company.created_at.to_f * 1000).to_i
 )

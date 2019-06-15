@@ -9,3 +9,7 @@ json.call(
   :logo,
   :slogan
 )
+
+json.join_at(
+  (company.created_at.to_f * 1000).to_i
+)
