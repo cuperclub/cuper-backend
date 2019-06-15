@@ -14,6 +14,12 @@ json.join_at(
   (user.created_at.to_f * 1000).to_i
 )
 
+json.current_company_id(
+  if user.employees.first
+    user.employees.first.company.id
+  end
+)
+
 json.companies do
   json.array!(
     user.employees,

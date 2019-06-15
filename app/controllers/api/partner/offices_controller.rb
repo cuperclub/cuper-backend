@@ -2,9 +2,10 @@ module Api
   module Partner
     class OfficesController < BaseController
       before_action :authenticate_user!
+      before_action :find_company, only: [:index, :show, :update]
 
       api :GET,
-          "/partner/offices",
+          "/partner/companies/:company_id/offices",
           "Get all offices"
       example %q{
         "offices":[{
@@ -15,7 +16,7 @@ module Api
       }
 
       def index
-        offices = current_user.company.offices
+        offices = @company.offices
         render :offices,
               status: :created,
               locals: { offices: offices }
@@ -29,7 +30,7 @@ module Api
       end
 
       api :POST,
-          "/partner/offices",
+          "/partner/companies/:company_id/offices",
           "Submit a office entity. Response includes the errors if any."
       param_group :office
       example %q{
@@ -53,7 +54,7 @@ module Api
       end
 
       api :GET,
-          "/partner/offices/:id",
+          "/partner/companies/:company_id/offices/:id",
           "Get a office"
       param :id, Integer, required: true
       example %q{
@@ -65,14 +66,14 @@ module Api
       }
 
       def show
-        office = current_user.company.offices.find(params[:id])
+        office = @company.offices.find(params[:id])
         render :office,
                 status: :accepted,
                 locals: { office: office }
       end
 
       api :PUT,
-      "/partner/offices/:id",
+      "/partner/companies/:company_id/offices/:id",
       "Edit a office"
       param :id, Integer, required: true
       example %q{
@@ -83,7 +84,7 @@ module Api
       }
 
       def update
-        office = current_user.company.offices.find(params[:id])
+        office = @company.offices.find(params[:id])
         if office.update(office_params)
           render :office,
                   status: :accepted,
@@ -118,6 +119,10 @@ module Api
           :long,
           :company_id
         )
+      end
+
+      def find_company
+        @company = current_user.companies.find(params[:company_id])
       end
     end
   end

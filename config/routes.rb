@@ -43,16 +43,16 @@ Rails.application.routes.draw do
     namespace :partner do
       resources :companies, only: [:create, :update, :show] do
         resources :promotions, only: [:index, :show]
-      end
-      resources :offices, only: [:index, :create, :show, :update] do
-        member do
-          put :toggle_status
+        resources :offices, only: [:index, :create, :show, :update] do
+          member do
+            put :toggle_status
+          end
+          resources :promotions, only: [:create, :update]
         end
-        resources :promotions, only: [:create, :update]
-      end
-      resources :employees, only: [:index, :show] do
-        member do
-          put :update_state
+        resources :employees, only: [:index, :show] do
+          member do
+            put :update_state
+          end
         end
       end
     end
