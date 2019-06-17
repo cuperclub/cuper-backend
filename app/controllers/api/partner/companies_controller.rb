@@ -79,7 +79,7 @@ module Api
       }
 
       def update
-        company = current_user.company
+        company = Company.find(params[:id])
         if company.update(company_params)
           render :company,
                   status: :accepted,
