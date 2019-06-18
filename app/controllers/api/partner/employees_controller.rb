@@ -2,7 +2,7 @@ module Api
   module Partner
     class EmployeesController < BaseController
       before_action :authenticate_user!
-      before_action :find_company, only: [:index, :show, :update]
+      before_action :find_company, only: [:index, :show, :update, :update_state]
 
       api :GET,
           "/partner/companies/:company_id/employees",
