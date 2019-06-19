@@ -42,6 +42,19 @@ class Employee < ApplicationRecord
     validate :cant_change_to_pending, on: :update
   end
 
+
+  def employeer_company
+    if self.role == "cashier"
+      self.company
+    end
+  end
+
+  def my_company
+    if self.role == "partner"
+      self.company
+    end
+  end
+
   private
 
   def cant_change_to_pending

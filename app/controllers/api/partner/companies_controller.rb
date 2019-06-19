@@ -47,7 +47,7 @@ module Api
       end
 
       api :GET,
-          "/partner/company",
+          "/partner/company/:id",
           "Get my company"
       example %q{
         {
@@ -62,7 +62,7 @@ module Api
       }
 
       def show
-        company = current_user.company
+        company = Company.find(params[:id])
         render :company,
                 status: :accepted,
                 locals: { company: company }
@@ -79,7 +79,7 @@ module Api
       }
 
       def update
-        company = current_user.company
+        company = Company.find(params[:id])
         if company.update(company_params)
           render :company,
                   status: :accepted,
