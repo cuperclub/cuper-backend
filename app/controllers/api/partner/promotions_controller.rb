@@ -109,7 +109,7 @@ module Api
       private
 
       def promotion_params
-        params.require(:promotion).permit(
+        params.permit(
           :title,
           :description,
           :terms,
@@ -117,6 +117,7 @@ module Api
           :points_required,
           :start_at,
           :end_at,
+          :image,
           :office_id
         )
       end
