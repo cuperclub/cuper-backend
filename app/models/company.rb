@@ -17,6 +17,7 @@
 #
 
 class Company < ApplicationRecord
+  mount_uploader :logo, ApplicationUploader
 
   begin :relationships
     has_many :employees
