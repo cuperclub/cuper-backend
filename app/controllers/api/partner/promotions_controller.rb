@@ -3,10 +3,10 @@ module Api
     class PromotionsController < BaseController
       before_action :authenticate_user!
       before_action :find_office, only: [:create, :update]
-      before_action :find_company, only: [:index, :show]
+      before_action :find_company, only: [:index, :show, :update]
 
       api :GET,
-          "/partner/offices/:office_id/promotions",
+          "/api/partner/companies/:company_id/promotions",
           "Get all promotions of an specific office"
       example %q{
         "promotions":[{
@@ -35,7 +35,7 @@ module Api
       end
 
       api :POST,
-          "/partner/offices/:office_id/promotions",
+          "/partner/companies/:company_id/offices/:office_id/promotions",
           "Submit a promotion into an specific office. Response includes the errors if any."
       param_group :promotion
       example %q{
@@ -122,11 +122,12 @@ module Api
       end
 
       def find_office
-        @office = current_user.company.offices.find(params[:office_id])
+        company = find_company
+        @office = company.offices.find(params[:office_id])
       end
 
       def find_company
-        @company = current_user.company
+        @company = current_user.companies.find(params[:company_id])
       end
     end
   end

@@ -2,9 +2,10 @@ module Api
   module Partner
     class EmployeesController < BaseController
       before_action :authenticate_user!
+      before_action :find_company, only: [:index, :show, :update, :update_state]
 
       api :GET,
-          "/partner/employees",
+          "/partner/companies/:company_id/employees",
           "Get all employees"
       example %q{
         "employees":[{
@@ -20,16 +21,15 @@ module Api
       }
 
       def index
-        employees = current_user.company
-                                .employees
-                                .where.not(user: current_user)
+        employees = @company.employees
+                            .where.not(user: current_user)
         render :employees,
               status: :created,
               locals: { employees: employees }
       end
 
       api :GET,
-          "/partner/employees/:id",
+          "/partner/companies/:company_id/employees/:id",
           "Get a employee"
       param :id, Integer, required: true
       example %q{
@@ -46,14 +46,14 @@ module Api
       }
 
       def show
-        employee = current_user.company.employees.find(params[:id])
+        employee = @company.employees.find(params[:id])
         render :employee,
                 status: :accepted,
                 locals: { employee: employee }
       end
 
       api :PUT,
-      "/partner/employees/:id/update_state",
+      "/partner/companies/:company_id/employees/:id/update_state",
       "Edit a employee"
       param :id, Integer, required: true
       example %q{
@@ -64,7 +64,7 @@ module Api
       }
 
       def update_state
-        employee = current_user.company.employees.find(params[:id])
+        employee = @company.employees.find(params[:id])
         if employee.update(employee_access_params)
           render :employee,
                   status: :accepted,
@@ -82,6 +82,10 @@ module Api
           :status,
           :feedback
         )
+      end
+
+      def find_company
+        @company = current_user.companies.find(params[:company_id])
       end
     end
   end
