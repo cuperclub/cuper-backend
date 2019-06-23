@@ -49,6 +49,37 @@ module Api
                 locals: { company: @company }
       end
 
+      api :PUT,
+          "/admin/companies/:id/change_status",
+          "Change status company"
+      param :id, Integer, required: true
+      param :status, String, required: true
+      example %q{
+        "company":{
+          "ruc":"5184135690",
+          "business_name":"The Krusty krab.",
+          "contributor_type":"Natural",
+          "economic_activity":"Restaurant",
+          "legal_representative":"Mr. Krabs",
+          "logo":null,
+          "slogan":"a cool slogan",
+          "status":"approved"
+        }
+      }
+
+      def change_status
+        employee = @company.employees.find_by_role("partner")
+        employee.status = params[:status]
+        if employee.save
+          render :company,
+                  status: :accepted,
+                  locals: { company: @company }
+        else
+          render json: employee.errors,
+                status: :unprocessable_entity
+        end
+      end
+
       private
 
       def find_company

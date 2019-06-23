@@ -28,7 +28,11 @@ Rails.application.routes.draw do
 
     namespace :admin do
       resources :categories
-      resources :companies, only: [:index, :show]
+      resources :companies, only: [:index, :show] do
+        member do
+          put :change_status
+        end
+      end
       resources :users do
         member do
           put :toggle_status
