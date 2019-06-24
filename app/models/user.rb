@@ -51,6 +51,7 @@ class User < ActiveRecord::Base
     has_many :companies, through: :employees
     has_many :transaction_inputs
     has_many :transaction_outputs
+    has_one :setting
   end
 
   begin :validations

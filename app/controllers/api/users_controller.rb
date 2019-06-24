@@ -56,6 +56,19 @@ module Api
               locals: { users:  users}
     end
 
+
+    def current_view
+      setting = current_user.setting
+      if setting
+        setting.current_company = params[:company_id]
+        render_setting(setting)
+      else
+        setting = Setting.new
+        setting.current_company = params[:company_id]
+        render_setting(setting)
+      end
+    end
+
     private
 
     def user_params
@@ -72,6 +85,16 @@ module Api
       users_results = UserSearch.new( q:params[:query],
                                       id:current_user.id
                                     ).results
+    end
+
+    def render_setting(record)
+      record.user = current_user
+      if record.save
+        render json: {company_id: record.current_company}, status: :ok
+      else
+        render json: record.errors,
+              status: :unprocessable_entity
+      end
     end
 
   end

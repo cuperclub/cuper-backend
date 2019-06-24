@@ -23,7 +23,11 @@ Rails.application.routes.draw do
 
     resources :companies, only: [:index]
     resources :promotions, only: [:index, :show]
-    resource :users, only: [:update]
+    resource :users, only: [:update] do
+      member do
+        put :current_view
+      end
+    end
     resources :users, only: [:update, :index]
     match "users/search" => 'users#search', via: :get
 
