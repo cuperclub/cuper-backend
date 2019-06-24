@@ -66,7 +66,7 @@ Rails.application.routes.draw do
       resource :profile, only: [:create]
     end
 
-    resources :transaction_inputs, only: [:create]
+    resources :transaction_inputs, only: [:index, :create]
     resources :transaction_outputs, only: [:create]
   end
 end
