@@ -52,7 +52,6 @@ module Api
 
     def search
       users = search_results
-      binding.pry
       render "api/users",
               locals: { users:  users}
     end
