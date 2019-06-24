@@ -6,6 +6,7 @@ json.call(
   :terms,
   :total_rewards,
   :points_required,
+  :image_url,
   :start_at,
   :end_at,
 )

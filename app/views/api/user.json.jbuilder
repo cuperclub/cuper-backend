@@ -3,6 +3,7 @@ json.call(
   :id,
   :name,
   :email,
+  :image_url,
   :national_id,
   :active
 )

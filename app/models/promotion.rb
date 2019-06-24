@@ -19,6 +19,7 @@
 #
 
 class Promotion < ApplicationRecord
+  mount_uploader :image, ApplicationUploader
 
   begin :relationships
     belongs_to :office

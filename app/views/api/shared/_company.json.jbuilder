@@ -6,7 +6,7 @@ json.call(
   :contributor_type,
   :legal_representative,
   :business_name,
-  :logo,
+  :logo_url,
   :slogan
 )
 

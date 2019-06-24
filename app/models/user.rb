@@ -40,6 +40,7 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
   include DeviseTokenAuth::Concerns::User
 
+  mount_uploader :image, ApplicationUploader
 
   scope :by_role, -> (role) {
     includes(:employee).where('employees.role' => role)
