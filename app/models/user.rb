@@ -72,4 +72,14 @@ class User < ActiveRecord::Base
     !!self.employees.find_by_role("partner")
   end
 
+  def current_view_company_id
+    if self.setting
+      self.setting.current_company
+    else
+      if self.employees.first
+        self.employees.first.company.id
+      end
+    end
+  end
+
 end
