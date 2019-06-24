@@ -21,7 +21,7 @@ module Api
       }
 
       def index
-        companies = Company.all
+        companies = Company.all.order(created_at: :desc)
         render :companies,
               status: :created,
               locals: { companies: companies }
