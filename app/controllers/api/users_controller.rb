@@ -3,9 +3,9 @@ module Api
 
     before_action :authenticate_user!
 
-    api :PUT,
+    api :GET,
         "/api/users",
-        "Update my account"
+        "Get all clients"
     example %q{
       "user":{
         "email": "admin@example.com",
@@ -21,6 +21,18 @@ module Api
               locals: { users:  users}
     end
 
+    api :PUT,
+        "/api/users",
+        "Update my account"
+    example %q{
+      "user":{
+        "email": "admin@example.com",
+        "nickname": "admin",
+        "name": "Admin User",
+        "national_id": "1234567890",
+      }
+    }
+
     def update
       if current_user.update(user_params)
         render "api/user",
@@ -30,6 +42,19 @@ module Api
         render json: current_user.errors,
               status: :unprocessable_entity
       end
+    end
+
+    api :GET,
+    "/users/search",
+    "returns search from query"
+    param :page, Integer
+    param :query, String
+
+    def search
+      users = search_results
+      binding.pry
+      render "api/users",
+              locals: { users:  users}
     end
 
     private
@@ -43,5 +68,12 @@ module Api
         :national_id
       )
     end
+
+    def search_results
+      users_results = UserSearch.new( q:params[:query],
+                                      id:current_user.id
+                                    ).results
+    end
+
   end
 end

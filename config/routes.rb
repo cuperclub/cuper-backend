@@ -25,6 +25,7 @@ Rails.application.routes.draw do
     resources :promotions, only: [:index, :show]
     # resource :users, only: [:update, :index]
     resources :users, only: [:update, :index]
+    match "users/search" => 'users#search', via: :get
 
     namespace :admin do
       resources :categories
