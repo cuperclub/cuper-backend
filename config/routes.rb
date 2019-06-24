@@ -23,8 +23,8 @@ Rails.application.routes.draw do
 
     resources :companies, only: [:index]
     resources :promotions, only: [:index, :show]
-    resource :users, only: [:update]
-    resources :users, only: [:update]
+    # resource :users, only: [:update, :index]
+    resources :users, only: [:update, :index]
 
     namespace :admin do
       resources :categories

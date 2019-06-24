@@ -15,6 +15,12 @@ module Api
       }
     }
 
+    def index
+      users = User.all
+      render "api/users",
+              locals: { users:  users}
+    end
+
     def update
       if current_user.update(user_params)
         render "api/user",
