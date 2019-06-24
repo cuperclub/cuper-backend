@@ -7,6 +7,7 @@ json.extract!(
   :national_id,
   :is_partner,
   :is_cashier,
+  :is_admin,
   :points
 )
 

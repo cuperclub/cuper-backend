@@ -1,6 +1,5 @@
 json.array!(
     users,
-    partial: "api/shared/user",
+    partial: "api/shared/admin_user",
     as: :user
 )
-

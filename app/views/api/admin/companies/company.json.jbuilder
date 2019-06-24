@@ -1,4 +1,4 @@
 json.partial!(
-  "api/shared/company",
+  "api/shared/admin_company",
   company: company
 )
