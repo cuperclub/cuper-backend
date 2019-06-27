@@ -71,6 +71,6 @@ Rails.application.routes.draw do
     end
 
     resources :transaction_inputs, only: [:index, :create]
-    resources :transaction_outputs, only: [:create]
+    resources :transaction_outputs, only: [:index, :create]
   end
 end
