@@ -1,7 +1,7 @@
 module Api
   class TransactionOutputsController < BaseController
     before_action :authenticate_user!
-    before_action :find_employee, only: [:index]
+    before_action :find_employee, only: [:index, :create]
 
     def index
       transaction_outputs = TransactionOutput.where(employee: @employee).order(created_at: :desc)
