@@ -50,7 +50,7 @@ Rails.application.routes.draw do
     end
 
     namespace :partner do
-      resources :companies, only: [:create, :update, :show] do
+      resource :companies, only: [:create, :update, :show] do
         resources :promotions, only: [:index, :show]
         resources :offices, only: [:index, :create, :show, :update] do
           member do

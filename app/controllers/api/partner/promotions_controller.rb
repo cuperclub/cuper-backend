@@ -6,7 +6,7 @@ module Api
       before_action :find_company, only: [:index, :show, :update]
 
       api :GET,
-          "/api/partner/companies/:company_id/promotions",
+          "/api/partner/companies/promotions",
           "Get all promotions of an specific office"
       example %q{
         "promotions":[{
@@ -35,7 +35,7 @@ module Api
       end
 
       api :POST,
-          "/partner/companies/:company_id/offices/:office_id/promotions",
+          "/partner/companies/offices/:office_id/promotions",
           "Submit a promotion into an specific office. Response includes the errors if any."
       param_group :promotion
       example %q{
@@ -128,7 +128,7 @@ module Api
       end
 
       def find_company
-        @company = current_user.companies.find(params[:company_id])
+        @company = Company.find(current_user.current_view_company_id)
       end
     end
   end
