@@ -1,7 +1,7 @@
 module Api
   class TransactionOutputsController < BaseController
-    before_action :authenticate_user!
-    before_action :find_employee, only: [:index, :create]
+    before_action :authenticate_user!,
+                  :find_employee, only: [:index, :create]
 
     def index
       transaction_outputs = TransactionOutput.where(employee: @employee).order(created_at: :desc)
@@ -26,13 +26,13 @@ module Api
           status: :unprocessable_entity
         end
     end
-  end
 
-  private
+    private
 
-  def find_employee
-    @employee = Employee.where(company_id: current_user.current_view_company_id,
-                                user: current_user
-                              ).first
+    def find_employee
+      @employee = Employee.where(company_id: current_user.current_view_company_id,
+                                  user: current_user
+                                ).first
+    end
   end
 end
