@@ -51,7 +51,11 @@ Rails.application.routes.draw do
 
     namespace :partner do
       resource :companies, only: [:create, :update, :show] do
-        resources :promotions, only: [:index, :show]
+        resources :promotions, only: [:index, :show] do
+          member do
+            get :transaction_outputs
+          end
+        end
         resources :offices, only: [:index, :create, :show, :update] do
           member do
             put :toggle_status

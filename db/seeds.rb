@@ -14,6 +14,14 @@ User.create(
   is_admin: true
 )
 
+User.create(
+  email: 'client@example.com',
+  nickname: 'client',
+  name: 'Client User',
+  password: "12345678",
+  national_id: '1234567893'
+)
+
 if Category.count == 0
   [
     "Comida",

@@ -3,7 +3,7 @@ module Api
     class PromotionsController < BaseController
       before_action :authenticate_user!
       before_action :find_office, only: [:create, :update]
-      before_action :find_company, only: [:index, :show, :update]
+      before_action :find_company, only: [:index, :show, :update, :transaction_outputs]
 
       api :GET,
           "/api/partner/companies/promotions",
@@ -104,6 +104,17 @@ module Api
           render json: promotion.errors,
                 status: :unprocessable_entity
         end
+      end
+
+      api :GET,
+          "/partner/offices/:office_id/promotions/:id/transaction_outputs",
+          "Get all transaction outputs of an specific promotions"
+      param :id, Integer, required: true
+      def transaction_outputs
+        promotion = @company.promotions.find(params[:id])
+        transaction_outputs = promotion.transaction_outputs
+        render "api/transaction_outputs/transaction_outputs",
+          locals: { transaction_outputs: transaction_outputs }
       end
 
       private
