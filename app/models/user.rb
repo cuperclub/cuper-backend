@@ -43,7 +43,7 @@ class User < ActiveRecord::Base
   mount_uploader :image, ApplicationUploader
 
   scope :by_role, -> (role) {
-    includes(:employee).where('employees.role' => role)
+    includes(:employees).where('employees.role' => role)
   }
 
   begin :relationships
