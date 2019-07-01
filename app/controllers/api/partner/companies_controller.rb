@@ -2,6 +2,7 @@ module Api
   module Partner
     class CompaniesController < BaseController
       before_action :authenticate_user!
+      before_action :find_company, only: [:show, :update]
 
       def_param_group :company do
         param :ruc, String,
@@ -47,7 +48,7 @@ module Api
       end
 
       api :GET,
-          "/partner/company/:id",
+          "/partner/company",
           "Get my company"
       example %q{
         {
@@ -62,10 +63,9 @@ module Api
       }
 
       def show
-        company = Company.find(params[:id])
         render :company,
                 status: :accepted,
-                locals: { company: company }
+                locals: { company: @company }
       end
 
       api :PUT,
@@ -79,8 +79,7 @@ module Api
       }
 
       def update
-        company = Company.find(params[:id])
-        if company.update(company_params)
+        if @company.update(company_params)
           render :company,
                   status: :accepted,
                   locals: { company: company }
@@ -103,6 +102,10 @@ module Api
           :slogan,
           :category_id
         )
+      end
+
+      def find_company
+        @company = Company.find(current_user.current_view_company_id)
       end
     end
   end

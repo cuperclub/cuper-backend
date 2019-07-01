@@ -23,8 +23,13 @@ Rails.application.routes.draw do
 
     resources :companies, only: [:index]
     resources :promotions, only: [:index, :show]
-    resource :users, only: [:update]
-    resources :users, only: [:update]
+    resource :users, only: [:update] do
+      member do
+        put :current_view
+      end
+    end
+    resources :users, only: [:update, :index]
+    match "users/search" => 'users#search', via: :get
 
     namespace :admin do
       resources :categories
@@ -45,8 +50,12 @@ Rails.application.routes.draw do
     end
 
     namespace :partner do
-      resources :companies, only: [:create, :update, :show] do
-        resources :promotions, only: [:index, :show]
+      resource :companies, only: [:create, :update, :show] do
+        resources :promotions, only: [:index, :show] do
+          member do
+            get :transaction_outputs
+          end
+        end
         resources :offices, only: [:index, :create, :show, :update] do
           member do
             put :toggle_status
@@ -65,7 +74,7 @@ Rails.application.routes.draw do
       resource :profile, only: [:create]
     end
 
-    resources :transaction_inputs, only: [:create]
-    resources :transaction_outputs, only: [:create]
+    resources :transaction_inputs, only: [:index, :create]
+    resources :transaction_outputs, only: [:index, :create]
   end
 end

@@ -43,7 +43,7 @@ class User < ActiveRecord::Base
   mount_uploader :image, ApplicationUploader
 
   scope :by_role, -> (role) {
-    includes(:employee).where('employees.role' => role)
+    includes(:employees).where('employees.role' => role)
   }
 
   begin :relationships
@@ -51,6 +51,7 @@ class User < ActiveRecord::Base
     has_many :companies, through: :employees
     has_many :transaction_inputs
     has_many :transaction_outputs
+    has_one :setting
   end
 
   begin :validations
@@ -69,6 +70,16 @@ class User < ActiveRecord::Base
 
   def is_partner
     !!self.employees.find_by_role("partner")
+  end
+
+  def current_view_company_id
+    if self.setting
+      self.setting.current_company
+    else
+      if self.employees.first
+        self.employees.first.company.id
+      end
+    end
   end
 
 end

@@ -16,9 +16,7 @@ json.join_at(
 )
 
 json.current_company_id(
-  if user.employees.first
-    user.employees.first.company.id
-  end
+  user.current_view_company_id
 )
 
 json.companies do

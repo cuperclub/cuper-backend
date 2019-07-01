@@ -10,10 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_12_213702) do
+ActiveRecord::Schema.define(version: 2019_06_24_205512) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "unaccent"
 
   create_table "categories", force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -79,6 +80,14 @@ ActiveRecord::Schema.define(version: 2019_06_12_213702) do
     t.boolean "unlimited", default: false
     t.bigint "office_id"
     t.index ["office_id"], name: "index_promotions_on_office_id"
+  end
+
+  create_table "settings", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.integer "current_company"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_settings_on_user_id"
   end
 
   create_table "transaction_inputs", force: :cascade do |t|

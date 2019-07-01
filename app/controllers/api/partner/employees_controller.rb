@@ -5,7 +5,7 @@ module Api
       before_action :find_company, only: [:index, :show, :update, :update_state]
 
       api :GET,
-          "/partner/companies/:company_id/employees",
+          "/partner/companies/employees",
           "Get all employees"
       example %q{
         "employees":[{
@@ -29,7 +29,7 @@ module Api
       end
 
       api :GET,
-          "/partner/companies/:company_id/employees/:id",
+          "/partner/companies/employees/:id",
           "Get a employee"
       param :id, Integer, required: true
       example %q{
@@ -53,7 +53,7 @@ module Api
       end
 
       api :PUT,
-      "/partner/companies/:company_id/employees/:id/update_state",
+      "/partner/companies/employees/:id/update_state",
       "Edit a employee"
       param :id, Integer, required: true
       example %q{
@@ -85,7 +85,7 @@ module Api
       end
 
       def find_company
-        @company = current_user.companies.find(params[:company_id])
+        @company = Company.find(current_user.current_view_company_id)
       end
     end
   end

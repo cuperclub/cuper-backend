@@ -15,3 +15,7 @@ json.name(
 json.join_at(
   (employee.company.created_at.to_f * 1000).to_i
 )
+
+json.logo_url(
+  employee.company.logo_url
+)

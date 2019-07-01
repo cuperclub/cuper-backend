@@ -234,6 +234,7 @@ GEM
     rspec-support (3.8.0)
     ruby-graphviz (1.2.4)
     ruby_dep (1.5.0)
+    searchlight (4.1.0)
     shellany (0.0.1)
     spring (2.0.2)
       activesupport (>= 4.2)
@@ -290,6 +291,7 @@ DEPENDENCIES
   rails-erd
   rb-readline
   rspec-rails
+  searchlight
   spring
   spring-watcher-listen (~> 2.0.0)
   tzinfo-data
@@ -298,4 +300,4 @@ RUBY VERSION
    ruby 2.5.0p0
 
 BUNDLED WITH
-   2.0.1
+   2.0.2

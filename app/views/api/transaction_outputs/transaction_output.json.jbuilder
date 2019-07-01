@@ -1,4 +1,4 @@
-json.call(
-  partial: "transaction_output",
-  as: :transaction_output
+json.partial!(
+  "api/shared/transaction_output",
+  transaction_output: transaction_output
 )

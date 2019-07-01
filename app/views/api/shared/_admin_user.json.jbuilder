@@ -2,7 +2,7 @@ json.call(
   user,
   :id,
   :name,
-  :image,
+  :image_url,
   :email,
   :national_id,
   :is_partner,

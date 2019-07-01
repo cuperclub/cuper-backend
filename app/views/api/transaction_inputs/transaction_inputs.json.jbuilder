@@ -1,5 +1,7 @@
-json.array!(
+json.transaction_inputs do
+  json.array!(
     transaction_inputs,
-    partial: "transaction_input",
+    partial: "api/shared/transaction_input",
     as: :transaction_input
-)
+  )
+end
