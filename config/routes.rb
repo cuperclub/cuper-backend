@@ -41,6 +41,7 @@ Rails.application.routes.draw do
       resources :users do
         member do
           put :toggle_status
+          put :update_password
         end
         collection do
           get "/:role",

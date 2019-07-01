@@ -38,6 +38,21 @@ module Api
         end
       end
 
+      api :PUT,
+      "/api/admin/users/:id/update_password",
+      "Change user password"
+      param :id, Integer, required: true
+      def update_password
+        user = User.find(params[:id])
+        user.password = params[:password]
+        if user.save
+          UserMailer.notify_password_change(user, params[:password], params[:email]).deliver_now
+          render json: {status: :ok}, status: :ok
+        else
+          render json: user.errors,
+                status: :unprocessable_entity
+        end
+      end
     end
   end
 end
