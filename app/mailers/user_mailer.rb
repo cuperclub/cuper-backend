@@ -4,7 +4,7 @@ class UserMailer < ApplicationMailer
   def notify_password_change(user, password, email_to_notify)
     @user= user
     @password= password
-    mail(to: email_to_notify, subject: "password updated")
+    mail(to: email_to_notify, subject: "Contraseña Actualizada")
   end
 
 end
