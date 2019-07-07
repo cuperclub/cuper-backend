@@ -21,3 +21,9 @@ json.status(
     employee.status
   end
 )
+
+json.feedback(
+  if employee
+    employee.feedback
+  end
+)

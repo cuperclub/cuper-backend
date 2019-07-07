@@ -54,6 +54,7 @@ module Api
           "Change status company"
       param :id, Integer, required: true
       param :status, String, required: true
+      param :feedback, String, required: true
       example %q{
         "company":{
           "ruc":"5184135690",
@@ -70,6 +71,7 @@ module Api
       def change_status
         employee = @company.employees.find_by_role("partner")
         employee.status = params[:status]
+        employee.feedback = params[:feedback]
         if employee.save
           render :company,
                   status: :accepted,
