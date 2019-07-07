@@ -71,6 +71,7 @@ ActiveRecord::Schema.define(version: 2019_07_07_032234) do
     t.float "price", default: 0.0
     t.string "name"
     t.integer "days", default: 1
+    t.boolean "active", default: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["company_id"], name: "index_plans_on_company_id"

@@ -8,6 +8,7 @@
 #  price      :float            default(0.0)
 #  name       :string
 #  days       :integer          default(1)
+#  active     :boolean          default(TRUE)
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #

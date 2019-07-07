@@ -33,6 +33,7 @@ Rails.application.routes.draw do
 
     namespace :admin do
       resources :categories
+      resources :plans
       resources :companies, only: [:index, :show] do
         member do
           put :change_status

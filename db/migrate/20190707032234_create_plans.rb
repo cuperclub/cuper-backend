@@ -6,6 +6,7 @@ class CreatePlans < ActiveRecord::Migration[5.2]
       t.float :price, default: 0
       t.string :name
       t.integer :days, default: 1
+      t.boolean :active, default: true
       t.timestamps
     end
   end
