@@ -52,6 +52,7 @@ class User < ActiveRecord::Base
     has_many :transaction_inputs
     has_many :transaction_outputs
     has_one :setting
+    has_one :plan
   end
 
   begin :validations
