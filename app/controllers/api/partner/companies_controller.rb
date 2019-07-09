@@ -38,7 +38,6 @@ module Api
             role: 'partner'
           )
           employee.save
-          CompanyMailer.notify_company_registered(current_user, company, 'cuperclubec@gmail.com').deliver_now
           render :company,
                 status: :created,
                 locals: { company: company }
