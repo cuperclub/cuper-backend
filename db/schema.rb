@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_07_032234) do
+ActiveRecord::Schema.define(version: 2019_07_09_163815) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -65,17 +65,23 @@ ActiveRecord::Schema.define(version: 2019_07_07_032234) do
     t.index ["company_id"], name: "index_offices_on_company_id"
   end
 
-  create_table "plans", force: :cascade do |t|
-    t.bigint "user_id", null: false
+  create_table "plan_companies", force: :cascade do |t|
+    t.bigint "plan_id", null: false
     t.bigint "company_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["company_id"], name: "index_plan_companies_on_company_id"
+    t.index ["plan_id"], name: "index_plan_companies_on_plan_id"
+  end
+
+  create_table "plans", force: :cascade do |t|
     t.float "price", default: 0.0
     t.string "name"
+    t.string "information"
     t.integer "days", default: 1
     t.boolean "active", default: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["company_id"], name: "index_plans_on_company_id"
-    t.index ["user_id"], name: "index_plans_on_user_id"
   end
 
   create_table "promotions", force: :cascade do |t|
