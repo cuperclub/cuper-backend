@@ -23,7 +23,8 @@ class Employee < ApplicationRecord
     "pending",
     "approved",
     "disabled",
-    "deleted"
+    "deleted",
+    "decline"
   ].freeze
 
   begin :relationships
@@ -42,6 +43,8 @@ class Employee < ApplicationRecord
     validate :cant_change_to_pending, on: :update
   end
 
+  after_update :send_status_notification_email
+  after_create :send_register_notification_email
 
   def employeer_company
     if self.role == "cashier"
@@ -64,5 +67,14 @@ class Employee < ApplicationRecord
         I18n.t("activerecord.errors.models.employee.cant_change", status: self.status)
       )
     end
+  end
+
+  def send_status_notification_email
+    status = I18n.t("models.employee.status.#{self.status}")
+    CompanyMailer.notify_company_status_updated(self.user, self.company, status, self.feedback).deliver_now
+  end
+
+  def send_register_notification_email
+    CompanyMailer.notify_company_registered(self.user, self.company, 'cuperclubec@gmail.com').deliver_now
   end
 end
