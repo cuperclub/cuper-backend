@@ -73,6 +73,8 @@ module Api
         employee.status = params[:status]
         employee.feedback = params[:feedback]
         if employee.save
+          status = I18n.t("models.employee.status.#{employee.status}")
+          CompanyMailer.notify_company_status_updated(employee.user, employee.company, status, params[:feedback]).deliver_now
           render :company,
                   status: :accepted,
                   locals: { company: @company }

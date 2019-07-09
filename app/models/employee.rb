@@ -23,7 +23,8 @@ class Employee < ApplicationRecord
     "pending",
     "approved",
     "disabled",
-    "deleted"
+    "deleted",
+    "decline"
   ].freeze
 
   begin :relationships
