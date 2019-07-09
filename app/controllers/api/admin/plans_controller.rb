@@ -1,6 +1,6 @@
 module Api
   module Admin
-    class CategoriesController < BaseController
+    class PlansController < BaseController
       before_action :authenticate_user!,
                     :find_plan,
                     except: [:index, :create]

@@ -1,4 +1,4 @@
-json.categories do
+json.plans do
   json.array!(
     plans,
     partial: "api/shared/plan",
