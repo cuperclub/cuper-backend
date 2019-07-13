@@ -1,6 +1,9 @@
 module Api
   class UsersController < BaseController
 
+    PAGE = 1
+    PER_PAGE = 10
+
     before_action :authenticate_user!
 
     api :GET,
@@ -17,6 +20,9 @@ module Api
 
     def index
       users = User.all
+                .order(created_at: :desc)
+                .page(params[:page] || PAGE)
+                .per(params[:per_page] || PER_PAGE)
       render "api/users",
               locals: { users:  users}
     end

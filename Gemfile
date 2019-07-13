@@ -66,5 +66,6 @@ gem 'devise_token_auth', '~> 0.1'
 gem 'rack-cors', '~> 0.4', require: 'rack/cors'
 gem 'apipie-rails'
 gem 'carrierwave', '~> 1.1'
+gem 'kaminari'
 
 gem "pundit"
