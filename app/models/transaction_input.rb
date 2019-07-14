@@ -32,7 +32,7 @@ class TransactionInput < ApplicationRecord
   end
 
   def cannot_assign_yourself
-    if user == employee.user
+    if employee && (user == employee.user)
       errors.add(
         :user,
         I18n.t("activerecord.errors.models.transaction_input.user")

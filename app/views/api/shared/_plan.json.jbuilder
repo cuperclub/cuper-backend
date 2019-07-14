@@ -4,5 +4,6 @@ json.call(
   :name,
   :price,
   :days,
-  :active
+  :active,
+  :information
 )

@@ -16,7 +16,7 @@ module Api
       }
 
       def index
-        plans = Plan.all
+        plans = Plan.all.order(created_at: :desc)
         render :plans,
               status: :created,
               locals: { plans: plans }
@@ -104,7 +104,8 @@ module Api
           :name,
           :price,
           :days,
-          :active
+          :active,
+          :information
         )
       end
     end

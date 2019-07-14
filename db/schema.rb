@@ -10,11 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_09_163815) do
+ActiveRecord::Schema.define(version: 2019_07_14_211524) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "unaccent"
+
+  create_table "app_settings", force: :cascade do |t|
+    t.integer "show_plan"
+    t.integer "points_by_register"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "categories", force: :cascade do |t|
     t.datetime "created_at", null: false

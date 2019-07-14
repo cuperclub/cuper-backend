@@ -94,3 +94,17 @@ Employee.create(
   role: 'partner',
   status: 'approved'
 )
+
+cuper_company = Company.create(
+  ruc: '9999999990',
+  economic_activity: 'Comercial',
+  business_name: 'Cuper Club',
+  legal_representative: "Anyone",
+  slogan:"Fideliza yours Customers",
+  category: Category.first,
+)
+
+AppSetting.create(
+  show_plan: 0,
+  points_by_register: 10
+)
