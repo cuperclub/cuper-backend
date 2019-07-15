@@ -14,7 +14,7 @@ module Api
                   .per(params[:per_page] || PER_PAGE)
         authorize users, policy_class: UserPolicy
         render :users,
-               locals: { users: users }
+               locals: { users: users, total_count: users.total_count }
       end
 
       api :PUT,
