@@ -5,14 +5,6 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
-User.create(
-  email: 'admin@example.com',
-  nickname: 'admin',
-  name: 'Admin User',
-  password: "12345678",
-  national_id: '1234567890',
-  is_admin: true
-)
 
 User.create(
   email: 'client@example.com',
@@ -95,6 +87,17 @@ Employee.create(
   status: 'approved'
 )
 
+####Administration Cuper######
+
+cuper_employee = User.create(
+  email: 'admin@example.com',
+  nickname: 'admin',
+  name: 'Admin User',
+  password: "12345678",
+  national_id: '1234567890',
+  is_admin: true
+)
+
 cuper_company = Company.create(
   ruc: '9999999990',
   economic_activity: 'Comercial',
@@ -104,7 +107,15 @@ cuper_company = Company.create(
   category: Category.first,
 )
 
+cuper_employee = Employee.create(
+  user: cuper_employee,
+  company: cuper_company,
+  role: 'partner',
+  status: 'approved'
+)
+
 AppSetting.create(
   show_plan: 0,
-  points_by_register: 10
+  points_by_register: 10,
+  main_employee_id: cuper_employee.id
 )

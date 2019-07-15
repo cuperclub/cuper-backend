@@ -19,6 +19,7 @@ ActiveRecord::Schema.define(version: 2019_07_14_211524) do
   create_table "app_settings", force: :cascade do |t|
     t.integer "show_plan"
     t.integer "points_by_register"
+    t.integer "main_employee_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

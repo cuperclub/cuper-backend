@@ -46,10 +46,6 @@ class User < ActiveRecord::Base
     includes(:employees).where('employees.role' => role)
   }
 
-  begin :callbacks
-    after_create :add_points_by_register
-  end
-
   begin :relationships
     has_many :employees
     has_many :companies, through: :employees
@@ -85,14 +81,4 @@ class User < ActiveRecord::Base
       end
     end
   end
-
-  def add_points_by_register
-    transaction_input = TransactionInput.new(
-      user: self,
-      employee: Employee.first,
-      points: AppSetting.first.points_by_register
-    )
-    transaction_input.save
-  end
-
 end
