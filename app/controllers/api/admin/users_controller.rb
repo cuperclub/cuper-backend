@@ -1,16 +1,20 @@
 module Api
   module Admin
     class UsersController < BaseController
+      PAGE = 1
+      PER_PAGE = 5
 
       before_action :authenticate_user!
 
       def index
         role = params[:role]
         is_role = Employee::ROLES.include?(role)
-        users = is_role ? User.by_role(role) : User.all
+        users_list = is_role ? User.by_role(role) : User.all
+        users = users_list.page(params[:page] || PAGE)
+                  .per(params[:per_page] || PER_PAGE)
         authorize users, policy_class: UserPolicy
         render :users,
-               locals: { users: users }
+               locals: { users: users, total_count: users.total_count }
       end
 
       api :PUT,
