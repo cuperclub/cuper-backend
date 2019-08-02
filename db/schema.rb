@@ -10,11 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_24_205512) do
+ActiveRecord::Schema.define(version: 2019_07_14_211524) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "unaccent"
+
+  create_table "app_settings", force: :cascade do |t|
+    t.integer "show_plan"
+    t.integer "points_by_register"
+    t.integer "main_employee_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "categories", force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -63,6 +71,25 @@ ActiveRecord::Schema.define(version: 2019_06_24_205512) do
     t.float "long"
     t.string "phone"
     t.index ["company_id"], name: "index_offices_on_company_id"
+  end
+
+  create_table "plan_companies", force: :cascade do |t|
+    t.bigint "plan_id", null: false
+    t.bigint "company_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["company_id"], name: "index_plan_companies_on_company_id"
+    t.index ["plan_id"], name: "index_plan_companies_on_plan_id"
+  end
+
+  create_table "plans", force: :cascade do |t|
+    t.float "price", default: 0.0
+    t.string "name"
+    t.string "information"
+    t.integer "days", default: 1
+    t.boolean "active", default: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "promotions", force: :cascade do |t|
