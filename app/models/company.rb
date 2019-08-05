@@ -20,11 +20,12 @@ class Company < ApplicationRecord
   mount_uploader :logo, ApplicationUploader
 
   begin :relationships
+    belongs_to :category
     has_many :employees
     has_many :users, through: :employees
     has_many :offices
     has_many :promotions, through: :offices
-    belongs_to :category
+    has_one :plan_company
   end
 
   begin :validations
