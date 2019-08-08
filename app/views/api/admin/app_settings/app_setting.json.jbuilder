@@ -12,3 +12,11 @@ json.plan_selected do
     )
   end
 end
+
+json.plans do
+  json.array!(
+    Plan.all,
+    partial: "api/shared/plan",
+    as: :plan
+  )
+end
