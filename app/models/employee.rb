@@ -70,11 +70,15 @@ class Employee < ApplicationRecord
   end
 
   def send_status_notification_email
-    status = I18n.t("models.employee.status.#{self.status}")
-    CompanyMailer.notify_company_status_updated(self.user, self.company, status, self.feedback).deliver_now
+    if self.role == 'partner'
+      status = I18n.t("models.employee.status.#{self.status}")
+      CompanyMailer.notify_company_status_updated(self.user, self.company, status, self.feedback).deliver_now
+    end
   end
 
   def send_register_notification_email
-    CompanyMailer.notify_company_registered(self.user, self.company, 'cuperclubec@gmail.com').deliver_now
+    if self.role == 'partner'
+      CompanyMailer.notify_company_registered(self.user, self.company, 'cuperclubec@gmail.com').deliver_now
+    end
   end
 end
