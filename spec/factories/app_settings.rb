@@ -3,7 +3,7 @@
 # Table name: app_settings
 #
 #  id                 :bigint(8)        not null, primary key
-#  show_plan          :integer
+#  plan_selected_id   :integer
 #  points_by_register :integer
 #  main_employee_id   :integer
 #  created_at         :datetime         not null

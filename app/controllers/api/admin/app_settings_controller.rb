@@ -39,7 +39,7 @@ module Api
       def update_settings
         @appSetting = AppSetting.last;
         if @appSetting.update(app_setting_params)
-          render :plan,
+          render :app_setting,
                   status: :accepted,
                   locals: { app_setting: @appSetting }
         else
