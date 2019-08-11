@@ -2,7 +2,7 @@ module Api
   module Partner
     class EmployeesController < BaseController
       before_action :authenticate_user!
-      before_action :find_company, only: [:index, :show, :update, :update_state]
+      before_action :find_company, only: [:index, :show, :update, :update_state, :create]
 
       api :GET,
           "/partner/companies/employees",
@@ -26,6 +26,37 @@ module Api
         render :employees,
               status: :created,
               locals: { employees: employees }
+      end
+
+      api :POST,
+          "/partner/companies/employees",
+          "Submit a employee application. Response includes the errors if any."
+      example %q{
+        "employee":{
+          "user": {
+            "email": "cashier@example.com",
+            "nickname": "chasier",
+            "name": "Chasier",
+            "national_id": "1234567892",
+          },
+          "role": "cashier",
+          "active": true
+        }
+      }
+
+      def create
+        employee = Employee.new(employee_params)
+        employee.company = @company;
+        employee.role = 'cashier';
+        employee.status = 'pending';
+        if employee.save
+          render :employee,
+                status: :created,
+                locals: { employee: employee }
+        else
+          render json: employee.errors,
+                status: :unprocessable_entity
+        end
       end
 
       api :GET,
@@ -76,6 +107,16 @@ module Api
       end
 
       private
+
+      def employee_params
+        params.permit(
+          :user_id,
+          :company_id,
+          :role,
+          :feedback,
+          :status
+        )
+      end
 
       def employee_access_params
         params.require(:employee).permit(
