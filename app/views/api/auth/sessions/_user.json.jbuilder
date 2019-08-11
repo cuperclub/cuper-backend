@@ -26,3 +26,12 @@ json.companies do
     as: :employee
   )
 end
+
+json.plan_promotion do
+  unless user.current_view_company_id
+    json.partial!(
+      'api/shared/plan',
+      plan: Plan.find(AppSetting.last.plan_selected_id)
+    )
+  end
+end
