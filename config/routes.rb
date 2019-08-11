@@ -37,8 +37,7 @@ Rails.application.routes.draw do
       resource :app_settings do
         member do
           get :settings
-          put :update_points
-          put :update_plan
+          put :update_settings
         end
       end
       resources :companies, only: [:index, :show] do

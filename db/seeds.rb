@@ -114,8 +114,15 @@ cuper_employee = Employee.create(
   status: 'approved'
 )
 
+free_plan = Plan.create(
+  name: 'Freemiun',
+  price: 0,
+  information: 'Try 90 days free',
+  days: 90
+)
+
 AppSetting.create(
-  show_plan: 0,
+  plan_selected_id: free_plan.id,
   points_by_register: 10,
   main_employee_id: cuper_employee.id
 )
