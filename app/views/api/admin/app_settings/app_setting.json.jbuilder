@@ -1,14 +1,22 @@
 json.call(
   app_setting,
   :points_by_register,
-  :main_employee_id
+  :plan_selected_id
 )
 
 json.plan_selected do
-  if Plan.first
+  if app_setting.plan_selected_id
     json.partial!(
       'api/shared/plan',
-      plan: Plan.first
+      plan: Plan.find(app_setting.plan_selected_id)
     )
   end
+end
+
+json.plans do
+  json.array!(
+    Plan.all,
+    partial: "api/shared/plan",
+    as: :plan
+  )
 end
