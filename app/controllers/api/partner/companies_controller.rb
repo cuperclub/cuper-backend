@@ -2,7 +2,7 @@ module Api
   module Partner
     class CompaniesController < BaseController
       before_action :authenticate_user!
-      before_action :find_company, only: [:show, :update]
+      before_action :find_company, only: [:show, :update, :send_invitation_employee]
 
       def_param_group :company do
         param :ruc, String,
@@ -85,6 +85,19 @@ module Api
                   locals: { company: company }
         else
           render json: company.errors,
+                status: :unprocessable_entity
+        end
+      end
+
+      def send_invitation_employee
+        email = params[:email]
+        if email
+          CompanyMailer.invitation_employee_company(email, @company).deliver_now
+          render :company,
+                  status: :accepted,
+                  locals: { company: @company }
+        else
+          render json: {emai: 'Invalid'},
                 status: :unprocessable_entity
         end
       end

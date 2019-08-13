@@ -59,6 +59,9 @@ Rails.application.routes.draw do
 
     namespace :partner do
       resource :companies, only: [:create, :update, :show] do
+        member do
+          get :send_invitation_employee
+        end
         resources :promotions, only: [:index, :show] do
           member do
             get :transaction_outputs
