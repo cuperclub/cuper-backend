@@ -2,7 +2,11 @@ module Api
   module Partner
     class CompaniesController < BaseController
       before_action :authenticate_user!
-      before_action :find_company, only: [:show, :update, :send_invitation_employee]
+      before_action :find_company, only: [:show,
+                                          :update,
+                                          :send_invitation_employee,
+                                          :request_employee]
+      before_action :find_user, only: [:request_employee]
 
       def_param_group :company do
         param :ruc, String,
@@ -89,6 +93,21 @@ module Api
         end
       end
 
+      def request_employee
+        notification = Notification.new
+        notification.message = "La empresa: #{@company.business_name} quiere registrarte como empleado"
+        notification.kind = "request_employee"
+        notification.from_user_id = current_user.id
+        notification.to_user_id = @user.id
+        if notification.save
+          render json: {status: :ok}, status: :ok
+        else
+          render json: notification.errors,
+                status: :unprocessable_entity
+        # CompanyMailer.invitation_employee_company(email, @company).deliver_now
+        end
+      end
+
       def send_invitation_employee
         email = params[:email]
         if email
@@ -119,6 +138,10 @@ module Api
 
       def find_company
         @company = Company.find(current_user.current_view_company_id)
+      end
+
+      def find_user
+        @user = User.find(params[:user_id])
       end
     end
   end
