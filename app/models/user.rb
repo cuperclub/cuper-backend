@@ -72,12 +72,21 @@ class User < ActiveRecord::Base
     !!self.employees.find_by_role("partner")
   end
 
+
+  def my_companies
+    self.employees.where(role: "partner")
+  end
+
   def current_view_company_id
     if self.setting
       self.setting.current_company
     else
-      unless self.employees.first.status == "pending"
-        self.employees.first.company.id
+      if self.my_companies.count
+        self.my_companies.first.company.id
+      else
+        unless self.employees.first.status == "pending"
+          self.employees.first.company.id
+        end
       end
     end
   end
