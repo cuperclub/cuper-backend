@@ -76,7 +76,7 @@ class User < ActiveRecord::Base
     if self.setting
       self.setting.current_company
     else
-      if self.employees.first
+      unless self.employees.first.status == "pending"
         self.employees.first.company.id
       end
     end
