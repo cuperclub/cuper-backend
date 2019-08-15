@@ -86,7 +86,7 @@ module Api
         if @company.update(company_params)
           render :company,
                   status: :accepted,
-                  locals: { company: company }
+                  locals: { company: @company }
         else
           render json: company.errors,
                 status: :unprocessable_entity
