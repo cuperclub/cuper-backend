@@ -81,10 +81,10 @@ class User < ActiveRecord::Base
     if self.setting
       self.setting.current_company
     else
-      if self.my_companies.count
+      if self.my_companies.count > 0
         self.my_companies.first.company.id
       else
-        unless self.employees.first.status == "pending"
+        if self.employees.count > 0 && self.employees.first.status != "pending"
           self.employees.first.company.id
         end
       end
