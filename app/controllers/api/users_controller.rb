@@ -70,7 +70,7 @@ module Api
     end
 
     def my_notifications
-      notifications = Notification.where(to_user_id: current_user.id)
+      notifications = Notification.where(to_user_id: current_user.id).order(created_at: :desc)
       render "api/notifications/notifications",
               locals: { notifications:  notifications}
     end

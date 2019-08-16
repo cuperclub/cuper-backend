@@ -94,17 +94,13 @@ module Api
       end
 
       def request_employee
-        notification = Notification.new
-        notification.message = "La empresa: #{@company.business_name} quiere registrarte como empleado"
-        notification.kind = "request_employee"
-        notification.from_user_id = current_user.id
-        notification.to_user_id = @user.id
+        notification = UtilService.new(@user, current_user).notify_employee_request
         if notification.save
           render json: {status: :ok}, status: :ok
+          # CompanyMailer.invitation_employee_company(email, @company).deliver_now
         else
           render json: notification.errors,
                 status: :unprocessable_entity
-        # CompanyMailer.invitation_employee_company(email, @company).deliver_now
         end
       end
 

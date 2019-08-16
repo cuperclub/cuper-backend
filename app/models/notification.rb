@@ -21,6 +21,7 @@ class Notification < ApplicationRecord
     "request_employee",
     "invitation_employee",
     "company_approved",
+    "inital_points",
   ].freeze
 
   STATUS = [
