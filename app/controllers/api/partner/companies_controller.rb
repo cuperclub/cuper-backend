@@ -2,7 +2,11 @@ module Api
   module Partner
     class CompaniesController < BaseController
       before_action :authenticate_user!
-      before_action :find_company, only: [:show, :update]
+      before_action :find_company, only: [:show,
+                                          :update,
+                                          :send_invitation_employee,
+                                          :request_employee]
+      before_action :find_user, only: [:request_employee]
 
       def_param_group :company do
         param :ruc, String,
@@ -89,6 +93,30 @@ module Api
         end
       end
 
+      def request_employee
+        notification = UtilService.new(@user, current_user).notify_employee_request
+        if notification.save
+          render json: {status: :ok}, status: :ok
+          # CompanyMailer.invitation_employee_company(email, @company).deliver_now
+        else
+          render json: notification.errors,
+                status: :unprocessable_entity
+        end
+      end
+
+      def send_invitation_employee
+        email = params[:email]
+        if email
+          CompanyMailer.invitation_employee_company(email, @company).deliver_now
+          render :company,
+                  status: :accepted,
+                  locals: { company: @company }
+        else
+          render json: {emai: 'Invalid'},
+                status: :unprocessable_entity
+        end
+      end
+
       private
 
       def company_params
@@ -106,6 +134,10 @@ module Api
 
       def find_company
         @company = Company.find(current_user.current_view_company_id)
+      end
+
+      def find_user
+        @user = User.find(params[:user_id])
       end
     end
   end

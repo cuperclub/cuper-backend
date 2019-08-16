@@ -22,6 +22,10 @@ es:
         disabled: Deshabilitada
         deleted: Borrada Temporalmente
         decline: Rechazada
+      status_emoji:
+        approved: ✅
+        disabled: 🚨
+        decline: ⚠️
   date:
     abbr_day_names:
     - dom

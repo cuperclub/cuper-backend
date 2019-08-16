@@ -24,6 +24,13 @@ Rails.application.routes.draw do
 
     resources :companies, only: [:index]
     resources :promotions, only: [:index, :show]
+    resources :notifications, only: [:index] do
+      member do
+        put :answer_request_employee
+      end
+    end
+    match "notifications/read_pending_notifications" => 'notifications#read_pending_notifications', via: :post
+
     resource :users, only: [:update] do
       member do
         put :current_view
@@ -60,6 +67,10 @@ Rails.application.routes.draw do
 
     namespace :partner do
       resource :companies, only: [:create, :update, :show] do
+        member do
+          get :send_invitation_employee
+          post :request_employee
+        end
         resources :promotions, only: [:index, :show] do
           member do
             get :transaction_outputs
@@ -71,7 +82,7 @@ Rails.application.routes.draw do
           end
           resources :promotions, only: [:create, :update]
         end
-        resources :employees, only: [:index, :show] do
+        resources :employees, only: [:index, :show, :create] do
           member do
             put :update_state
           end

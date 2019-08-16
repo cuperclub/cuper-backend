@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_11_165039) do
+ActiveRecord::Schema.define(version: 2019_08_15_213909) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -57,6 +57,20 @@ ActiveRecord::Schema.define(version: 2019_08_11_165039) do
     t.string "status", default: "pending"
     t.index ["company_id"], name: "index_employees_on_company_id"
     t.index ["user_id"], name: "index_employees_on_user_id"
+  end
+
+  create_table "notifications", force: :cascade do |t|
+    t.string "message"
+    t.string "status", default: "pending"
+    t.string "kind"
+    t.bigint "from_employee_id"
+    t.bigint "from_user_id"
+    t.bigint "to_user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["from_employee_id"], name: "index_notifications_on_from_employee_id"
+    t.index ["from_user_id"], name: "index_notifications_on_from_user_id"
+    t.index ["to_user_id"], name: "index_notifications_on_to_user_id"
   end
 
   create_table "offices", force: :cascade do |t|

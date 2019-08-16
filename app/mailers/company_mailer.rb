@@ -14,4 +14,10 @@ class CompanyMailer < ApplicationMailer
     @feedback = feedback
     mail(to: user.email, subject: "Company Inf")
   end
+
+  def invitation_employee_company(email, company)
+    @email = email
+    @company = company
+    mail(to: email, subject: "Employee Invitation")
+  end
 end
