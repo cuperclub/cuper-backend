@@ -4,6 +4,7 @@ class CreateNotifications < ActiveRecord::Migration[5.2]
       t.string :message
       t.string :status, default: "pending"
       t.string :kind
+      t.references :from_employee
       t.references :from_user
       t.references :to_user
       t.timestamps

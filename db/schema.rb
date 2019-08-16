@@ -63,10 +63,12 @@ ActiveRecord::Schema.define(version: 2019_08_15_213909) do
     t.string "message"
     t.string "status", default: "pending"
     t.string "kind"
+    t.bigint "from_employee_id"
     t.bigint "from_user_id"
     t.bigint "to_user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["from_employee_id"], name: "index_notifications_on_from_employee_id"
     t.index ["from_user_id"], name: "index_notifications_on_from_user_id"
     t.index ["to_user_id"], name: "index_notifications_on_to_user_id"
   end

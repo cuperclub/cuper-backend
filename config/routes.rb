@@ -24,10 +24,14 @@ Rails.application.routes.draw do
 
     resources :companies, only: [:index]
     resources :promotions, only: [:index, :show]
+    resources :notifications, only: [:index] do
+      member do
+        put :answer_request_employee
+      end
+    end
     resource :users, only: [:update] do
       member do
         put :current_view
-        get :my_notifications
       end
     end
     resources :users, only: [:update, :index]
