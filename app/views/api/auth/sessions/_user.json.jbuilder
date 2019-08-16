@@ -19,6 +19,10 @@ json.current_company_id(
   user.current_view_company_id
 )
 
+json.pending_notifications(
+  user.pending_notifications
+)
+
 json.companies do
   json.array!(
     user.employees,
