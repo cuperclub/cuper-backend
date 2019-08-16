@@ -72,14 +72,25 @@ class User < ActiveRecord::Base
     !!self.employees.find_by_role("partner")
   end
 
+  def my_companies
+    self.employees.where(role: "partner")
+  end
+
+  def pending_notifications
+    Notification.where(to_user_id: self.id, status:"pending").count
+  end
+
   def current_view_company_id
     if self.setting
       self.setting.current_company
     else
-      if self.employees.first
-        self.employees.first.company.id
+      if self.my_companies.count > 0
+        self.my_companies.first.company.id
+      else
+        if self.employees.count > 0 && self.employees.first.status != "pending"
+          self.employees.first.company.id
+        end
       end
     end
   end
-
 end

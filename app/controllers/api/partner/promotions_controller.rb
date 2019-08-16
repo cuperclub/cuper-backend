@@ -1,6 +1,9 @@
 module Api
   module Partner
     class PromotionsController < BaseController
+      PAGE = 1
+      PER_PAGE = 5
+
       before_action :authenticate_user!
       before_action :find_office, only: [:create, :update]
       before_action :find_company, only: [:index, :show, :update, :transaction_outputs]
@@ -19,10 +22,12 @@ module Api
       }
 
       def index
-        promotions = @company.promotions
+        promotion_list = @company.promotions
+        promotions = promotion_list.page(params[:page] || PAGE)
+                      .per(params[:per_page] || PER_PAGE)
         render :promotions,
               status: :created,
-              locals: { promotions: promotions }
+              locals: { promotions: promotions, total_count: promotions.total_count }
       end
 
       def_param_group :promotion do

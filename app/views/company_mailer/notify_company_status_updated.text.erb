@@ -1,0 +1,11 @@
+Hola, <%= @user.name %>
+===============================================
+
+La compania "<%= @company.business_name %>" ha sido <%= @status %>
+Para mayor información enviar un email a: soportecuperclub@gmail.com
+
+<% unless @feedback.nil? %>
+Observación: <%= @feedback %>
+<% end %>
+
+Saludos!

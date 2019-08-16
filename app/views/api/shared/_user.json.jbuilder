@@ -7,3 +7,7 @@ json.call(
   :national_id,
   :is_admin
 )
+
+json.join_at(
+  (user.created_at.to_f * 1000).to_i
+)

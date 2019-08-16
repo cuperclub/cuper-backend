@@ -10,11 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_24_205512) do
+ActiveRecord::Schema.define(version: 2019_08_15_213909) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "unaccent"
+
+  create_table "app_settings", force: :cascade do |t|
+    t.integer "plan_selected_id"
+    t.integer "points_by_register"
+    t.integer "main_employee_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "categories", force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -51,6 +59,20 @@ ActiveRecord::Schema.define(version: 2019_06_24_205512) do
     t.index ["user_id"], name: "index_employees_on_user_id"
   end
 
+  create_table "notifications", force: :cascade do |t|
+    t.string "message"
+    t.string "status", default: "pending"
+    t.string "kind"
+    t.bigint "from_employee_id"
+    t.bigint "from_user_id"
+    t.bigint "to_user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["from_employee_id"], name: "index_notifications_on_from_employee_id"
+    t.index ["from_user_id"], name: "index_notifications_on_from_user_id"
+    t.index ["to_user_id"], name: "index_notifications_on_to_user_id"
+  end
+
   create_table "offices", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -63,6 +85,25 @@ ActiveRecord::Schema.define(version: 2019_06_24_205512) do
     t.float "long"
     t.string "phone"
     t.index ["company_id"], name: "index_offices_on_company_id"
+  end
+
+  create_table "plan_companies", force: :cascade do |t|
+    t.bigint "plan_id", null: false
+    t.bigint "company_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["company_id"], name: "index_plan_companies_on_company_id"
+    t.index ["plan_id"], name: "index_plan_companies_on_plan_id"
+  end
+
+  create_table "plans", force: :cascade do |t|
+    t.float "price", default: 0.0
+    t.string "name"
+    t.string "information"
+    t.integer "days", default: 1
+    t.boolean "active", default: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "promotions", force: :cascade do |t|

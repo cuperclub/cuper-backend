@@ -13,7 +13,8 @@ Rails.application.routes.draw do
     controllers: {
       sessions: "auth/sessions",
       registrations: "auth/registrations",
-      passwords: "auth/passwords"
+      passwords: "auth/passwords",
+      token_validations: "auth/token_validations"
     }
   )
 
@@ -23,6 +24,13 @@ Rails.application.routes.draw do
 
     resources :companies, only: [:index]
     resources :promotions, only: [:index, :show]
+    resources :notifications, only: [:index] do
+      member do
+        put :answer_request_employee
+      end
+    end
+    match "notifications/read_pending_notifications" => 'notifications#read_pending_notifications', via: :post
+
     resource :users, only: [:update] do
       member do
         put :current_view
@@ -33,6 +41,13 @@ Rails.application.routes.draw do
 
     namespace :admin do
       resources :categories
+      resources :plans
+      resource :app_settings do
+        member do
+          get :settings
+          put :update_settings
+        end
+      end
       resources :companies, only: [:index, :show] do
         member do
           put :change_status
@@ -52,6 +67,10 @@ Rails.application.routes.draw do
 
     namespace :partner do
       resource :companies, only: [:create, :update, :show] do
+        member do
+          get :send_invitation_employee
+          post :request_employee
+        end
         resources :promotions, only: [:index, :show] do
           member do
             get :transaction_outputs
@@ -63,7 +82,7 @@ Rails.application.routes.draw do
           end
           resources :promotions, only: [:create, :update]
         end
-        resources :employees, only: [:index, :show] do
+        resources :employees, only: [:index, :show, :create] do
           member do
             put :update_state
           end
