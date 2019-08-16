@@ -76,6 +76,13 @@ module Api
           render :company,
                   status: :accepted,
                   locals: { company: @company }
+          UtilService.new(
+            employee.user,
+            current_user,
+            {
+              company: @company,
+              status: params[:status]
+            }).notify_company_change_status
         else
           render json: employee.errors,
                 status: :unprocessable_entity

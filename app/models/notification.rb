@@ -20,7 +20,7 @@ class Notification < ApplicationRecord
   KIND = [
     "request_employee",
     "invitation_employee",
-    "company_approved",
+    "company_status",
     "inital_points",
   ].freeze
 

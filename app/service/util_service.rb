@@ -1,7 +1,8 @@
 class UtilService
-  def initialize(client, current_user = nil)
+  def initialize(client, current_user = nil, meta = "")
     @client = client
     @current_user = current_user
+    @meta = meta
   end
 
   def app_settings
@@ -29,6 +30,18 @@ class UtilService
     notification.from_user_id = @current_user.id
     notification.to_user_id = @client.id
     notification
+  end
+
+  def notify_company_change_status
+    notification = Notification.new
+    company = @meta[:company]
+    status = I18n.t("models.employee.status.#{@meta[:status]}")
+    emoji = I18n.t("models.employee.status_emoji.#{@meta[:status]}")
+    notification.message = "Tu empresa: #{company.business_name} ha sido #{status} #{emoji}"
+    notification.kind = "company_status"
+    notification.from_user_id = @current_user.id
+    notification.to_user_id = @client.id
+    notification.save
   end
 
   private
