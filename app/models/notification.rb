@@ -30,7 +30,8 @@ class Notification < ApplicationRecord
     "pending",
     "approved",
     "disabled",
-    "decline"
+    "decline",
+    "read"
   ].freeze
 
 end

@@ -70,6 +70,37 @@ module Api
       end
     end
 
+    api :POST,
+    "/notifications/:id/:answer_request_employee",
+    "approved/declined a request to be employee"
+    param :id, Integer, required: true
+    example %q{
+      "employee":{
+        "user": {
+          "email": "cashier@example.com",
+          "nickname": "chasier",
+          "name": "Chasier",
+          "national_id": "1234567892",
+        },
+        "role": "cashier",
+        "active": true
+      },
+      "notification": {
+        "message": "I am a notification 2",
+        "status": "pending",
+        "kind": "client_points",
+        "from_employee_id": "1",
+        "from_user_id": "2",
+        "to_user_id": "3"
+      }
+    }
+
+    def read_pending_notifications
+      Notification.where(to_user_id: current_user.id, status: "pending")
+                  .where.not(kind: "request_employee").update_all(:status => "read")
+      render json: {status: :ok}, status: :ok
+    end
+
 
     private
 

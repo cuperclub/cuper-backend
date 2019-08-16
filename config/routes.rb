@@ -29,6 +29,8 @@ Rails.application.routes.draw do
         put :answer_request_employee
       end
     end
+    match "notifications/read_pending_notifications" => 'notifications#read_pending_notifications', via: :post
+
     resource :users, only: [:update] do
       member do
         put :current_view
