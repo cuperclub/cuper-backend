@@ -69,6 +69,12 @@ module Api
       end
     end
 
+    def my_notifications
+      notifications = Notification.where(to_user_id: current_user.id)
+      render "api/notifications/notifications",
+              locals: { notifications:  notifications}
+    end
+
     private
 
     def user_params

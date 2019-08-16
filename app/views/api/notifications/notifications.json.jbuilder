@@ -1,7 +1,5 @@
-json.notifications do
-  json.array!(
-    notifications,
-    partial: "api/notifications/notification",
-    as: :notification
-  )
-end
+json.array!(
+  notifications,
+  partial: "api/shared/notification",
+  as: :notification
+)
