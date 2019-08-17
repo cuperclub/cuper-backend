@@ -104,18 +104,16 @@ module Api
         end
       end
 
-      def send_invitation_employee
-        email = params[:email]
-        if email
-          CompanyMailer.invitation_employee_company(email, @company).deliver_now
-          render :company,
-                  status: :accepted,
-                  locals: { company: @company }
-        else
-          render json: {emai: 'Invalid'},
-                status: :unprocessable_entity
-        end
-      end
+      # def send_invitation_employee
+      #   email = params[:email]
+      #   if email
+      #     CompanyMailer.invitation_employee_company(email, @company).deliver_now
+      #     render json: {status: :ok}, status: :ok
+      #   else
+      #     render json: {emai: 'Invalid'},
+      #           status: :unprocessable_entity
+      #   end
+      # end
 
       private
 
