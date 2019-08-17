@@ -59,13 +59,18 @@ module Api
       if @notification.kind == "request_employee" && @notification.status == "pending"
         @notification.status = params[:status]
         @notification.save
-        employee = create_employe
-        if employee.save
-          render json: { employee: employee, notification: @notification },
-                  status: :created
+        if params[:status] === "approved"
+          employee = create_employe
+          if employee.save
+            render json: { employee: employee, notification: @notification },
+                    status: :created
+          else
+            render json: employee.errors,
+                  status: :unprocessable_entity
+          end
         else
-          render json: employee.errors,
-                status: :unprocessable_entity
+          render json: { notification: @notification },
+                status: :created
         end
       end
     end
@@ -96,9 +101,11 @@ module Api
     }
 
     def read_pending_notifications
-      Notification.where(to_user_id: current_user.id, status: "pending")
-                  .where.not(kind: "request_employee").update_all(:status => "read")
-      render json: {status: :ok}, status: :ok
+      notifications = Notification.where(to_user_id: current_user.id, status: "pending")
+                  .where.not(kind: "request_employee")
+      total = notifications.count
+      notifications.update_all(:status => "read")
+      render json: {status: :ok, total: total}, status: :ok
     end
 
 
