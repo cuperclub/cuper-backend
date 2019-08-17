@@ -60,6 +60,19 @@ class UtilService
     notification.save
   end
 
+  def notify_client_assign_points
+    notification = Notification.new
+    company = @meta[:company]
+    employee = @meta[:employee]
+    points = @meta[:points]
+    notification.message = "#{company.business_name} te ha asignado: #{points} Pts. por consumo"
+    notification.kind = "assign_points"
+    notification.from_employee_id = employee.id
+    notification.from_user_id = @current_user.id
+    notification.to_user_id = @client.id
+    notification.save
+  end
+
   private
 
   def notify_assign_points!
