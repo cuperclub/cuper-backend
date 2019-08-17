@@ -16,11 +16,12 @@
 class Notification < ApplicationRecord
 
   belongs_to :from_user, :class_name => 'User'
-  belongs_to :from_employee, :class_name => 'Employee'
+  belongs_to :from_employee, :class_name => 'Employee', required: false
   belongs_to :to_user, :class_name => 'User'
 
   KIND = [
     "request_employee",
+    "answer_request_employee",
     "invitation_employee",
     "company_status",
     "inital_points",

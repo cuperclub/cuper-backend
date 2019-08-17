@@ -17,15 +17,15 @@ es:
   models:
     employee:
       status:
-        approved: Aprobada
+        approved: Aprobado
         pending: Pendiente
         disabled: Deshabilitada
         deleted: Borrada Temporalmente
-        decline: Rechazada
+        declined: Rechazado
       status_emoji:
         approved: ✅
         disabled: 🚨
-        decline: ⚠️
+        declined: ⚠️
   date:
     abbr_day_names:
     - dom

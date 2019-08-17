@@ -62,6 +62,7 @@ module Api
         if params[:status] === "approved"
           employee = create_employe
           if employee.save
+            notify_company!(employee)
             render json: { employee: employee, notification: @notification },
                     status: :created
           else
@@ -69,6 +70,7 @@ module Api
                   status: :unprocessable_entity
           end
         else
+          notify_company!(nil)
           render json: { notification: @notification },
                 status: :created
         end
@@ -115,7 +117,6 @@ module Api
       @notification = Notification.find(params[:id])
     end
 
-
     def create_employe
       employee = Employee.new
       employee.company = @notification.from_employee.company;
@@ -123,6 +124,15 @@ module Api
       employee.status = params[:status];
       employee.user = @notification.to_user;
       employee
+    end
+
+    def notify_company!(employee)
+      UtilService.new( @notification.from_user,
+                        current_user,
+                        { status: params[:status],
+                          employee: employee
+                        }
+                      ).notify_company_request_employee
     end
   end
 end
