@@ -82,7 +82,7 @@ Rails.application.routes.draw do
           end
           resources :promotions, only: [:create, :update]
         end
-        resources :employees, only: [:index, :show, :create] do
+        resources :employees, only: [:index, :show] do
           member do
             put :update_state
           end
