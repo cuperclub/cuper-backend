@@ -38,6 +38,7 @@ class TransactionOutput < ApplicationRecord
   def update_promotion
     if !promotion.unlimited
       promotion.total_rewards = promotion.total_rewards - 1
+      promotion.save
     end
   end
 
