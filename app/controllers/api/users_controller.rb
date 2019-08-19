@@ -84,7 +84,7 @@ module Api
     def search_results
       users_results = UserSearch.new( q:params[:query],
                                       id:current_user.id
-                                    ).results
+                                    ).results.limit(10)
     end
 
     def render_setting(record)

@@ -47,6 +47,45 @@ class UtilService
     notification.save
   end
 
+  def notify_company_request_employee
+    notification = Notification.new
+    company = @meta[:company]
+    status = I18n.t("models.employee.status.#{@meta[:status]}")
+    emoji = I18n.t("models.employee.status_emoji.#{@meta[:status]}")
+    notification.message = "#{@current_user.name}: Ha #{status} tu solicitud de empleado #{emoji}"
+    notification.kind = "answer_request_employee"
+    notification.from_employee_id = @meta[:employee].nil? ? nil : @meta[:employee].id
+    notification.from_user_id = @current_user.id
+    notification.to_user_id = @client.id
+    notification.save
+  end
+
+  def notify_client_assign_points
+    notification = Notification.new
+    company = @meta[:company]
+    employee = @meta[:employee]
+    points = @meta[:points]
+    notification.message = "#{company.business_name} te ha asignado: #{points} Pts. por consumo"
+    notification.kind = "assign_points"
+    notification.from_employee_id = employee.id
+    notification.from_user_id = @current_user.id
+    notification.to_user_id = @client.id
+    notification.save
+  end
+
+  def notify_client_assign_promotion
+    notification = Notification.new
+    company = @meta[:company]
+    employee = @meta[:employee]
+    promotion = @meta[:promotion]
+    notification.message = "Has canjeado #{promotion.title} en: #{company.business_name} por #{promotion.points_required} Pts"
+    notification.kind = "assign_points"
+    notification.from_employee_id = employee.id
+    notification.from_user_id = @current_user.id
+    notification.to_user_id = @client.id
+    notification.save
+  end
+
   private
 
   def notify_assign_points!

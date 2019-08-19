@@ -68,7 +68,7 @@ Rails.application.routes.draw do
     namespace :partner do
       resource :companies, only: [:create, :update, :show] do
         member do
-          get :send_invitation_employee
+          # get :send_invitation_employee
           post :request_employee
         end
         resources :promotions, only: [:index, :show] do
@@ -82,7 +82,7 @@ Rails.application.routes.draw do
           end
           resources :promotions, only: [:create, :update]
         end
-        resources :employees, only: [:index, :show, :create] do
+        resources :employees, only: [:index, :show] do
           member do
             put :update_state
           end

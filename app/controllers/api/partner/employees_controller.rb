@@ -44,21 +44,6 @@ module Api
         }
       }
 
-      def create
-        employee = Employee.new(employee_params)
-        employee.company = @company;
-        employee.role = 'cashier';
-        employee.status = 'pending';
-        if employee.save
-          render :employee,
-                status: :created,
-                locals: { employee: employee }
-        else
-          render json: employee.errors,
-                status: :unprocessable_entity
-        end
-      end
-
       api :GET,
           "/partner/companies/employees/:id",
           "Get a employee"
