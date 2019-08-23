@@ -88,7 +88,7 @@ module Api
                   status: :accepted,
                   locals: { company: @company }
         else
-          render json: company.errors,
+          render json: @company.errors,
                 status: :unprocessable_entity
         end
       end
