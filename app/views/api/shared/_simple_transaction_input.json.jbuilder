@@ -11,3 +11,7 @@ json.created_at(
 json.company(
   transaction_input.employee.company.business_name
 )
+
+json.kind(
+  transaction_input.class.name
+)
