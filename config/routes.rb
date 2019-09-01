@@ -34,6 +34,7 @@ Rails.application.routes.draw do
     resource :users, only: [:update] do
       member do
         put :current_view
+        get :my_transactions
       end
     end
     resources :users, only: [:update, :index]

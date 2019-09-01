@@ -69,6 +69,18 @@ module Api
       end
     end
 
+    api :GET,
+    "/users/my_transactions",
+    "returns current user transactions"
+
+    def my_transactions
+      inputs = TransactionInput.where(user: current_user).order(created_at: :desc)
+      outputs = TransactionOutput.where(user: current_user).order(created_at: :desc)
+      render "api/all_transactions",
+              status: :ok,
+              locals: { inputs: inputs, outputs: outputs }
+    end
+
     private
 
     def user_params
