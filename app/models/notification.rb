@@ -18,7 +18,7 @@ class Notification < ApplicationRecord
   belongs_to :from_user, :class_name => 'User'
   belongs_to :from_employee, :class_name => 'Employee', required: false
   belongs_to :to_user, :class_name => 'User'
-  after_create :send_notification_user!
+  after_create :notify_user!
 
   KIND = [
     "request_employee",
@@ -38,7 +38,17 @@ class Notification < ApplicationRecord
     "read"
   ].freeze
 
-  def send_notification_user!
+  def notify_user!
+    unless Rails.env.test?
+      if Rails.env.production?
+        # delay.send_pusher_notification!
+      else
+        send_pusher_notification!
+      end
+    end
+  end
+
+  def send_pusher_notification!
     notification_data = self
     user_channel_general = "usernotifications.general"
     begin
