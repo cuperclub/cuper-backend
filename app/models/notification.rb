@@ -18,6 +18,7 @@ class Notification < ApplicationRecord
   belongs_to :from_user, :class_name => 'User'
   belongs_to :from_employee, :class_name => 'Employee', required: false
   belongs_to :to_user, :class_name => 'User'
+  after_create :send_notification_user!
 
   KIND = [
     "request_employee",
@@ -37,4 +38,17 @@ class Notification < ApplicationRecord
     "read"
   ].freeze
 
+  def send_notification_user!
+    notification_data = self
+    user_channel_general = "usernotifications.general"
+    begin
+      Pusher.trigger(user_channel_general, 'new-notification', notification_data)
+    rescue Exception => e
+      puts e.message
+      puts e.backtrace.inspect
+    else
+      puts "PUSHER: Message sent successfully!"
+      puts "PUSHER: #{notification_data}"
+    end
+  end
 end
