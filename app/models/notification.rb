@@ -50,7 +50,7 @@ class Notification < ApplicationRecord
 
   def send_pusher_notification!
     notification_data = self
-    user_channel_general = "usernotifications.general"
+    user_channel_general = "usernotifications.#{self.to_user_id}"
     begin
       Pusher.trigger(user_channel_general, 'new-notification', notification_data)
     rescue Exception => e
