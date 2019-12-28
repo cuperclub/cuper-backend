@@ -9,7 +9,7 @@ Rails.application.config.middleware.use OmniAuth::Builder do
             Rails.application.credentials[Rails.env.to_sym][:google_app_id],
             Rails.application.credentials[Rails.env.to_sym][:google_app_secret],
             {
-              scope: 'userinfo.email, userinfo.profile, http://gdata.youtube.com',
+              scope: 'userinfo.email, userinfo.profile',
               prompt: 'select_account',
               image_aspect_ratio: 'square',
               image_size: 50
