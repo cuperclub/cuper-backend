@@ -47,6 +47,7 @@ class User < ActiveRecord::Base
   scope :by_role, -> (role) {
     includes(:employees).where('employees.role' => role)
   }
+  after_create :assign_points
 
   begin :relationships
     has_many :employees
@@ -94,5 +95,10 @@ class User < ActiveRecord::Base
         end
       end
     end
+  end
+
+
+  def assign_points
+    UtilService.new(self).assign_promo_points
   end
 end
