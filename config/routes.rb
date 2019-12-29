@@ -13,7 +13,8 @@ Rails.application.routes.draw do
     controllers: {
       sessions: "auth/sessions",
       registrations: "auth/registrations",
-      token_validations: "auth/token_validations"
+      token_validations: "auth/token_validations",
+      omniauth_callbacks: "auth/omniauth_callbacks"
     }
   )
 

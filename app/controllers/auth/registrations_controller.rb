@@ -5,7 +5,7 @@ module Auth
     protected
 
     def render_create_success
-      add_points_by_register!
+      # add_points_by_register!
       @success = true
       render "api/auth/sessions/user"
     end
@@ -16,8 +16,8 @@ module Auth
       request.format = :json
     end
 
-    def add_points_by_register!
-      UtilService.new(current_user).assign_promo_points
-    end
+    # def add_points_by_register!
+    #   UtilService.new(current_user).assign_promo_points
+    # end
   end
 end
