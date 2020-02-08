@@ -22,6 +22,7 @@ class TransactionOutput < ApplicationRecord
   begin :validations
     validate :user_has_enough_points
     validate :promotion_has_enough_rewards
+    validates :points, numericality: { greater_than: 0 }
   end
 
   begin :callbacks
