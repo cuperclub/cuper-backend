@@ -4,10 +4,14 @@ module Api
                   :find_employee, only: [:index, :create]
     before_action :get_company, only: [:create]
 
+    PAGE = 1
+    PER_PAGE = 5
+
     def index
-      transaction_inputs = TransactionInput.where(employee: @employee).order(created_at: :desc)
+      transactions_list = TransactionInput.where(employee: @employee).order(created_at: :desc)
+      transaction_inputs = transactions_list.page(params[:page] || PAGE).per(params[:per_page] || PER_PAGE)
       render :transaction_inputs,
-            locals: { transaction_inputs: transaction_inputs }
+            locals: { transaction_inputs: transaction_inputs, total_count: transaction_inputs.total_count }
     end
 
     def create

@@ -5,3 +5,7 @@ json.transaction_inputs do
     as: :transaction_input
   )
 end
+
+json.meta do
+  json.total_count total_count
+end
