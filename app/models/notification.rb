@@ -21,8 +21,8 @@ class Notification < ApplicationRecord
   after_create :notify_user!
 
   begin :validations
-    validates_uniqueness_of :to_user, scope: [:from_user],
-                            if: -> {kind == 'request_employee'},
+    validates_uniqueness_of :to_user, scope: [:from_user, :from_employee],
+                            if: -> {kind == 'request_employee' && status == 'pending'},
                             message: I18n.t("activerecord.errors.models.notification.twice_request_employee")
   end
 
