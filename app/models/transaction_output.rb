@@ -54,7 +54,7 @@ class TransactionOutput < ApplicationRecord
   end
 
   def promotion_has_enough_rewards
-    if promotion && !promotion.unlimited && promotion.total_rewards - 1 < 0
+    if promotion && !promotion.unlimited && promotion.total_rewards - 1 != 0
       errors.add(
         :points,
         I18n.t("activerecord.errors.models.transaction_output.not_enough_rewards")

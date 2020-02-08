@@ -134,7 +134,8 @@ module Api
           :start_at,
           :end_at,
           :image,
-          :office_id
+          :office_id,
+          :unlimited
         )
       end
 
