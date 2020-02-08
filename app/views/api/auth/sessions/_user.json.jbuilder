@@ -8,7 +8,8 @@ json.extract!(
   :is_partner,
   :is_cashier,
   :is_admin,
-  :points
+  :points,
+  :provider
 )
 
 json.join_at(
