@@ -14,6 +14,8 @@ es:
         transaction_output:
           not_enough_points: Puntos insuficientes
           not_enough_rewards: Rewards insuficientes
+        notification:
+          twice_request_employee: Ya has enviado una invitacion a este usuario
   models:
     employee:
       status:
