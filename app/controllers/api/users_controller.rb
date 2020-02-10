@@ -2,6 +2,8 @@ module Api
   class UsersController < BaseController
 
     before_action :authenticate_user!
+    PAGE = 1
+    PER_PAGE = 5
 
     api :GET,
         "/api/users",
@@ -74,11 +76,13 @@ module Api
     "returns current user transactions"
 
     def my_transactions
-      inputs = TransactionInput.where(user: current_user).order(created_at: :desc)
-      outputs = TransactionOutput.where(user: current_user).order(created_at: :desc)
+      inputs = TransactionInput.where(user: current_user)
+      outputs = TransactionOutput.where(user: current_user)
+      user_transactions = inputs + outputs
+      all_transactions = paginate_transactions(user_transactions)
       render "api/all_transactions",
-              status: :ok,
-              locals: { inputs: inputs, outputs: outputs }
+        status: :ok,
+        locals: { transactions: all_transactions, total_count: all_transactions.total_count }
     end
 
     private
@@ -107,6 +111,17 @@ module Api
         render json: record.errors,
               status: :unprocessable_entity
       end
+    end
+
+    def paginate_transactions(transactions_data)
+      sorted_transactions = sort_transactions(transactions_data)
+      Kaminari.paginate_array(sorted_transactions)
+              .page(params[:page] || PAGE)
+              .per(params[:per_page] || PER_PAGE)
+    end
+
+    def sort_transactions(transactions_data)
+      transactions_data.sort_by {|elem| elem[:created_at]}.reverse
     end
 
   end

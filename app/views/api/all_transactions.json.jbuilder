@@ -1,15 +1,11 @@
-json.transaction_inputs do
+json.transactions do
   json.array!(
-    inputs,
-    partial: "api/shared/simple_transaction_input",
-    as: :transaction_input
+    transactions,
+    partial: "api/shared/generic_transaction",
+    as: :transaction
   )
 end
 
-json.transaction_outputs do
-  json.array!(
-    outputs,
-    partial: "api/shared/simple_transaction_output",
-    as: :transaction_output
-  )
+json.meta do
+  json.total_count total_count
 end
