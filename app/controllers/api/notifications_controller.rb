@@ -4,6 +4,9 @@ module Api
     before_action :find_notification, only: [:answer_request_employee]
     respond_to :json
 
+    PAGE = 1
+    PER_PAGE = 5
+
     api :GET,
     "/api/notifications",
     "Get current_user notifications"
@@ -25,9 +28,10 @@ module Api
       }],
     }]
     def index
-      notifications = Notification.where(to_user_id: current_user.id).order(created_at: :desc)
+      notifications_list = Notification.where(to_user_id: current_user.id).order(created_at: :desc)
+      notifications = notifications_list.page(params[:page] || PAGE).per(params[:per_page] || PER_PAGE)
       render "api/notifications/notifications",
-              locals: { notifications:  notifications}
+              locals: { notifications:  notifications, total_count: notifications.total_count }
     end
 
     api :PUT,
