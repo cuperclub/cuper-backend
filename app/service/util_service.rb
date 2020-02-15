@@ -12,6 +12,7 @@ class UtilService
   def assign_promo_points
     app = app_settings
     if app && app.points_by_register > 0
+      binding.pry
       transaction_input = TransactionInput.new(
         user: @client,
         employee_id: app.main_employee_id,
