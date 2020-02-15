@@ -119,7 +119,7 @@ module Api
         promotion = @company.promotions.find(params[:id])
         transaction_outputs = promotion.transaction_outputs
         render "api/transaction_outputs/transaction_outputs",
-          locals: { transaction_outputs: transaction_outputs }
+          locals: { transaction_outputs: transaction_outputs, total_count: 0 }
       end
 
       private
