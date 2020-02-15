@@ -92,14 +92,16 @@ Employee.create(
   user: cashier,
   company: company,
   role: 'cashier',
-  status: 'approved'
+  status: 'approved',
+  skip_notification_email: true
 )
 
 Employee.create(
   user: partner,
   company: company,
   role: 'partner',
-  status: 'approved'
+  status: 'approved',
+  skip_notification_email: true
 )
 
 ####Administration Cuper######
@@ -126,7 +128,8 @@ cuper_employee = Employee.create(
   user: cuper_employee,
   company: cuper_company,
   role: 'partner',
-  status: 'approved'
+  status: 'approved',
+  skip_notification_email: true
 )
 
 free_plan = Plan.create(
