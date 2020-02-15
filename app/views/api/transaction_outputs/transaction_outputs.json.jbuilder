@@ -7,5 +7,7 @@ json.transaction_outputs do
 end
 
 json.meta do
-  json.total_count total_count
+  unless json.total_count.nil?
+    json.total_count total_count
+  end
 end
