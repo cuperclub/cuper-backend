@@ -12,8 +12,9 @@ jobs:
           RAILS_ENV: test
       - image: postgres:9.5
         environment:
-          POSTGRES_USER: root
+          POSTGRES_USER: postgres
           POSTGRES_DB: cuperclub-backend_test
+          POSTGRES_PASSWORD: "postgres"
 
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
