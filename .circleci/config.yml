@@ -10,7 +10,6 @@ jobs:
       - image: circleci/ruby:2.5.0-node-browsers
         environment:
           RAILS_ENV: test
-          BUNDLER_VERSION: 2.0.2
       - image: postgres:9.5
         environment:
           POSTGRES_USER: postgres
@@ -39,7 +38,9 @@ jobs:
           command: |
             echo 'export BUNDLER_VERSION=$(cat Gemfile.lock | tail -1 | tr -d " ")' >> $BASH_ENV
             source $BASH_ENV
+            gem update --system
             gem install bundler
+            bundle install --jobs=4 --retry=3 --path vendor/bundle
 
       - save_cache:
           paths:
