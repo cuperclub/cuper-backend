@@ -45,6 +45,11 @@ module Api
             role: 'partner'
           )
           employee.save
+          plan_company = PlanCompany.new(
+            plan_id: params[:plan_id],
+            company: company
+          )
+          plan_company.save
           render :company,
                 status: :created,
                 locals: { company: company }
