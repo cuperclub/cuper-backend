@@ -36,6 +36,9 @@ module Api
       def create
         company = Company.new(company_params)
         if company.save
+          setting = current_user.setting
+          setting.current_company = company.id
+          setting.save
           employee = Employee.new(
             user: current_user,
             company: company,
