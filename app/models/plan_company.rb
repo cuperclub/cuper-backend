@@ -7,6 +7,7 @@
 #  company_id :bigint(8)        not null
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  expired    :boolean          default(FALSE)
 #
 
 class PlanCompany < ApplicationRecord
