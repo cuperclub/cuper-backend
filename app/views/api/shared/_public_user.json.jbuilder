@@ -1,10 +1,11 @@
 json.call(
   user,
-  :id,
-  :name,
-  :email,
-  :image_url,
   :national_id
+)
+
+json.partial!(
+  "api/shared/user_basic",
+  user: user
 )
 
 json.join_at(

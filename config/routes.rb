@@ -71,6 +71,7 @@ Rails.application.routes.draw do
         member do
           # get :send_invitation_employee
           post :request_employee
+          get :pending_requests_employee
         end
         resources :promotions, only: [:index, :show] do
           member do

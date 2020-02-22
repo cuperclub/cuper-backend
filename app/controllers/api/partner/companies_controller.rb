@@ -107,6 +107,15 @@ module Api
         end
       end
 
+      def pending_requests_employee
+        notifications = Notification.where(from_user: current_user,
+                                            kind: "request_employee",
+                                            status: "pending")
+                                          .order(created_at: :desc)
+        render "api/notifications/notifications_request_employee",
+                locals: { notifications:  notifications }
+      end
+
       # def send_invitation_employee
       #   email = params[:email]
       #   if email
