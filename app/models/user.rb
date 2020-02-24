@@ -97,6 +97,10 @@ class User < ActiveRecord::Base
     end
   end
 
+  def my_employee
+    Employee.where(user: self, company_id: self.current_view_company_id)
+  end
+
 
   def assign_points
     UtilService.new(self).assign_promo_points

@@ -99,7 +99,8 @@ module Api
       def request_employee
         notification = UtilService.new(@user, current_user).notify_employee_request
         if notification.save
-          render json: {status: :ok}, status: :ok
+          render "api/notifications/notification_request_employee",
+                  locals: { notification:  notification }
           # CompanyMailer.invitation_employee_company(email, @company).deliver_now
         else
           render json: notification.errors,
@@ -109,6 +110,7 @@ module Api
 
       def pending_requests_employee
         notifications = Notification.where(from_user: current_user,
+                                            from_employee: current_user.my_employee,
                                             kind: "request_employee",
                                             status: "pending")
                                           .order(created_at: :desc)
