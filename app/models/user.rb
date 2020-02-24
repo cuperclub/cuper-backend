@@ -98,7 +98,7 @@ class User < ActiveRecord::Base
   end
 
   def my_employee
-    Employee.where(user: self, company_id: self.current_view_company_id)
+    Employee.where(user: self, company_id: self.current_view_company_id).first
   end
 
 

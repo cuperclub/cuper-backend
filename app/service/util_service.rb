@@ -25,10 +25,9 @@ class UtilService
   def notify_employee_request
     notification = Notification.new
     company = user_company
-    employee = user_employee
     notification.message = "La empresa: #{company.business_name} quiere registrarte como empleado"
     notification.kind = "request_employee"
-    notification.from_employee_id = employee.id
+    notification.from_employee_id = @current_user.my_employee.id
     notification.from_user_id = @current_user.id
     notification.to_user_id = @client.id
     notification
@@ -100,10 +99,5 @@ class UtilService
 
   def user_company
     Company.find(@current_user.current_view_company_id)
-  end
-
-  def user_employee
-    company = user_company
-    Employee.find_by_company_id(company.id)
   end
 end
