@@ -18,4 +18,5 @@ if company.plan_company
       plan: plan
     )
   end
+  json.plan_expired company.plan_company.expired
 end
