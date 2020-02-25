@@ -36,9 +36,6 @@ module Api
       def create
         company = Company.new(company_params)
         if company.save
-          # setting = current_user.setting
-          # setting.current_company = company.id
-          # setting.save
           employee = Employee.new(
             user: current_user,
             company: company,
@@ -52,6 +49,7 @@ module Api
             )
             plan.save
           end
+          set_current_view(company.id)
           render :company,
                 status: :created,
                 locals: { company: company }
@@ -135,6 +133,20 @@ module Api
       #           status: :unprocessable_entity
       #   end
       # end
+
+      def set_current_view(company_id)
+        setting = current_user.setting
+        if setting
+          setting.current_company = company_id
+          setting.user = current_user
+          setting.save
+        else
+          setting = Setting.new
+          setting.current_company = company_id
+          setting.user = current_user
+          setting.save
+        end
+      end
 
       private
 
