@@ -8,7 +8,7 @@ gem 'rails', '~> 5.2.3'
 # Use postgresql as the database for Active Record
 gem 'pg', '>= 0.18', '< 2.0'
 # Use Puma as the app server
-gem 'puma', '~> 3.11'
+gem 'puma', '~> 3.12'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.5'
 # Use Redis adapter to run Action Cable in production
@@ -67,7 +67,7 @@ gem 'omniauth-facebook', '~> 4.0'
 gem 'omniauth-google-oauth2'
 
 gem 'devise_token_auth', '~> 0.1'
-gem 'rack-cors', '~> 0.4', require: 'rack/cors'
+gem 'rack-cors', '~> 1.0', require: 'rack/cors'
 gem 'apipie-rails'
 gem 'carrierwave', '~> 1.1'
 gem 'kaminari'
