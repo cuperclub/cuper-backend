@@ -21,7 +21,7 @@ module Api
     private
 
     def promotions_availables
-      @promotions = Promotion.joins(:office).where(offices: {company_id: Company.joins(:employees).select("id").where(employees: {status: "approved", role: "partner"}).map(&:id)})
+      @promotions = Promotion.joins(:office).where(offices: {company_id: Company.joins(:employees).select("id").where(employees: {status: "approved", role: "partner"})})
     end
   end
 end
