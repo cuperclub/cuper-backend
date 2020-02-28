@@ -20,6 +20,7 @@ class TransactionInput < ApplicationRecord
 
   begin :validations
     validate :cannot_assign_yourself
+    validates :points, numericality: { greater_than: 0 }
   end
 
   begin :callbacks

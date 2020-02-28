@@ -32,6 +32,8 @@ module CuperclubBackend
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
     config.i18n.default_locale = :es
+    #omniauth
+    config.middleware.use Rack::Session::Cookie
 
     config.generators do |g|
       g.test_framework :rspec,

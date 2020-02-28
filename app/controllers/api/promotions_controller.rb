@@ -7,7 +7,7 @@ module Api
     "/api/promotions",
     "Get all promotions"
     def index
-      promotions = Promotion.all
+      promotions = promotions_availables
       render :promotions,
             locals: { promotions: promotions }
     end
@@ -18,5 +18,11 @@ module Api
              locals: { promotion: promotion }
     end
 
+    private
+
+    def promotions_availables
+      @promotions = Promotion.joins(:office).where(offices: {company_id: Company.joins(:employees).select("id").where(employees: {status: "approved", role: "partner"})})
+    end
   end
 end
+

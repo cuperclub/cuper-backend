@@ -9,4 +9,5 @@ json.call(
   :image_url,
   :start_at,
   :end_at,
+  :unlimited
 )

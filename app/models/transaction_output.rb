@@ -22,6 +22,7 @@ class TransactionOutput < ApplicationRecord
   begin :validations
     validate :user_has_enough_points
     validate :promotion_has_enough_rewards
+    validates :points, numericality: { greater_than: 0 }
   end
 
   begin :callbacks
@@ -38,6 +39,7 @@ class TransactionOutput < ApplicationRecord
   def update_promotion
     if !promotion.unlimited
       promotion.total_rewards = promotion.total_rewards - 1
+      promotion.save
     end
   end
 
@@ -52,7 +54,7 @@ class TransactionOutput < ApplicationRecord
   end
 
   def promotion_has_enough_rewards
-    if promotion && !promotion.unlimited && promotion.total_rewards - 1 < 0
+    if promotion && !promotion.unlimited && promotion.total_rewards - 1 != 0
       errors.add(
         :points,
         I18n.t("activerecord.errors.models.transaction_output.not_enough_rewards")

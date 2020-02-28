@@ -4,6 +4,9 @@ module Api
     before_action :find_notification, only: [:answer_request_employee]
     respond_to :json
 
+    PAGE = 1
+    PER_PAGE = 5
+
     api :GET,
     "/api/notifications",
     "Get current_user notifications"
@@ -25,9 +28,10 @@ module Api
       }],
     }]
     def index
-      notifications = Notification.where(to_user_id: current_user.id).order(created_at: :desc)
+      notifications_list = Notification.where(to_user_id: current_user.id).order(created_at: :desc)
+      notifications = notifications_list.page(params[:page] || PAGE).per(params[:per_page] || PER_PAGE)
       render "api/notifications/notifications",
-              locals: { notifications:  notifications}
+              locals: { notifications:  notifications, total_count: notifications.total_count }
     end
 
     api :PUT,
@@ -59,13 +63,20 @@ module Api
       if @notification.kind == "request_employee" && @notification.status == "pending"
         @notification.status = params[:status]
         @notification.save
-        employee = create_employe
-        if employee.save
-          render json: { employee: employee, notification: @notification },
-                  status: :created
+        if params[:status] === "approved"
+          employee = create_employe
+          if employee.save
+            notify_company!(employee)
+            render json: { employee: employee, notification: @notification },
+                    status: :created
+          else
+            render json: employee.errors,
+                  status: :unprocessable_entity
+          end
         else
-          render json: employee.errors,
-                status: :unprocessable_entity
+          notify_company!(nil)
+          render json: { notification: @notification },
+                status: :created
         end
       end
     end
@@ -96,9 +107,11 @@ module Api
     }
 
     def read_pending_notifications
-      Notification.where(to_user_id: current_user.id, status: "pending")
-                  .where.not(kind: "request_employee").update_all(:status => "read")
-      render json: {status: :ok}, status: :ok
+      notifications = Notification.where(to_user_id: current_user.id, status: "pending")
+                  .where.not(kind: "request_employee")
+      total = notifications.count
+      notifications.update_all(:status => "read")
+      render json: {status: :ok, total: total}, status: :ok
     end
 
 
@@ -108,7 +121,6 @@ module Api
       @notification = Notification.find(params[:id])
     end
 
-
     def create_employe
       employee = Employee.new
       employee.company = @notification.from_employee.company;
@@ -116,6 +128,15 @@ module Api
       employee.status = params[:status];
       employee.user = @notification.to_user;
       employee
+    end
+
+    def notify_company!(employee)
+      UtilService.new( @notification.from_user,
+                        current_user,
+                        { status: params[:status],
+                          employee: employee
+                        }
+                      ).notify_company_request_employee
     end
   end
 end

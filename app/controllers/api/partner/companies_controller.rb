@@ -42,6 +42,14 @@ module Api
             role: 'partner'
           )
           employee.save
+          if params[:plan_id]
+            plan = PlanCompany.new(
+              company: company,
+              plan_id: params[:plan_id]
+            )
+            plan.save
+          end
+          set_current_view(company.id)
           render :company,
                 status: :created,
                 locals: { company: company }
@@ -88,7 +96,7 @@ module Api
                   status: :accepted,
                   locals: { company: @company }
         else
-          render json: company.errors,
+          render json: @company.errors,
                 status: :unprocessable_entity
         end
       end
@@ -96,7 +104,8 @@ module Api
       def request_employee
         notification = UtilService.new(@user, current_user).notify_employee_request
         if notification.save
-          render json: {status: :ok}, status: :ok
+          render "api/notifications/notification_request_employee",
+                  locals: { notification:  notification }
           # CompanyMailer.invitation_employee_company(email, @company).deliver_now
         else
           render json: notification.errors,
@@ -104,16 +113,38 @@ module Api
         end
       end
 
-      def send_invitation_employee
-        email = params[:email]
-        if email
-          CompanyMailer.invitation_employee_company(email, @company).deliver_now
-          render :company,
-                  status: :accepted,
-                  locals: { company: @company }
+      def pending_requests_employee
+        notifications = Notification.where(from_user: current_user,
+                                            from_employee: current_user.my_employee,
+                                            kind: "request_employee",
+                                            status: "pending")
+                                          .order(created_at: :desc)
+        render "api/notifications/notifications_request_employee",
+                locals: { notifications:  notifications }
+      end
+
+      # def send_invitation_employee
+      #   email = params[:email]
+      #   if email
+      #     CompanyMailer.invitation_employee_company(email, @company).deliver_now
+      #     render json: {status: :ok}, status: :ok
+      #   else
+      #     render json: {emai: 'Invalid'},
+      #           status: :unprocessable_entity
+      #   end
+      # end
+
+      def set_current_view(company_id)
+        setting = current_user.setting
+        if setting
+          setting.current_company = company_id
+          setting.user = current_user
+          setting.save
         else
-          render json: {emai: 'Invalid'},
-                status: :unprocessable_entity
+          setting = Setting.new
+          setting.current_company = company_id
+          setting.user = current_user
+          setting.save
         end
       end
 

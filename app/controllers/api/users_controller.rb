@@ -2,6 +2,8 @@ module Api
   class UsersController < BaseController
 
     before_action :authenticate_user!
+    PAGE = 1
+    PER_PAGE = 5
 
     api :GET,
         "/api/users",
@@ -69,6 +71,20 @@ module Api
       end
     end
 
+    api :GET,
+    "/users/my_transactions",
+    "returns current user transactions"
+
+    def my_transactions
+      inputs = TransactionInput.where(user: current_user)
+      outputs = TransactionOutput.where(user: current_user)
+      user_transactions = inputs + outputs
+      all_transactions = paginate_transactions(user_transactions)
+      render "api/all_transactions",
+        status: :ok,
+        locals: { transactions: all_transactions, total_count: all_transactions.total_count }
+    end
+
     private
 
     def user_params
@@ -84,17 +100,44 @@ module Api
     def search_results
       users_results = UserSearch.new( q:params[:query],
                                       id:current_user.id
-                                    ).results
+                                    ).results.limit(10)
     end
 
     def render_setting(record)
       record.user = current_user
       if record.save
-        render json: {company_id: record.current_company}, status: :ok
+        expired_plan = validate_plan(record.current_company)
+        render json: {
+          company_id: record.current_company,
+          expired_plan: expired_plan
+          }, status: :ok
       else
         render json: record.errors,
               status: :unprocessable_entity
       end
+    end
+
+    def validate_plan(company_id)
+      current_plan = PlanCompany.find_by_company_id(company_id)
+      day_in_seconds = 86400
+      expired_date = current_plan.created_at + (current_plan.plan.days * day_in_seconds)
+      expired_plan = expired_date < DateTime.now
+      if expired_plan && !current_plan.expired
+        current_plan.expired = true
+        current_plan.save
+      end
+      expired_plan
+    end
+
+    def paginate_transactions(transactions_data)
+      sorted_transactions = sort_transactions(transactions_data)
+      Kaminari.paginate_array(sorted_transactions)
+              .page(params[:page] || PAGE)
+              .per(params[:per_page] || PER_PAGE)
+    end
+
+    def sort_transactions(transactions_data)
+      transactions_data.sort_by {|elem| elem[:created_at]}.reverse
     end
 
   end

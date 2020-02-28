@@ -13,8 +13,8 @@ Rails.application.routes.draw do
     controllers: {
       sessions: "auth/sessions",
       registrations: "auth/registrations",
-      passwords: "auth/passwords",
-      token_validations: "auth/token_validations"
+      token_validations: "auth/token_validations",
+      omniauth_callbacks: "auth/omniauth_callbacks"
     }
   )
 
@@ -34,6 +34,7 @@ Rails.application.routes.draw do
     resource :users, only: [:update] do
       member do
         put :current_view
+        get :my_transactions
       end
     end
     resources :users, only: [:update, :index]
@@ -68,8 +69,9 @@ Rails.application.routes.draw do
     namespace :partner do
       resource :companies, only: [:create, :update, :show] do
         member do
-          get :send_invitation_employee
+          # get :send_invitation_employee
           post :request_employee
+          get :pending_requests_employee
         end
         resources :promotions, only: [:index, :show] do
           member do
@@ -82,7 +84,7 @@ Rails.application.routes.draw do
           end
           resources :promotions, only: [:create, :update]
         end
-        resources :employees, only: [:index, :show, :create] do
+        resources :employees, only: [:index, :show] do
           member do
             put :update_state
           end

@@ -17,6 +17,7 @@ module Api
 
       def index
         plans = Plan.all.order(created_at: :desc)
+        plans = ((current_user.companies.count == 0) || current_user.is_admin) ? plans : plans.where.not(price: 0.0)
         render :plans,
               status: :created,
               locals: { plans: plans }
