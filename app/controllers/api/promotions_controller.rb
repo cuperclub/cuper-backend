@@ -20,23 +20,9 @@ module Api
 
     private
 
-    def companies_aproved
-      @companiesIds = []
-      Employee.where(status: "approved", role: "partner").each do |employee|
-        @companiesIds.push(employee.company_id)
-      end
-      @companiesIds
-    end
-
     def promotions_availables
-      @promotions = []
-      Promotion.all.each do |promotion|
-        if companies_aproved.include?(promotion.office.company_id)
-          @promotions.push(promotion)
-        end
-      end
-      @promotions
+      @promotions = Promotion.joins(:office).where(offices: {company_id: Company.joins(:employees).select("id").where(employees: {status: "approved", role: "partner"}).map(&:id)})
     end
-
   end
 end
+
