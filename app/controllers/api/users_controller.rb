@@ -120,7 +120,7 @@ module Api
     def validate_plan(company_id)
       current_plan = PlanCompany.find_by_company_id(company_id)
       day_in_seconds = 86400
-      expired_date = current_plan.created_at + (current_plan.plan.days * day_in_seconds)
+      expired_date = current_plan.start_date + (current_plan.plan.days * day_in_seconds)
       expired_plan = expired_date < DateTime.now
       if expired_plan && !current_plan.expired
         current_plan.expired = true

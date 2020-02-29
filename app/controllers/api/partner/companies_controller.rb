@@ -45,7 +45,8 @@ module Api
           if params[:plan_id]
             plan = PlanCompany.new(
               company: company,
-              plan_id: params[:plan_id]
+              plan_id: params[:plan_id],
+              start_date: DateTime.now
             )
             plan.save
           end

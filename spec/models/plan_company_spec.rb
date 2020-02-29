@@ -8,6 +8,7 @@
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #  expired    :boolean          default(FALSE)
+#  start_date :datetime
 #
 
 require 'rails_helper'
