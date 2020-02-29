@@ -126,6 +126,9 @@ module Api
         if expired_plan && !current_plan.expired
           current_plan.expired = true
           current_plan.save
+          employee = Employee.where(company: company_id, user: current_user).first
+          employee.status = "expired"
+          employee.save
         end
       end
       expired_plan
