@@ -106,32 +106,14 @@ module Api
     def render_setting(record)
       record.user = current_user
       if record.save
-        expired_plan = validate_plan(record.current_company)
         render json: {
           company_id: record.current_company,
-          expired_plan: expired_plan
+          expired_plan: current_user.expired_plan
           }, status: :ok
       else
         render json: record.errors,
               status: :unprocessable_entity
       end
-    end
-
-    def validate_plan(company_id)
-      current_plan = PlanCompany.find_by_company_id(company_id)
-      if current_plan
-        day_in_seconds = 86400
-        expired_date = current_plan.start_date + (current_plan.plan.days * day_in_seconds)
-        expired_plan = expired_date < DateTime.now
-        if expired_plan && !current_plan.expired
-          current_plan.expired = true
-          current_plan.save
-          employee = Employee.where(company: company_id, user: current_user).first
-          employee.status = "expired"
-          employee.save
-        end
-      end
-      expired_plan
     end
 
     def paginate_transactions(transactions_data)

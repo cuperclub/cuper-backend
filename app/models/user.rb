@@ -97,6 +97,23 @@ class User < ActiveRecord::Base
     end
   end
 
+  def expired_plan
+    current_plan = PlanCompany.find_by_company_id(self.current_view_company_id)
+    if current_plan && current_plan.has_attribute?(:expired)
+      day_in_seconds = 86400
+      expired_date = current_plan.start_date + (current_plan.plan.days * day_in_seconds)
+      is_expired_plan = current_plan.expired
+      if expired_date < DateTime.now && !current_plan.expired
+        current_plan.expired = true
+        current_plan.save
+        employee = self.my_employee
+        employee.status = "expired"
+        employee.save
+      end
+    end
+    is_expired_plan
+  end
+
   def my_employee
     Employee.where(user: self, company_id: self.current_view_company_id).first
   end
