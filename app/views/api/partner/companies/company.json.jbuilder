@@ -18,5 +18,8 @@ if company.plan_company
       plan: plan
     )
   end
+
   json.expired_plan company.plan_company.expired
+
+  json.expired_plan_date ((company.plan_company.start_date + (company.plan_company.plan.days * 86400)).to_f * 1000).to_i
 end
