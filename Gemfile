@@ -69,7 +69,7 @@ gem 'omniauth-google-oauth2'
 gem 'devise_token_auth', '~> 0.1'
 gem 'rack-cors', '~> 1.0', require: 'rack/cors'
 gem 'apipie-rails'
-gem 'carrierwave', '~> 1.1'
+gem 'carrierwave', '~> 1.3'
 gem 'kaminari'
 
 gem "pundit"
