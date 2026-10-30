@@ -105,14 +105,14 @@ Use `mise install ruby@<exact-version>` to install without changing `.ruby-versi
 ## Phase 2 — Ruby and Rails upgrades
 
 - [x] **Objective:** use the approved Ruby 3.4.12 / Rails 8.0.5.1 runtime target; newer major/minor upgrades are separate work.
-- [ ] **Components:** `.ruby-version`, `Gemfile`, `Gemfile.lock`, `.circleci/config.yml`, `config/application.rb`, `config/environments/**`, `config/initializers/**`, `bin/**`, relevant native gems.
-- [ ] **Prerequisites:** phase 0 reproducibility and phase 1 regression suite; dependency blockers addressed when needed.
-- [ ] **Changes:** install exact Ruby with mise, one runtime PR at a time; upgrade Rails one listed minor line per PR; run deprecations and targeted upgrade checks; inspect generated `app:update` diff instead of accepting defaults indiscriminately; move from classic assumptions to Zeitwerk; replace legacy secrets access; update Rack session setup, cookie rotation and native builds as evidence requires.
-- [ ] **Risks:** OAuth/session behavior, cookies, autoloading, Ruby keyword arguments and database adapter need compatibility checks; Rails 8.1/CarrierWave 4 support is deferred, not a blocker.
-- [ ] **Tests:** full suite per hop, boot and eager-load check, routes, OAuth callback mocks, token lifecycle, schema load, uploads, JSON contract and CI on pinned runtime/PostgreSQL.
-- [ ] **Acceptance:** each hop passes and deploy/rollback rehearsed; no unexplained deprecations; final exact Ruby/Rails/Bundler bundle resolves and boots.
-- [ ] **Rollback:** restore prior image, lock and runtime; do not mix app rollback with an incompatible schema change.
-- [ ] **Frontend:** zero intentional API contract changes; run old Angular against upgraded backend.
+- [x] **Components:** `.ruby-version`, `Gemfile`, `Gemfile.lock`, `.circleci/config.yml`, `config/application.rb`, `config/environments/**`, `config/initializers/**`, `bin/**`, relevant native gems.
+- [x] **Prerequisites:** phase 0 reproducibility and available phase 1 regression coverage; dependency bundle resolves on the approved target.
+- [x] **Changes:** established Ruby 3.4.12/Rails 8.0.5.1, updated legacy Rails config/session/secrets integration, and verified the app boots and eagerly loads. Further Rails/Ruby upgrades are separate work.
+- [x] **Risks:** compatibility checks passed for the exercised app/runtime paths. OAuth is assumed acceptable by the user and its keep/remove decision is deferred; Rails 8.1/CarrierWave 4 is outside scope.
+- [x] **Tests:** full RSpec, Zeitwerk eager-load, route boot, schema load, local file upload + persisted reload, token lifecycle and representative API response comparison passed. Hosted CircleCI and OAuth callback tests are intentionally excluded by user direction.
+- [x] **Acceptance:** approved exact bundle resolves and boots; no deprecation warnings appeared in the checks; local application rollback rehearsal passed with unchanged schema/data and matching API response.
+- [x] **Rollback:** rehearsed switching between candidate code and the prior runtime-baseline commit on a disposable PostgreSQL database; no production deployment or data migration was involved.
+- [x] **Frontend:** routes and Jbuilder views are unchanged from `master`; the representative successful API response matched after rollback. Full Angular integration was not run, per the agreed response-compatibility scope.
 
 ## Phase 3 — gems and configuration
 
