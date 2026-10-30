@@ -15,9 +15,14 @@
 #   end
 # end
 
+default_origins = Rails.env.development? || Rails.env.test? ? "http://localhost:4200" : ""
+allowed_origins = ENV.fetch("CORS_ALLOWED_ORIGINS", default_origins).split(",").map(&:strip).reject(&:empty?)
+
+raise "CORS_ALLOWED_ORIGINS must not contain '*'" if allowed_origins.include?("*")
+
 Rails.application.config.middleware.use Rack::Cors do
     allow do
-      origins '*'
+      origins(*allowed_origins)
       resource '*',
       :headers => :any,
       :expose  => ['access-token', 'expiry', 'token-type', 'uid', 'client'],

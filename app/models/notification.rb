@@ -59,12 +59,9 @@ class Notification < ApplicationRecord
     user_channel_general = "usernotifications.#{self.to_user_id}"
     begin
       Pusher.trigger(user_channel_general, 'new-notification', notification_data)
-    rescue Exception => e
-      puts e.message
-      puts e.backtrace.inspect
-    else
-      puts "PUSHER: Message sent successfully!"
-      puts "PUSHER: #{notification_data}"
+      Rails.logger.info("Pusher notification delivered (notification_id=#{id})")
+    rescue StandardError => e
+      Rails.logger.error("Pusher notification failed (notification_id=#{id}, error=#{e.class})")
     end
   end
 end
