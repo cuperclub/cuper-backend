@@ -1,0 +1,41 @@
+name: Backend modernization
+description: Track the completed backend modernization work and review its evidence.
+title: "Complete backend modernization phases 0–6"
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this form for the repository-local backend modernization. Angular integration, CI, and Dockerized deployment are separate workstreams.
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: State the backend outcome being reviewed.
+      placeholder: Summarize the completed backend modernization.
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope and changes
+      description: List the phases and behavior included in this work.
+      placeholder: Describe the security, runtime, accounting, ledger, and operational changes.
+    validations:
+      required: true
+  - type: textarea
+    id: verification
+    attributes:
+      label: Verification
+      description: Record test commands, results, and isolated rehearsal evidence.
+      placeholder: Include the exact local verification results.
+    validations:
+      required: true
+  - type: textarea
+    id: follow_up
+    attributes:
+      label: Follow-up and exclusions
+      description: Identify work intentionally left to Angular, CI, or future deployment.
+      placeholder: List deferred work and known limitations.
+    validations:
+      required: true
