@@ -18,6 +18,18 @@ class ApplicationUploader < CarrierWave::Uploader::Base
     "uploads/#{model.class.to_s.underscore}/#{mounted_as}/#{model.id}"
   end
 
+  def size_range
+    1.byte..10.megabytes
+  end
+
+  def extension_allowlist
+    %w[jpg jpeg png webp gif]
+  end
+
+  def content_type_allowlist
+    /\Aimage\/(jpeg|png|webp|gif)\z/
+  end
+
   # Provide a default URL as a default if there hasn't been a file uploaded:
   # def default_url(*args)
   #   # For Rails 3.1+ asset pipeline compatibility:

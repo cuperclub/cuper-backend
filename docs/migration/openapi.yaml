@@ -3,10 +3,10 @@ info:
   title: Cuper backend (source-derived legacy contract)
   version: 0.1.0
   description: >-
-    Partial contract derived from routes, controllers and Jbuilder templates in
-    the legacy Rails repository. Runtime routes and payloads have not yet been
-    captured. Unknown fields and authentication routes are intentionally not
-    invented; expand only with request specs and sanitized fixtures.
+    Partial source-derived contract for the Rails backend. Runtime routes and
+    selected response behavior are documented in api-contract.md; this file
+    remains deliberately partial. Unknown fields and authentication routes are
+    not invented; expand only with request specs and sanitized fixtures.
 servers:
   - url: /
 security: []
@@ -81,10 +81,24 @@ paths:
       operationId: createTransactionInput
       summary: Accumulate loyalty points
       description: >-
-        Authenticated. Controller reads user_id, points and invoice_number from
-        transaction_input and multiplies submitted points by the company's
-        points_per_dollar. Source behavior and field units require regression
-        fixtures before this contract is expanded.
+        Authenticated approved employee in the selected company. The legacy
+        transaction_input.points field is the purchase amount in dollars; the
+        backend multiplies it by the company's integer points_per_dollar rate
+        and stores whole loyalty points, rounding halves up. No currency code
+        is carried by this API.
+      parameters:
+        - name: Idempotency-Key
+          in: header
+          required: false
+          description: >-
+            Optional during legacy-client transition. Generate one opaque UUID
+            per user intent and reuse it for retries; a different intent needs
+            a new UUID. Repeating the same key and payload replays the original
+            result; reusing a key for a different payload returns 409. Requests
+            without the header retain legacy behavior and are not deduplicated.
+          schema:
+            type: string
+            maxLength: 255
       security:
         - tokenHeaders: []
       requestBody:
@@ -104,7 +118,7 @@ paths:
                       format: int64
                     points:
                       type: number
-                      description: Legacy numeric input; business unit and precision are not yet verified.
+                      description: Purchase amount in dollars; converted to whole loyalty points by points_per_dollar.
                     invoice_number:
                       type: string
                       nullable: true
@@ -130,6 +144,13 @@ paths:
                     description: Fields delegated to api/shared/user and user_basic partials.
         '422':
           $ref: '#/components/responses/ValidationError'
+        '409':
+          description: Idempotency-Key was already used for a different operation.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
         default:
           $ref: '#/components/responses/UnverifiedError'
   /api/transaction_outputs:
@@ -138,11 +159,23 @@ paths:
       operationId: createTransactionOutput
       summary: Redeem a promotion
       description: >-
-        Authenticated. Legacy controller accepts user_id, points,
-        promotion_id and invoice_number inside transaction_output. The client
-        currently supplies points, although the recommended implementation
-        must calculate the authoritative cost from the server-side promotion.
-        That internal correction must retain the legacy response contract.
+        Authenticated approved employee in the selected company. The controller
+        accepts user_id (or legacy national_id), promotion_id and optional
+        invoice_number inside transaction_output. Client-supplied points are
+        ignored; the cost is calculated from the company-scoped promotion.
+      parameters:
+        - name: Idempotency-Key
+          in: header
+          required: false
+          description: >-
+            Optional during legacy-client transition. Generate one opaque UUID
+            per user intent and reuse it for retries; a different intent needs
+            a new UUID. Repeating the same key and payload replays the original
+            result; reusing a key for a different payload returns 409. Requests
+            without the header retain legacy behavior and are not deduplicated.
+          schema:
+            type: string
+            maxLength: 255
       security:
         - tokenHeaders: []
       requestBody:
@@ -155,14 +188,14 @@ paths:
               properties:
                 transaction_output:
                   type: object
-                  required: [user_id, points, promotion_id]
+                  required: [user_id, promotion_id]
                   properties:
                     user_id:
                       type: integer
                       format: int64
                     points:
                       type: number
-                      description: Legacy field accepted by current source; precise semantics and deprecation need coordination.
+                      description: Ignored by the backend; authoritative cost comes from the promotion.
                     promotion_id:
                       type: integer
                       format: int64
@@ -190,6 +223,13 @@ paths:
                     $ref: '#/components/schemas/Promotion'
         '422':
           $ref: '#/components/responses/ValidationError'
+        '409':
+          description: Idempotency-Key was already used for a different operation.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
         default:
           $ref: '#/components/responses/UnverifiedError'
   /api/users/current_view:
@@ -199,9 +239,8 @@ paths:
       summary: Set current company context
       description: >-
         Authenticated source reads company_id and returns company_id plus
-        expired_plan. The existing implementation does not verify membership;
-        the modernized backend must authorize the selection without changing
-        the successful response shape.
+        expired_plan. Company selection is restricted to an approved membership
+        and retains the existing successful response shape.
       security:
         - tokenHeaders: []
       requestBody:

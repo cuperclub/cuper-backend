@@ -30,7 +30,7 @@
 #  national_id            :string
 #  is_admin               :boolean          default(FALSE)
 #  active                 :boolean          default(TRUE)
-#  points                 :float            default(0.0)
+#  points                 :bigint(8)        default(0)
 #
 
 class User < ActiveRecord::Base
@@ -54,6 +54,7 @@ class User < ActiveRecord::Base
     has_many :companies, through: :employees
     has_many :transaction_inputs
     has_many :transaction_outputs
+    has_many :point_movements
     has_one :setting
   end
 

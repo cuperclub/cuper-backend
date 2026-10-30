@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   root to: redirect("/apipie")
+  get "up" => "rails/health#show", as: :rails_health_check
   apipie
 
   resources :transaction_outputs

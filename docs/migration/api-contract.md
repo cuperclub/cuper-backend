@@ -1,6 +1,6 @@
 # Observable API contract
 
-**Status:** routes were captured from the booted application in [`runtime-routes.txt`](runtime-routes.txt); the full RSpec suite passes on a fresh disposable PostgreSQL database. Payloads and legacy Angular usage have not been comprehensively validated because the frontend repository/fixtures are unavailable. Do not treat Apipie examples as complete truth: `config/initializers/apipie.rb` sets `validate = false`, and some examples are stale or syntactically illustrative.
+**Status:** routes were captured from the booted application in [`runtime-routes.txt`](runtime-routes.txt); backend regression specs pass. This source-derived contract is the handoff to the Angular owner, who owns client adaptation and frontend fixtures. Do not treat Apipie examples as complete truth: `config/initializers/apipie.rb` sets `validate = false`, and some examples are stale or syntactically illustrative.
 
 ## Compatibility rules
 
@@ -36,23 +36,23 @@ Unless noted, `namespace :api` supplies JSON defaults. “Auth” below reflects
 | PUT/PATCH | `/api/users` | `#update` | Authenticated; current user fields and status 202 on success |
 | PUT/PATCH | `/api/users/:id` | `#update` | Declared ID is not used by action; behavior still updates current user. Confirm legacy dependency before changing. |
 | GET | `/api/users/search` | `#search` | Authenticated; public-user array, query `query`, optional page; results capped at 10 |
-| PUT | `/api/users/current_view` | `#current_view` | Authenticated; body currently reads `company_id`; response `{company_id,expired_plan}` |
+| PUT | `/api/users/current_view` | `#current_view` | Authenticated; body reads `company_id` and requires approved company membership; response `{company_id,expired_plan}` |
 | GET | `/api/users/my_transactions` | `#my_transactions` | Authenticated; `{transactions:[...],meta:{total_count}}`; page/per_page defaults 1/5 |
-| GET/POST | `/api/admin/categories` | Admin categories index/create | Index/create callbacks exclude auth in source; list `{categories:[...]}`, create 201 |
-| GET/PUT/PATCH/DELETE | `/api/admin/categories/:id` | Admin categories show/update/destroy | Show/update auth; update uses `{category:{...}}`, success 202; destroy action is not defined |
-| GET/POST | `/api/admin/plans` | Admin plans index/create | Index/create callbacks exclude auth in source; `{plans:[...]}` plus promotional plan on index; create 201 |
-| GET/PUT/PATCH/DELETE | `/api/admin/plans/:id` | Admin plans show/update/destroy | Show/update auth; update success 202; destroy action is not defined |
-| GET/PUT | `/api/admin/app_settings/settings` | `#settings` | Authenticated; app setting and plans from Jbuilder; success 202 |
-| PUT | `/api/admin/app_settings/update_settings` | `#update_settings` | Authenticated; requires `app_setting` keys; success 202 |
+| GET/POST | `/api/admin/categories` | Admin categories index/create | Authenticated; index is available to authenticated users; create requires `is_admin`; list `{categories:[...]}`, create 201 |
+| GET/PUT/PATCH/DELETE | `/api/admin/categories/:id` | Admin categories show/update/destroy | Show requires authentication; update requires `is_admin`, uses `{category:{...}}`, success 202; destroy action is not defined |
+| GET/POST | `/api/admin/plans` | Admin plans index/create | Authenticated; index is available to authenticated users with plan filtering; create requires `is_admin`; index `{plans:[...]}` plus promotional plan; create 201 |
+| GET/PUT/PATCH/DELETE | `/api/admin/plans/:id` | Admin plans show/update/destroy | Show requires authentication; update requires `is_admin`, success 202; destroy action is not defined |
+| GET/PUT | `/api/admin/app_settings/settings` | `#settings` | Authenticated and `is_admin`; app setting and plans from Jbuilder; success 202 |
+| PUT | `/api/admin/app_settings/update_settings` | `#update_settings` | Authenticated and `is_admin`; requires `app_setting` keys; success 202 |
 | GET | `/api/admin/app_settings` | Default singular-resource show | Route is declared but controller `show` is not evident; verify runtime |
 | PUT/PATCH | `/api/admin/app_settings` | Default singular-resource update | Route is declared but controller action differs (`update_settings`); verify runtime |
-| GET | `/api/admin/companies` | `#index` | `authenticate_user!`; `{companies:[...]}`; admin-only policy not evident |
-| GET | `/api/admin/companies/:id` | `#show` | Authenticated; success 202 |
-| PUT | `/api/admin/companies/:id/change_status` | `#change_status` | Authenticated; `status`, `feedback`; authorization role not evident |
-| GET | `/api/admin/users` | `#index` | Authenticated; `{users:[...],meta:{total_count}}`; page/per_page defaults 1/5 and Pundit policy invoked |
+| GET | `/api/admin/companies` | `#index` | Authenticated and `is_admin`; `{companies:[...]}` |
+| GET | `/api/admin/companies/:id` | `#show` | Authenticated and `is_admin`; success 202 |
+| PUT | `/api/admin/companies/:id/change_status` | `#change_status` | Authenticated and `is_admin`; `status`, `feedback` |
+| GET | `/api/admin/users` | `#index` | Authenticated; `{users:[...],meta:{total_count}}`; page/per_page defaults 1/5 and Pundit admin policy invoked |
 | GET | `/api/admin/users/:role` | `#index` through custom collection route | Role filtering only for `Employee::ROLES`; route precedence requires runtime confirmation |
-| PUT | `/api/admin/users/:id/toggle_status` | `#toggle_status` | Authenticated; `{active:boolean}`; admin authorization not evident |
-| PUT | `/api/admin/users/:id/update_password` | `#update_password` | Authenticated; password action has no evident admin authorization; currently sends password via email |
+| PUT | `/api/admin/users/:id/toggle_status` | `#toggle_status` | Authenticated and `is_admin`; `{active:boolean}` |
+| PUT | `/api/admin/users/:id/update_password` | `#update_password` | Authenticated and `is_admin`; sends Devise reset instructions; does not email a submitted password |
 | POST | `/api/partner/companies` | `Api::Partner::CompaniesController#create` | Authenticated; company fields and optional `plan_id`; returns company (201) |
 | GET | `/api/partner/companies` | `#show` | Authenticated; uses selected company context |
 | PUT/PATCH | `/api/partner/companies` | `#update` | Authenticated; returns company (202) |
@@ -62,10 +62,10 @@ Unless noted, `namespace :api` supplies JSON defaults. “Auth” below reflects
 | GET | `/api/partner/companies/promotions/:id` | Partner promotions show | Authenticated; selected company-scoped lookup |
 | GET | `/api/partner/companies/promotions/:id/transaction_outputs` | `#transaction_outputs` | Authenticated; transaction output envelope; total_count hard-coded 0 |
 | GET | `/api/partner/companies/offices` | Partner offices index | Authenticated; `{offices:[...]}` |
-| POST | `/api/partner/companies/offices` | `#create` | Authenticated; request permits `company_id`; ownership must be corrected, JSON office partial, success 201 |
+| POST | `/api/partner/companies/offices` | `#create` | Authenticated approved partner in selected company; office ownership is assigned from authorized context, JSON office partial, success 201 |
 | GET | `/api/partner/companies/offices/:id` | `#show` | Authenticated; lookup scoped to selected company |
-| PUT/PATCH | `/api/partner/companies/offices/:id` | `#update` | Authenticated; permits `company_id`; success 202 |
-| PUT | `/api/partner/companies/offices/:id/toggle_status` | `#toggle_status` | Authenticated; `{active:boolean}`; policy uses `is_employee` |
+| PUT/PATCH | `/api/partner/companies/offices/:id` | `#update` | Authenticated approved partner in selected company; submitted company ownership is not trusted; success 202 |
+| PUT | `/api/partner/companies/offices/:id/toggle_status` | `#toggle_status` | Authenticated; `{active:boolean}`; policy requires approved partner membership for the office's company |
 | POST | `/api/partner/companies/offices/:office_id/promotions` | Partner promotions create | Authenticated; server resolves office under selected company; 201 |
 | PUT/PATCH | `/api/partner/companies/offices/:office_id/promotions/:id` | Partner promotions update | Authenticated; scoped through office; success 202 |
 | GET | `/api/partner/companies/employees` | Partner employees index | Authenticated; `{employees:[...]}` |
@@ -73,9 +73,9 @@ Unless noted, `namespace :api` supplies JSON defaults. “Auth” below reflects
 | PUT | `/api/partner/companies/employees/:id/update_state` | `#update_state` | Authenticated; nested `employee.status`, `employee.feedback`; success 202 |
 | POST | `/api/cashier/profile` | Cashier profile create | Authenticated; `company_id`; `{status:"accepted"}`, HTTP 202 |
 | GET | `/api/transaction_inputs` | Transaction inputs index | Authenticated; employee context; `{transaction_inputs:[...],meta:{total_count}}`, page/per_page 1/5 |
-| POST | `/api/transaction_inputs` | Transaction inputs create | Authenticated; nested `transaction_input.user_id` (or legacy `national_id` fallback), `.points`, `.invoice_number`; 201 or 422 |
+| POST | `/api/transaction_inputs` | Transaction inputs create | Authenticated approved employee in selected company; nested `transaction_input.user_id` (or legacy `national_id` fallback), `.points` purchase amount, `.invoice_number`; 201, 409 keyed conflict, or 422 |
 | GET | `/api/transaction_outputs` | Transaction outputs index | Authenticated; employee context; `{transaction_outputs:[...],meta:{total_count}}`, page/per_page 1/5 |
-| POST | `/api/transaction_outputs` | Transaction outputs create | Authenticated; nested `transaction_output.user_id` (or legacy `national_id` fallback), `.promotion_id`, `.invoice_number`; client `.points` is ignored, cost comes from the company-scoped promotion, employee cannot redeem their own promotion; 201 or 422 |
+| POST | `/api/transaction_outputs` | Transaction outputs create | Authenticated approved employee in selected company; nested `transaction_output.user_id` (or legacy `national_id` fallback), `.promotion_id`, `.invoice_number`; client `.points` is ignored, cost comes from the company-scoped promotion, employee cannot redeem their own promotion; 201, 409 keyed conflict, or 422 |
 
 ### Authentication routes
 
@@ -89,7 +89,10 @@ Headers exposed by CORS initializer: `access-token`, `expiry`, `token-type`, `ui
 
 | Flow | Request evidence | Response evidence / unknowns |
 |---|---|---|
-| Accrual | `transaction_input` contains `user_id` (legacy `national_id` fallback), `points`, optional `invoice_number`; points are multiplied by company category's integer `points_per_dollar` | Transaction input partial includes points and user; notification is sent separately; validate type coercion and exact unit |
+| Accrual | `transaction_input` contains `user_id` (legacy `national_id` fallback), `points`, optional `invoice_number`; `points` is the legacy purchase-amount input, converted by the company's integer `points_per_dollar` rate and rounded to whole points (halves up) | Transaction input partial includes calculated integer points and user; zero-point accruals are recorded; values above the exact JSON integer range are rejected; no currency code is carried |
+| Plans | Admin API documents `price` as `Integer`; fractional, negative, non-finite, or out-of-safe-range prices are rejected | Price is serialized as an integer in existing whole API units; currency code and minor unit are not specified |
+| Idempotency | `Idempotency-Key` on accrual and redemption; Angular generates one opaque UUID per user intent and reuses it for retries | Same key/same intent replays the original 201 without repeating balance, inventory, or notification effects; same key/different intent returns 409. Header remains optional during legacy transition; no-key retries cannot be distinguished safely from a new identical operation |
+| Manual point events | Adjustment, expiry, reversal and opening-balance writes are internal model operations, not public HTTP endpoints; reconciliation is run with `rake points:reconcile` | Each event requires a unique per-user reference and reason; reversal creates an equal-and-opposite event; reconciliation report mode is read-only and `APPLY=1` appends ledger deltas without changing the balance |
 | Redemption | `transaction_output` contains `user_id` (legacy `national_id` fallback), `promotion_id`, optional invoice number; client points are ignored | Promotion is scoped to employee company and configured points are charged; response property shape is unchanged |
 | Pagination | `page` and `per_page`, default 1 and 5 in controllers | Some list endpoints omit pagination; no max per_page observed |
 | Error handling | Model errors rendered as JSON for common validation failures; `RecordNotFound` becomes `{error: message}`, 404; Pundit becomes `{error: message}`, 401 | Error content and status vary; fixture before refactor |
@@ -101,12 +104,9 @@ Headers exposed by CORS initializer: `access-token`, `expiry`, `token-type`, `ui
 
 `openapi.yaml` is an initial source-evidence subset. It intentionally marks unspecified schemas as unverified and excludes generated Devise details pending route capture. Add endpoints in small batches with request specs and fixture-backed response schemas. CI should lint the document and compare operation IDs/method/path to an approved route manifest. A change to an existing endpoint requires a compatibility review and frontend matrix run.
 
-## Decisions / frontend questions
+## Angular handoff
 
-- Which listed endpoints are actually consumed by the old Angular frontend? No frontend repository is present.
-- Does Angular send `user_id` or `national_id` on transaction requests? Existing skipped specs use `national_id`, current controller reads `user_id`.
-- Which status codes does the client rely on, especially successful GETs returning 201/202?
-- Are token headers updated/persisted by the frontend even though server rotation is disabled?
-- Which exact payloads handle login, expired token, Pundit rejection, validation failure and OAuth failure?
-- Does the client rely on singular `/api/users/:id` update semantics, raw dates, or current file URLs?
-- Is the API same-origin behind a proxy, and what are the actual Angular origins?
+- Angular owns confirmation of consumed endpoints, payload/error adaptation, auth-header persistence, and frontend fixtures.
+- For every accrual/redemption user intent, generate and persist one UUID before sending; send it as `Idempotency-Key`; reuse it for all retries after timeouts/network errors; generate a new UUID only for a distinct user intent. Do not derive keys from request payload, amount, invoice, or a time window.
+- The backend header remains optional until the Angular client adopts it; requests without it keep the legacy API behavior but are not retry-safe.
+- Deployment origin/proxy configuration is deferred to the separate Dockerization/deployment task.

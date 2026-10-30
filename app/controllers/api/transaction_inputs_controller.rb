@@ -1,3 +1,5 @@
+require "bigdecimal"
+
 module Api
   class TransactionInputsController < BaseController
     before_action :authenticate_user!,
@@ -20,27 +22,30 @@ module Api
         User.find_by(id: transaction_input_params[:user_id]) :
         User.find_by(national_id: transaction_input_params[:national_id])
       points = final_points
-      transaction_input, saved = TransactionInput.accrue(
+      transaction_input, saved, replayed = TransactionInput.accrue(
         user: user,
         employee: @employee,
         points: points,
-        invoice_number: transaction_input_params[:invoice_number]
+        invoice_number: transaction_input_params[:invoice_number],
+        idempotency_key: idempotency_key
       )
       if saved
-        UtilService.new(user,
-                        current_user,
-                        {
-                          employee: @employee,
-                          company: @company,
-                          points: points
-                        }
-                      ).notify_client_assign_points
+        unless replayed
+          UtilService.new(user,
+                          current_user,
+                          {
+                            employee: @employee,
+                            company: @company,
+                            points: points
+                          }
+                        ).notify_client_assign_points
+        end
         render :transaction_input,
           status: :created,
           locals: { transaction_input: transaction_input }
       else
         render json: transaction_input.errors,
-        status: :unprocessable_entity
+        status: idempotency_conflict?(transaction_input) ? :conflict : :unprocessable_entity
       end
     end
 
@@ -61,16 +66,27 @@ module Api
       company.category.points_per_dollar
     end
 
+    def idempotency_key
+      request.headers["Idempotency-Key"]&.strip.presence
+    end
+
+    def idempotency_conflict?(record)
+      record.errors.details[:base].any? { |error| error[:error] == :idempotency_key_reused }
+    end
+
     def final_points
       transaction_input_params = params[:transaction_input]
-      points = Float(transaction_input_params[:points], exception: false)
-      return unless points&.finite?
+      purchase_amount = BigDecimal(transaction_input_params[:points].to_s, exception: false)
+      return unless purchase_amount&.finite? && purchase_amount.positive?
 
       multiplier = get_points_per_dollar
       return unless multiplier.is_a?(Integer)
 
-      result = points * multiplier
-      result if result.finite?
+      result = purchase_amount * multiplier
+      return unless result.finite?
+
+      points = result.round(0, half: :up).to_i
+      points if points.between?(0, TransactionInput::MAX_SAFE_POINT_VALUE)
     end
   end
 end

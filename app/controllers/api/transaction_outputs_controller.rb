@@ -20,28 +20,31 @@ module Api
         User.find_by(id: transaction_output_params[:user_id]) :
         User.find_by(national_id: transaction_output_params[:national_id])
       promotion = @company.promotions.find(transaction_output_params[:promotion_id])
-      transaction_output, saved = TransactionOutput.redeem(
+      transaction_output, saved, replayed = TransactionOutput.redeem(
         user: user,
         employee: @employee,
         promotion: promotion,
-        invoice_number: transaction_output_params[:invoice_number]
+        invoice_number: transaction_output_params[:invoice_number],
+        idempotency_key: idempotency_key
       )
 
       if saved
-        UtilService.new(user,
-                        current_user,
-                        {
-                          employee: @employee,
-                          company: @company,
-                          promotion: promotion
-                        }
-                      ).notify_client_assign_promotion
+        unless replayed
+          UtilService.new(user,
+                          current_user,
+                          {
+                            employee: @employee,
+                            company: @company,
+                            promotion: promotion
+                          }
+                        ).notify_client_assign_promotion
+        end
         render :transaction_output,
           status: :created,
           locals: { transaction_output: transaction_output }
         else
           render json: transaction_output.errors,
-          status: :unprocessable_entity
+          status: idempotency_conflict?(transaction_output) ? :conflict : :unprocessable_entity
         end
     end
 
@@ -49,6 +52,14 @@ module Api
 
     def get_company
       @company = Company.find(current_user.current_view_company_id)
+    end
+
+    def idempotency_key
+      request.headers["Idempotency-Key"]&.strip.presence
+    end
+
+    def idempotency_conflict?(record)
+      record.errors.details[:base].any? { |error| error[:error] == :idempotency_key_reused }
     end
 
     def find_employee

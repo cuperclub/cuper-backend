@@ -7,7 +7,7 @@
 #  updated_at     :datetime         not null
 #  user_id        :bigint(8)
 #  employee_id    :bigint(8)
-#  points         :float
+#  points         :bigint(8)
 #  invoice_number :string
 #
 
