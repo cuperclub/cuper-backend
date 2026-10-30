@@ -1,25 +1,18 @@
-# Ruby CircleCI 2.0 configuration file
-#
-# Check https://circleci.com/docs/2.0/language-ruby/ for more details
-#
-version: 2
+version: 2.1
 jobs:
   build:
     docker:
-      # specify the version you desire here
-      - image: circleci/ruby:2.5.0-node-browsers
+      - image: cimg/ruby:3.4.12
         environment:
           RAILS_ENV: test
-      - image: postgres:9.5
+          DATABASE_USERNAME: postgres
+          DATABASE_PASSWORD: postgres
+          DATABASE_HOST: localhost
+      - image: postgres:17.11
         environment:
           POSTGRES_USER: postgres
           POSTGRES_DB: cuperclub-backend_test
-          POSTGRES_PASSWORD: ""
-
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      # - image: circleci/postgres:9.4
+          POSTGRES_PASSWORD: postgres
 
     working_directory: ~/repo
 
@@ -29,40 +22,25 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           keys:
-            - v1-dependencies-{{ checksum "Gemfile.lock" }}
-            # fallback to using the latest cache if no exact match is found
-            - v1-dependencies-
+            - v2-ruby-3.4.12-{{ arch }}-{{ checksum "Gemfile.lock" }}
 
       - run:
           name: Configure Bundler
           command: |
-            echo 'export BUNDLER_VERSION=$(cat Gemfile.lock | tail -1 | tr -d " ")' >> $BASH_ENV
-            source $BASH_ENV
-            gem install bundler
-            bundle install --jobs=4 --retry=3 --path vendor/bundle
+            BUNDLER_VERSION="$(sed -n '/^BUNDLED WITH$/{n;s/^ *//;p;}' Gemfile.lock)"
+            gem install bundler --version "$BUNDLER_VERSION" --no-document
+            bundle config set --local path vendor/bundle
+            bundle install --jobs=4 --retry=3
 
       - save_cache:
           paths:
             - ./vendor/bundle
-          key: v1-dependencies-{{ checksum "Gemfile.lock" }}
+          key: v2-ruby-3.4.12-{{ arch }}-{{ checksum "Gemfile.lock" }}
 
       # Database setup
       - run: bundle exec rake db:create
       - run: bundle exec rake db:schema:load
 
-      # run tests!
       - run:
-          name: run tests
-          command: |
-            mkdir /tmp/test-results
-            TEST_FILES="$(circleci tests glob "spec/**/*_spec.rb" | \
-              circleci tests split --split-by=timings)"
-
-            bundle exec rspec
-
-      # collect reports
-      - store_test_results:
-          path: /tmp/test-results
-      - store_artifacts:
-          path: /tmp/test-results
-          destination: test-results
+          name: Run RSpec
+          command: bundle exec rspec
