@@ -15,28 +15,36 @@ module Api
     end
 
     def create
-      transaction_output_params = params[:transaction_output]
-      user = User.find_by(id: transaction_output_params[:user_id])
-      transaction_output = TransactionOutput.new(user: user,
+      transaction_output_params = params.require(:transaction_output)
+      user = transaction_output_params[:user_id] ?
+        User.find_by(id: transaction_output_params[:user_id]) :
+        User.find_by(national_id: transaction_output_params[:national_id])
+      promotion = @company.promotions.find(transaction_output_params[:promotion_id])
+      transaction_output, saved, replayed = TransactionOutput.redeem(
+        user: user,
         employee: @employee,
-        points: transaction_output_params[:points],
-        promotion_id: transaction_output_params[:promotion_id],
-        invoice_number: transaction_output_params[:invoice_number])
-      if transaction_output.save
-        UtilService.new(user,
-                        current_user,
-                        {
-                          employee: @employee,
-                          company: @company,
-                          promotion: Promotion.find(transaction_output_params[:promotion_id])
-                        }
-                      ).notify_client_assign_promotion
+        promotion: promotion,
+        invoice_number: transaction_output_params[:invoice_number],
+        idempotency_key: idempotency_key
+      )
+
+      if saved
+        unless replayed
+          UtilService.new(user,
+                          current_user,
+                          {
+                            employee: @employee,
+                            company: @company,
+                            promotion: promotion
+                          }
+                        ).notify_client_assign_promotion
+        end
         render :transaction_output,
           status: :created,
           locals: { transaction_output: transaction_output }
         else
           render json: transaction_output.errors,
-          status: :unprocessable_entity
+          status: idempotency_conflict?(transaction_output) ? :conflict : :unprocessable_entity
         end
     end
 
@@ -46,10 +54,18 @@ module Api
       @company = Company.find(current_user.current_view_company_id)
     end
 
+    def idempotency_key
+      request.headers["Idempotency-Key"]&.strip.presence
+    end
+
+    def idempotency_conflict?(record)
+      record.errors.details[:base].any? { |error| error[:error] == :idempotency_key_reused }
+    end
+
     def find_employee
-      @employee = Employee.where(company_id: current_user.current_view_company_id,
-                                  user: current_user
-                                ).first
+      @employee = current_user.employees
+        .where(company_id: current_user.current_view_company_id, status: "approved")
+        .first!
     end
   end
 end

@@ -19,5 +19,22 @@
 require 'rails_helper'
 
 RSpec.describe Company, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  it "requires its registration identity and category fields" do
+    company = build(:company,
+      ruc: nil,
+      business_name: nil,
+      legal_representative: nil,
+      category: nil)
+
+    expect(company).not_to be_valid
+    expect(company.errors.attribute_names).to include(:ruc, :business_name, :legal_representative, :category)
+  end
+
+  it "requires a unique RUC" do
+    existing_company = create(:company)
+    duplicate = build(:company, ruc: existing_company.ruc)
+
+    expect(duplicate).not_to be_valid
+    expect(duplicate.errors[:ruc]).to be_present
+  end
 end

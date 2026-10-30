@@ -3,7 +3,7 @@
 # Table name: plans
 #
 #  id          :bigint(8)        not null, primary key
-#  price       :float            default(0.0)
+#  price       :bigint(8)        default(0)
 #  name        :string
 #  information :string
 #  days        :integer          default(1)

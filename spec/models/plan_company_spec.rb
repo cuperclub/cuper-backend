@@ -13,5 +13,10 @@
 require 'rails_helper'
 
 RSpec.describe PlanCompany, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  it "requires both a plan and a company" do
+    subscription = build(:plan_company, plan: nil, company: nil)
+
+    expect(subscription).not_to be_valid
+    expect(subscription.errors.attribute_names).to include(:plan, :company)
+  end
 end

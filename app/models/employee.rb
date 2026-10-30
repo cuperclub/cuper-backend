@@ -40,11 +40,12 @@ class Employee < ApplicationRecord
               inclusion: { in: ROLES }
     validates :status,
               inclusion: { in: STATUS }
+    validates :user_id, uniqueness: { scope: :company_id }, on: :create
     validate :cant_change_to_pending, on: :update
   end
 
-  after_update :send_status_notification_email, unless: :skip_notification_email
-  after_create :send_register_notification_email, unless: :skip_notification_email
+  after_update_commit :send_status_notification_email, unless: :skip_notification_email
+  after_create_commit :send_register_notification_email, unless: :skip_notification_email
 
   attr_accessor :skip_notification_email
 

@@ -15,12 +15,19 @@ module Api
       param_group :request
 
       def create
-        cashier = Employee.new(
-          user: current_user,
-          company: @company,
-          role: 'cashier'
-        )
-        if cashier.save
+        cashier = nil
+        already_applied = false
+        current_user.with_lock do
+          already_applied = Employee.exists?(user: current_user, company: @company)
+          unless already_applied
+            cashier = Employee.new(user: current_user, company: @company, role: 'cashier')
+            cashier.save
+          end
+        end
+
+        if already_applied
+          render json: { error: "User already has a membership in this company" }, status: :conflict
+        elsif cashier.persisted?
           render json: {status: :accepted},
                  status: :accepted
         else

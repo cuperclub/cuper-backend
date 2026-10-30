@@ -1,9 +1,9 @@
 module Api
   module Admin
     class PlansController < BaseController
-      before_action :authenticate_user!,
-                    :find_plan,
-                    except: [:index, :create]
+      before_action :authenticate_user!
+      before_action :find_plan, except: [:index, :create]
+      before_action :authorize_admin!, only: [:create, :update]
 
       api :GET,
           "/admin/plans",

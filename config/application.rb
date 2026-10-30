@@ -21,6 +21,8 @@ module CuperclubBackend
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 5.2
+    config.active_support.to_time_preserves_timezone = :zone
+    config.secret_key_base = config_for(:secrets)[:secret_key_base]
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration can go into files in config/initializers
@@ -33,7 +35,9 @@ module CuperclubBackend
     config.api_only = true
     config.i18n.default_locale = :es
     #omniauth
-    config.middleware.use Rack::Session::Cookie
+    config.session_store :cookie_store, key: "_cuperclub_backend_session"
+    config.middleware.use ActionDispatch::Cookies
+    config.middleware.use config.session_store, config.session_options
 
     config.generators do |g|
       g.test_framework :rspec,

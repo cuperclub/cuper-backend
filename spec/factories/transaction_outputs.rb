@@ -5,7 +5,7 @@
 #  id             :bigint(8)        not null, primary key
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null
-#  points         :float
+#  points         :bigint(8)
 #  invoice_number :string
 #  promotion_id   :bigint(8)
 #  employee_id    :bigint(8)

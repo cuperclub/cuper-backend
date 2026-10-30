@@ -6,13 +6,13 @@ RSpec.describe Api::PromotionsController, type: :controller do
     let(:user) { create :user }
 
     it "returns http unauthorized with non logged in users" do
-      get :index, :format => :json
+      get :index, params: { format: :json }
       expect(response).to have_http_status(:unauthorized)
     end
 
     it "returns http success with logged in user" do
       login_as user
-      get :index, :format => :json
+      get :index, params: { format: :json }
       expect(response).to have_http_status(:success)
     end
 
@@ -23,13 +23,13 @@ RSpec.describe Api::PromotionsController, type: :controller do
     let(:promotion) { create :promotion }
 
     it "returns http unauthorized with non logged in users" do
-      get :show, params: { id: promotion.id }, :format => :json
+      get :show, params: { id: promotion.id, format: :json }
       expect(response).to have_http_status(:unauthorized)
     end
 
     it "returns http success with logged in users" do
       login_as user
-      get :show, params: { id: promotion.id }, :format => :json
+      get :show, params: { id: promotion.id, format: :json }
       expect(response).to have_http_status(:success)
     end
   end

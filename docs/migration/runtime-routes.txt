@@ -1,0 +1,76 @@
+Generated from the booted Rails application with `rails routes`; 73 `/api/` routes.
+Refresh this file when routes or mounted authentication configuration changes.
+
+                                                    GET|POST /api/auth/user/:provider/callback(.:format)                                                       auth/omniauth_callbacks#redirect_callbacks
+                              api_auth_user_failure GET|POST /api/auth/user/failure(.:format)                                                                  auth/omniauth_callbacks#omniauth_failure
+                                      api_companies GET      /api/companies(.:format)                                                                          api/companies#index {format: :json}
+                                     api_promotions GET      /api/promotions(.:format)                                                                         api/promotions#index {format: :json}
+                                      api_promotion GET      /api/promotions/:id(.:format)                                                                     api/promotions#show {format: :json}
+           answer_request_employee_api_notification PUT      /api/notifications/:id/answer_request_employee(.:format)                                          api/notifications#answer_request_employee {format: :json}
+                                  api_notifications GET      /api/notifications(.:format)                                                                      api/notifications#index {format: :json}
+       api_notifications_read_pending_notifications POST     /api/notifications/read_pending_notifications(.:format)                                           api/notifications#read_pending_notifications {format: :json}
+                             current_view_api_users PUT      /api/users/current_view(.:format)                                                                 api/users#current_view {format: :json}
+                          my_transactions_api_users GET      /api/users/my_transactions(.:format)                                                              api/users#my_transactions {format: :json}
+                                          api_users PATCH    /api/users(.:format)                                                                              api/users#update {format: :json}
+                                                    PUT      /api/users(.:format)                                                                              api/users#update {format: :json}
+                                                    GET      /api/users(.:format)                                                                              api/users#index {format: :json}
+                                           api_user PATCH    /api/users/:id(.:format)                                                                          api/users#update {format: :json}
+                                                    PUT      /api/users/:id(.:format)                                                                          api/users#update {format: :json}
+                                   api_users_search GET      /api/users/search(.:format)                                                                       api/users#search {format: :json}
+                               api_admin_categories GET      /api/admin/categories(.:format)                                                                   api/admin/categories#index {format: :json}
+                                                    POST     /api/admin/categories(.:format)                                                                   api/admin/categories#create {format: :json}
+                                 api_admin_category GET      /api/admin/categories/:id(.:format)                                                               api/admin/categories#show {format: :json}
+                                                    PATCH    /api/admin/categories/:id(.:format)                                                               api/admin/categories#update {format: :json}
+                                                    PUT      /api/admin/categories/:id(.:format)                                                               api/admin/categories#update {format: :json}
+                                                    DELETE   /api/admin/categories/:id(.:format)                                                               api/admin/categories#destroy {format: :json}
+                                    api_admin_plans GET      /api/admin/plans(.:format)                                                                        api/admin/plans#index {format: :json}
+                                                    POST     /api/admin/plans(.:format)                                                                        api/admin/plans#create {format: :json}
+                                     api_admin_plan GET      /api/admin/plans/:id(.:format)                                                                    api/admin/plans#show {format: :json}
+                                                    PATCH    /api/admin/plans/:id(.:format)                                                                    api/admin/plans#update {format: :json}
+                                                    PUT      /api/admin/plans/:id(.:format)                                                                    api/admin/plans#update {format: :json}
+                                                    DELETE   /api/admin/plans/:id(.:format)                                                                    api/admin/plans#destroy {format: :json}
+                    settings_api_admin_app_settings GET      /api/admin/app_settings/settings(.:format)                                                        api/admin/app_settings#settings {format: :json}
+             update_settings_api_admin_app_settings PUT      /api/admin/app_settings/update_settings(.:format)                                                 api/admin/app_settings#update_settings {format: :json}
+                             api_admin_app_settings GET      /api/admin/app_settings(.:format)                                                                 api/admin/app_settings#show {format: :json}
+                                                    PATCH    /api/admin/app_settings(.:format)                                                                 api/admin/app_settings#update {format: :json}
+                                                    PUT      /api/admin/app_settings(.:format)                                                                 api/admin/app_settings#update {format: :json}
+                                                    DELETE   /api/admin/app_settings(.:format)                                                                 api/admin/app_settings#destroy {format: :json}
+                                                    POST     /api/admin/app_settings(.:format)                                                                 api/admin/app_settings#create {format: :json}
+                    change_status_api_admin_company PUT      /api/admin/companies/:id/change_status(.:format)                                                  api/admin/companies#change_status {format: :json}
+                                api_admin_companies GET      /api/admin/companies(.:format)                                                                    api/admin/companies#index {format: :json}
+                                  api_admin_company GET      /api/admin/companies/:id(.:format)                                                                api/admin/companies#show {format: :json}
+                       toggle_status_api_admin_user PUT      /api/admin/users/:id/toggle_status(.:format)                                                      api/admin/users#toggle_status {format: :json}
+                     update_password_api_admin_user PUT      /api/admin/users/:id/update_password(.:format)                                                    api/admin/users#update_password {format: :json}
+                                                    GET      /api/admin/users/:role(.:format)                                                                  api/admin/users#index {format: :json}
+                                    api_admin_users GET      /api/admin/users(.:format)                                                                        api/admin/users#index {format: :json}
+                                                    POST     /api/admin/users(.:format)                                                                        api/admin/users#create {format: :json}
+                                     api_admin_user GET      /api/admin/users/:id(.:format)                                                                    api/admin/users#show {format: :json}
+                                                    PATCH    /api/admin/users/:id(.:format)                                                                    api/admin/users#update {format: :json}
+                                                    PUT      /api/admin/users/:id(.:format)                                                                    api/admin/users#update {format: :json}
+                                                    DELETE   /api/admin/users/:id(.:format)                                                                    api/admin/users#destroy {format: :json}
+             request_employee_api_partner_companies POST     /api/partner/companies/request_employee(.:format)                                                 api/partner/companies#request_employee {format: :json}
+    pending_requests_employee_api_partner_companies GET      /api/partner/companies/pending_requests_employee(.:format)                                        api/partner/companies#pending_requests_employee {format: :json}
+transaction_outputs_api_partner_companies_promotion GET      /api/partner/companies/promotions/:id/transaction_outputs(.:format)                               api/partner/promotions#transaction_outputs {format: :json}
+                   api_partner_companies_promotions GET      /api/partner/companies/promotions(.:format)                                                       api/partner/promotions#index {format: :json}
+                    api_partner_companies_promotion GET      /api/partner/companies/promotions/:id(.:format)                                                   api/partner/promotions#show {format: :json}
+         toggle_status_api_partner_companies_office PUT      /api/partner/companies/offices/:id/toggle_status(.:format)                                        api/partner/offices#toggle_status {format: :json}
+            api_partner_companies_office_promotions POST     /api/partner/companies/offices/:office_id/promotions(.:format)                                    api/partner/promotions#create {format: :json}
+             api_partner_companies_office_promotion PATCH    /api/partner/companies/offices/:office_id/promotions/:id(.:format)                                api/partner/promotions#update {format: :json}
+                                                    PUT      /api/partner/companies/offices/:office_id/promotions/:id(.:format)                                api/partner/promotions#update {format: :json}
+                      api_partner_companies_offices GET      /api/partner/companies/offices(.:format)                                                          api/partner/offices#index {format: :json}
+                                                    POST     /api/partner/companies/offices(.:format)                                                          api/partner/offices#create {format: :json}
+                       api_partner_companies_office GET      /api/partner/companies/offices/:id(.:format)                                                      api/partner/offices#show {format: :json}
+                                                    PATCH    /api/partner/companies/offices/:id(.:format)                                                      api/partner/offices#update {format: :json}
+                                                    PUT      /api/partner/companies/offices/:id(.:format)                                                      api/partner/offices#update {format: :json}
+        update_state_api_partner_companies_employee PUT      /api/partner/companies/employees/:id/update_state(.:format)                                       api/partner/employees#update_state {format: :json}
+                    api_partner_companies_employees GET      /api/partner/companies/employees(.:format)                                                        api/partner/employees#index {format: :json}
+                     api_partner_companies_employee GET      /api/partner/companies/employees/:id(.:format)                                                    api/partner/employees#show {format: :json}
+                              api_partner_companies GET      /api/partner/companies(.:format)                                                                  api/partner/companies#show {format: :json}
+                                                    PATCH    /api/partner/companies(.:format)                                                                  api/partner/companies#update {format: :json}
+                                                    PUT      /api/partner/companies(.:format)                                                                  api/partner/companies#update {format: :json}
+                                                    POST     /api/partner/companies(.:format)                                                                  api/partner/companies#create {format: :json}
+                                api_cashier_profile POST     /api/cashier/profile(.:format)                                                                    api/cashier/profiles#create {format: :json}
+                             api_transaction_inputs GET      /api/transaction_inputs(.:format)                                                                 api/transaction_inputs#index {format: :json}
+                                                    POST     /api/transaction_inputs(.:format)                                                                 api/transaction_inputs#create {format: :json}
+                            api_transaction_outputs GET      /api/transaction_outputs(.:format)                                                                api/transaction_outputs#index {format: :json}
+                                                    POST     /api/transaction_outputs(.:format)                                                                api/transaction_outputs#create {format: :json}

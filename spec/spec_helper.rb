@@ -13,8 +13,7 @@
 # it.
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
-require "capybara/rspec"
-require 'database_cleaner'
+require 'database_cleaner/active_record'
 
 RSpec.configure do |config|
 

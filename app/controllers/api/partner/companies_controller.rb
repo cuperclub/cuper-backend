@@ -1,6 +1,6 @@
 module Api
   module Partner
-    class CompaniesController < BaseController
+    class CompaniesController < Api::Partner::BaseController
       before_action :authenticate_user!
       before_action :find_company, only: [:show,
                                           :update,
@@ -35,26 +35,21 @@ module Api
 
       def create
         company = Company.new(company_params)
-        if company.save
-          employee = Employee.new(
-            user: current_user,
-            company: company,
-            role: 'partner'
-          )
-          employee.save
-          if params[:plan_id]
-            plan = PlanCompany.new(
-              company: company,
-              plan_id: params[:plan_id]
-            )
-            plan.save
+        begin
+          Company.transaction do
+            company.save!
+            Employee.create!(user: current_user, company: company, role: 'partner')
+            if params[:plan_id]
+              PlanCompany.create!(company: company, plan_id: params[:plan_id])
+            end
+            set_current_view(company.id)
           end
-          set_current_view(company.id)
+
           render :company,
                 status: :created,
                 locals: { company: company }
-        else
-          render json: company.errors,
+        rescue ActiveRecord::RecordInvalid => error
+          render json: error.record.errors,
                 status: :unprocessable_entity
         end
       end
@@ -102,8 +97,13 @@ module Api
       end
 
       def request_employee
+        if Employee.exists?(user: @user, company: @company)
+          render json: { error: "User already has a membership in this company" }, status: :conflict
+          return
+        end
+
         notification = UtilService.new(@user, current_user).notify_employee_request
-        if notification.save
+        if notification.persisted?
           render "api/notifications/notification_request_employee",
                   locals: { notification:  notification }
           # CompanyMailer.invitation_employee_company(email, @company).deliver_now
@@ -135,17 +135,8 @@ module Api
       # end
 
       def set_current_view(company_id)
-        setting = current_user.setting
-        if setting
-          setting.current_company = company_id
-          setting.user = current_user
-          setting.save
-        else
-          setting = Setting.new
-          setting.current_company = company_id
-          setting.user = current_user
-          setting.save
-        end
+        setting = current_user.setting || Setting.new(user: current_user)
+        setting.update!(current_company: company_id)
       end
 
       private
@@ -164,7 +155,7 @@ module Api
       end
 
       def find_company
-        @company = Company.find(current_user.current_view_company_id)
+        @company = find_partner_company
       end
 
       def find_user

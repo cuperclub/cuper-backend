@@ -1,8 +1,9 @@
 module Api
   module Admin
     class CategoriesController < BaseController
-      before_action :authenticate_user!,
-                    :find_category,
+      before_action :authenticate_user!
+      before_action :authorize_admin!, only: [:create, :update]
+      before_action :find_category,
                     except: [:index, :create]
 
       api :GET,
