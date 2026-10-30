@@ -13,5 +13,10 @@
 require 'rails_helper'
 
 RSpec.describe Category, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  it "requires a name and points-per-dollar value" do
+    category = build(:category, name: nil, points_per_dollar: nil)
+
+    expect(category).not_to be_valid
+    expect(category.errors.attribute_names).to include(:name, :points_per_dollar)
+  end
 end
