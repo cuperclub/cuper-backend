@@ -1,0 +1,305 @@
+openapi: 3.0.3
+info:
+  title: Cuper backend (source-derived legacy contract)
+  version: 0.1.0
+  description: >-
+    Partial contract derived from routes, controllers and Jbuilder templates in
+    the legacy Rails repository. Runtime routes and payloads have not yet been
+    captured. Unknown fields and authentication routes are intentionally not
+    invented; expand only with request specs and sanitized fixtures.
+servers:
+  - url: /
+security: []
+tags:
+  - name: Public
+  - name: Users
+  - name: Transactions
+paths:
+  /api/companies:
+    get:
+      tags: [Public]
+      operationId: listCompanies
+      summary: List public companies
+      description: Source renders api/public_companies with a companies array.
+      responses:
+        '201':
+          description: Existing controller success status (unusual for GET; preserve pending contract review).
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [companies]
+                properties:
+                  companies:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          format: int64
+                        business_name:
+                          type: string
+                          nullable: true
+                        logo:
+                          type: string
+                          nullable: true
+                          description: Raw model attribute in current public-company partial; runtime type/URL needs fixture verification.
+              example:
+                companies:
+                  - id: 1
+                    business_name: Example business
+                    logo: null
+        default:
+          $ref: '#/components/responses/UnverifiedError'
+  /api/promotions:
+    get:
+      tags: [Public]
+      operationId: listPromotions
+      summary: List available promotions
+      description: Authenticated controller; Jbuilder exposes a promotions array.
+      security:
+        - tokenHeaders: []
+      responses:
+        '200':
+          description: Rails render success status inferred from controller without explicit status.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [promotions]
+                properties:
+                  promotions:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/PublicPromotion'
+        default:
+          $ref: '#/components/responses/UnverifiedError'
+  /api/transaction_inputs:
+    post:
+      tags: [Transactions]
+      operationId: createTransactionInput
+      summary: Accumulate loyalty points
+      description: >-
+        Authenticated. Controller reads user_id, points and invoice_number from
+        transaction_input and multiplies submitted points by the company's
+        points_per_dollar. Source behavior and field units require regression
+        fixtures before this contract is expanded.
+      security:
+        - tokenHeaders: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [transaction_input]
+              properties:
+                transaction_input:
+                  type: object
+                  required: [user_id, points]
+                  properties:
+                    user_id:
+                      type: integer
+                      format: int64
+                    points:
+                      type: number
+                      description: Legacy numeric input; business unit and precision are not yet verified.
+                    invoice_number:
+                      type: string
+                      nullable: true
+      responses:
+        '201':
+          description: Transaction input created; response uses transaction_input Jbuilder template.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    format: int64
+                  points:
+                    type: number
+                  created_at:
+                    type: string
+                    format: date-time
+                    description: Raw created_at is included in this transaction partial; verify runtime serialization.
+                  user:
+                    type: object
+                    description: Fields delegated to api/shared/user and user_basic partials.
+        '422':
+          $ref: '#/components/responses/ValidationError'
+        default:
+          $ref: '#/components/responses/UnverifiedError'
+  /api/transaction_outputs:
+    post:
+      tags: [Transactions]
+      operationId: createTransactionOutput
+      summary: Redeem a promotion
+      description: >-
+        Authenticated. Legacy controller accepts user_id, points,
+        promotion_id and invoice_number inside transaction_output. The client
+        currently supplies points, although the recommended implementation
+        must calculate the authoritative cost from the server-side promotion.
+        That internal correction must retain the legacy response contract.
+      security:
+        - tokenHeaders: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [transaction_output]
+              properties:
+                transaction_output:
+                  type: object
+                  required: [user_id, points, promotion_id]
+                  properties:
+                    user_id:
+                      type: integer
+                      format: int64
+                    points:
+                      type: number
+                      description: Legacy field accepted by current source; precise semantics and deprecation need coordination.
+                    promotion_id:
+                      type: integer
+                      format: int64
+                    invoice_number:
+                      type: string
+                      nullable: true
+      responses:
+        '201':
+          description: Redemption created; response uses transaction_output Jbuilder template.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    format: int64
+                  created_at:
+                    type: string
+                    format: date-time
+                  user:
+                    type: object
+                    description: Fields delegated to shared user partial.
+                  promotion:
+                    $ref: '#/components/schemas/Promotion'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+        default:
+          $ref: '#/components/responses/UnverifiedError'
+  /api/users/current_view:
+    put:
+      tags: [Users]
+      operationId: setCurrentCompany
+      summary: Set current company context
+      description: >-
+        Authenticated source reads company_id and returns company_id plus
+        expired_plan. The existing implementation does not verify membership;
+        the modernized backend must authorize the selection without changing
+        the successful response shape.
+      security:
+        - tokenHeaders: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [company_id]
+              properties:
+                company_id:
+                  oneOf:
+                    - type: integer
+                    - type: string
+                  description: Rails accepts a scalar parameter; JSON type needs fixture confirmation.
+      responses:
+        '200':
+          description: Existing success response.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [company_id, expired_plan]
+                properties:
+                  company_id:
+                    oneOf:
+                      - type: integer
+                      - type: string
+                      - type: 'null'
+                  expired_plan:
+                    type: boolean
+        '422':
+          $ref: '#/components/responses/ValidationError'
+        default:
+          $ref: '#/components/responses/UnverifiedError'
+components:
+  securitySchemes:
+    tokenHeaders:
+      type: apiKey
+      in: header
+      name: access-token
+      description: >-
+        Devise Token Auth also uses client, uid and token-type headers; expiry
+        is returned/exposed by CORS. Exact required headers and responses must
+        be confirmed by runtime request tests.
+  schemas:
+    PublicPromotion:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        title:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+        terms:
+          type: string
+          nullable: true
+        total_rewards:
+          type: integer
+        points_required:
+          type: integer
+        image_url:
+          type: string
+          nullable: true
+        start_at:
+          type: string
+          nullable: true
+          description: Date serialization format needs fixture verification.
+        end_at:
+          type: string
+          nullable: true
+          description: Date serialization format needs fixture verification.
+        unlimited:
+          type: boolean
+    Promotion:
+      allOf:
+        - $ref: '#/components/schemas/PublicPromotion'
+        - type: object
+          properties:
+            office:
+              type: object
+              description: Nested office partial; fields not repeated here until captured in request fixtures.
+  responses:
+    ValidationError:
+      description: Rails model errors serialized as JSON; exact structure varies and needs fixture verification.
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: true
+    UnverifiedError:
+      description: Error response not fully verified from source.
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: true
