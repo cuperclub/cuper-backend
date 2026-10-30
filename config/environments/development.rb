@@ -58,8 +58,8 @@ Rails.application.configure do
     domain: "example.com",
     authentication: "plain",
     enable_starttls_auto: true,
-    user_name: Rails.application.credentials[Rails.env.to_sym][:gmail_user],
-    password: Rails.application.credentials[Rails.env.to_sym][:gmail_pass]
+    user_name: Rails.application.credentials.dig(Rails.env.to_sym, :gmail_user),
+    password: Rails.application.credentials.dig(Rails.env.to_sym, :gmail_pass)
   }
 
   config.action_mailer.default_url_options = { :host => 'localhost:3000' }
