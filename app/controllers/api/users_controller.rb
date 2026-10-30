@@ -102,9 +102,11 @@ module Api
     end
 
     def search_results
-      users_results = UserSearch.new( q:params[:query],
-                                      id:current_user.id
-                                    ).results.limit(10)
+      query = "%#{params[:query]}%"
+      User.where(
+        "unaccent(users.name) ILIKE :query OR unaccent(users.national_id) ILIKE :query OR unaccent(users.email) ILIKE :query",
+        query: query
+      ).where.not(id: current_user.id).limit(10)
     end
 
     def render_setting(record)

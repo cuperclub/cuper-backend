@@ -116,15 +116,17 @@ Use `mise install ruby@<exact-version>` to install without changing `.ruby-versi
 
 ## Phase 3 — gems and configuration
 
-- [ ] **Objective:** maintain only justified, supported dependencies and move configuration to explicit runtime secrets.
-- [ ] **Components:** `Gemfile*`, uploaders, mailers, initializers, config environments, CI.
-- [ ] **Prerequisites:** address only gems blocking phase 2 at their corresponding hop; stable runtime baseline.
-- [ ] **Changes:** update auth/OAuth gems as a compatible set; update Rack, pg, Puma, Jbuilder, RSpec and security-sensitive transitives; replace single-use Searchlight search with Active Record; remove unneeded Spring, Guard, rb-readline, demo/test dependencies only after confirming usage; modernize CarrierWave only after compatibility/asset path test; use credentials/env for secrets; correct CORS origins after frontend origin confirmation.
-- [ ] **Risks:** token semantics, OAuth provider configuration, file URL/storage breakage, version-specific keyword/serialization changes.
-- [ ] **Tests:** bundle check; auth/provider contract; upload existing/new assets; CORS preflight; app boot per environment; OSV/Bundler audit.
-- [ ] **Acceptance:** dependency set is justified, stable and reproducible; no exposed credentials; existing file URLs remain resolvable.
-- [ ] **Rollback:** pin previous lock/config and retain old storage read paths until files are verified.
-- [ ] **Frontend:** preserve token headers, callback URLs, CORS and image URLs.
+- [x] **Objective:** close repository-local dependency/configuration cleanup for the approved runtime without changing OAuth or guessing deployment values.
+- [x] **Components:** Gemfile/lockfile, search controller/spec, Rails/Rake binstubs, Pundit integration and local CORS middleware.
+- [x] **Prerequisites:** Phase 2 runtime baseline is stable on Ruby 3.4.12 / Rails 8.0.5.1.
+- [x] **Changes:** replaced Searchlight with parameterized Active Record; removed unused Searchlight, Spring, Guard, rb-readline, Faker, Capybara and Launchy; updated locally testable Puma, Rack/CORS, RSpec, FactoryBot, Kaminari, Pundit, Pusher 1.x and bcrypt dependencies. OAuth/Devise configuration, CarrierWave storage policy and production origins were not changed.
+- [x] **Risks:** exercised dependency and API paths pass locally. OAuth provider behavior, production file URLs/storage, secret topology and production CORS remain deployment gates, not claims made by this closure.
+- [x] **Tests:** bundle check, full RSpec, Zeitwerk, Rails/Rake binstubs, local Puma startup, localhost CORS preflight and local upload persistence pass. Hosted CI, OAuth callbacks, production CORS and existing production asset URLs were not tested.
+- [x] **Acceptance (scoped):** branch dependencies resolve and tested behavior passes. Production secret exposure and existing production file URLs remain unverified release checks.
+- [x] **Rollback:** no schema or production storage changes were made; revert the application commit/lockfile to roll back this phase.
+- [x] **Frontend (scoped):** search behavior is regression-tested and the local CORS preflight passes. Production Angular origins are not yet known and were not added.
+
+**Status (2026-10-30): closed for repository-local work at the owner's direction.** OAuth remains unchanged pending a separate keep/remove discussion. Before deployment, owners still need to confirm CORS origins, secret/storage topology and existing-upload URL validity; none were guessed or production-tested.
 
 ## Phase 4 — exact numeric representation
 
