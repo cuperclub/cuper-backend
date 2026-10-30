@@ -5,6 +5,7 @@ module Api
       PER_PAGE = 5
 
       before_action :authenticate_user!
+      before_action :authorize_admin!, only: [:toggle_status, :update_password]
 
       def index
         role = params[:role]
@@ -48,15 +49,10 @@ module Api
       param :id, Integer, required: true
       def update_password
         user = User.find(params[:id])
-        user.password = params[:password]
-        if user.save
-          UserMailer.notify_password_change(user, params[:password], params[:email]).deliver_now
-          render json: {status: :ok}, status: :ok
-        else
-          render json: user.errors,
-                status: :unprocessable_entity
-        end
+        user.send_reset_password_instructions
+        render json: {status: :ok}, status: :ok
       end
+
     end
   end
 end

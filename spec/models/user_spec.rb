@@ -39,4 +39,32 @@ RSpec.describe User, type: :model do
     user = build(:user)
     expect(user).to be_valid
   end
+
+  it "is an employee only after an employee membership is approved" do
+    user = create(:user)
+    employee = create(:employee, user: user)
+
+    expect(user.is_employee).to be false
+
+    employee.update!(status: "approved")
+
+    expect(user.is_employee).to be true
+  end
+
+  it "does not select a company without an approved membership" do
+    user = create(:user)
+    employee = create(:employee, user: user, status: "pending")
+    user.create_setting!(current_company: employee.company_id)
+
+    expect(user.current_view_company_id).to be_nil
+  end
+
+  it "ignores a saved company that the user is no longer approved for" do
+    user = create(:user)
+    approved = create(:employee, user: user, status: "approved")
+    other_company = create(:company, ruc: "987654321")
+    user.create_setting!(current_company: other_company.id)
+
+    expect(user.current_view_company_id).to eq(approved.company_id)
+  end
 end

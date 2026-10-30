@@ -60,24 +60,57 @@ module Api
     }
 
     def answer_request_employee
-      if @notification.kind == "request_employee" && @notification.status == "pending"
-        @notification.status = params[:status]
-        @notification.save
-        if params[:status] === "approved"
-          employee = create_employe
-          if employee.save
-            notify_company!(employee)
-            render json: { employee: employee, notification: @notification },
-                    status: :created
-          else
-            render json: employee.errors,
-                  status: :unprocessable_entity
+      status = params[:status]
+      unless ["approved", "decline"].include?(status)
+        render json: { status: ["is invalid"] }, status: :unprocessable_entity
+        return
+      end
+
+      employee = nil
+      outcome = :answered
+      begin
+        Notification.transaction do
+          @notification.lock!
+          unless @notification.kind == "request_employee" && @notification.status == "pending"
+            outcome = :already_answered
+            raise ActiveRecord::Rollback
           end
-        else
-          notify_company!(nil)
-          render json: { notification: @notification },
-                status: :created
+
+          if status == "approved"
+            partner = Employee.lock.find_by(id: @notification.from_employee_id)
+            unless partner&.role == "partner" && partner.status == "approved"
+              outcome = :partner_unapproved
+              raise ActiveRecord::Rollback
+            end
+
+            recipient = User.lock.find(@notification.to_user_id)
+            if Employee.exists?(user: recipient, company: partner.company)
+              outcome = :already_member
+              raise ActiveRecord::Rollback
+            end
+
+            employee = create_employe(partner, recipient)
+            employee.save!
+          end
+
+          @notification.update!(status: status)
+          notify_company!(employee)
         end
+      rescue ActiveRecord::RecordInvalid => error
+        render json: error.record.errors, status: :unprocessable_entity
+        return
+      end
+
+      if outcome == :already_answered
+        render json: { error: "This request has already been answered" }, status: :conflict
+      elsif outcome == :partner_unapproved
+        render json: { error: "The requesting partner is no longer approved" }, status: :forbidden
+      elsif outcome == :already_member
+        render json: { error: "User already has a membership in this company" }, status: :conflict
+      elsif employee
+        render json: { employee: employee, notification: @notification }, status: :created
+      else
+        render json: { notification: @notification }, status: :created
       end
     end
 
@@ -118,15 +151,15 @@ module Api
     private
 
     def find_notification
-      @notification = Notification.find(params[:id])
+      @notification = Notification.where(to_user_id: current_user.id).find(params[:id])
     end
 
-    def create_employe
+    def create_employe(partner, recipient)
       employee = Employee.new
-      employee.company = @notification.from_employee.company;
+      employee.company = partner.company
       employee.role = 'cashier';
       employee.status = params[:status];
-      employee.user = @notification.to_user;
+      employee.user = recipient
       employee
     end
 

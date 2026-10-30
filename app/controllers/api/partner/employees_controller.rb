@@ -1,6 +1,6 @@
 module Api
   module Partner
-    class EmployeesController < BaseController
+    class EmployeesController < Api::Partner::BaseController
       before_action :authenticate_user!
       before_action :find_company, only: [:index, :show, :update, :update_state, :create]
 
@@ -111,7 +111,7 @@ module Api
       end
 
       def find_company
-        @company = Company.find(current_user.current_view_company_id)
+        @company = find_partner_company
       end
     end
   end

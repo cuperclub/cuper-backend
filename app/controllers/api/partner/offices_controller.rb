@@ -1,8 +1,8 @@
 module Api
   module Partner
-    class OfficesController < BaseController
+    class OfficesController < Api::Partner::BaseController
       before_action :authenticate_user!
-      before_action :find_company, only: [:index, :show, :update]
+      before_action :find_company, only: [:index, :create, :show, :update]
 
       api :GET,
           "/partner/companies/offices",
@@ -42,7 +42,7 @@ module Api
       }
 
       def create
-        office = Office.new(office_params)
+        office = @company.offices.new(office_params)
         if office.save
           render :office,
                 status: :created,
@@ -116,13 +116,12 @@ module Api
           :email,
           :phone,
           :lat,
-          :long,
-          :company_id
+          :long
         )
       end
 
       def find_company
-        @company = Company.find(current_user.current_view_company_id)
+        @company = find_partner_company
       end
     end
   end

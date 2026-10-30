@@ -1,6 +1,6 @@
 module Api
   module Partner
-    class PromotionsController < BaseController
+    class PromotionsController < Api::Partner::BaseController
       PAGE = 1
       PER_PAGE = 5
 
@@ -134,7 +134,6 @@ module Api
           :start_at,
           :end_at,
           :image,
-          :office_id,
           :unlimited
         )
       end
@@ -145,7 +144,7 @@ module Api
       end
 
       def find_company
-        @company = Company.find(current_user.current_view_company_id)
+        @company = find_partner_company
       end
     end
   end
