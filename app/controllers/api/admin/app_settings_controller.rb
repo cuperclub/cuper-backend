@@ -2,6 +2,7 @@ module Api
   module Admin
     class AppSettingsController < BaseController
       before_action :authenticate_user!
+      before_action :authorize_admin!, only: [:settings, :update_settings]
 
       api :GET,
           "/admin/app_settings/settings",

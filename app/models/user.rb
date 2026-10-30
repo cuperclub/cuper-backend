@@ -59,20 +59,30 @@ class User < ActiveRecord::Base
 
   begin :validations
     validates :email, presence: true, uniqueness: true
-    validates :national_id, uniqueness: true, allow_nil: true
-    validates :name, presence: true
+  validates :national_id, uniqueness: true, allow_nil: true
+  validates :name, presence: true
   end
 
+  before_save :revoke_tokens_when_deactivated
+
   def is_employee
-    !!self.employees
+    employees.exists?(status: "approved")
+  end
+
+  def active_for_authentication?
+    super && active?
+  end
+
+  def valid_token?(token, client = "default")
+    active? && super
   end
 
   def is_cashier
-    !!self.employees.find_by_role("cashier")
+    employees.exists?(role: "cashier", status: "approved")
   end
 
   def is_partner
-    !!self.employees.find_by_role("partner")
+    employees.exists?(role: "partner", status: "approved")
   end
 
   def my_companies
@@ -84,25 +94,24 @@ class User < ActiveRecord::Base
   end
 
   def current_view_company_id
-    if self.setting
-      self.setting.current_company
-    else
-      if self.my_companies.count > 0
-        self.my_companies.first.company.id
-      else
-        if self.employees.count > 0 && self.employees.first.status != "pending"
-          self.employees.first.company.id
-        end
-      end
-    end
+    approved_employees = employees.where(status: "approved")
+    approved_employees.find_by(company_id: setting&.current_company)&.company_id ||
+      approved_employees.find_by(role: "partner")&.company_id ||
+      approved_employees.first&.company_id
   end
 
   def my_employee
-    Employee.where(user: self, company_id: self.current_view_company_id).first
+    employees.find_by(company_id: current_view_company_id, role: "partner", status: "approved")
   end
 
 
   def assign_points
     UtilService.new(self).assign_promo_points
+  end
+
+  private
+
+  def revoke_tokens_when_deactivated
+    self.tokens = {} if will_save_change_to_active? && !active?
   end
 end

@@ -23,13 +23,19 @@ class UtilService
   end
 
   def notify_employee_request
-    notification = Notification.new
-    company = user_company
-    notification.message = "La empresa: #{company.business_name} quiere registrarte como empleado"
-    notification.kind = "request_employee"
-    notification.from_employee_id = @current_user.my_employee.id
-    notification.from_user_id = @current_user.id
-    notification.to_user_id = @client.id
+    notification = nil
+    # shortcut: serializes this request path only; add a partial unique index if other writers are introduced.
+    @current_user.with_lock do
+      company = user_company
+      notification = Notification.new(
+        message: "La empresa: #{company.business_name} quiere registrarte como empleado",
+        kind: "request_employee",
+        from_employee_id: @current_user.my_employee.id,
+        from_user_id: @current_user.id,
+        to_user_id: @client.id
+      )
+      notification.save
+    end
     notification
   end
 
@@ -56,7 +62,7 @@ class UtilService
     notification.from_employee_id = @meta[:employee].nil? ? nil : @meta[:employee].id
     notification.from_user_id = @current_user.id
     notification.to_user_id = @client.id
-    notification.save
+    notification.save!
   end
 
   def notify_client_assign_points

@@ -15,5 +15,17 @@
 require 'rails_helper'
 
 RSpec.describe Employee, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  it "rejects roles and statuses outside the supported sets" do
+    employee = build(:employee, role: "manager", status: "active")
+
+    expect(employee).not_to be_valid
+    expect(employee.errors.attribute_names).to include(:role, :status)
+  end
+
+  it "does not allow an existing membership to return to pending" do
+    employee = create(:employee, status: "approved", skip_notification_email: true)
+
+    expect(employee.update(status: "pending")).to be(false)
+    expect(employee.reload.status).to eq("approved")
+  end
 end

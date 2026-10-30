@@ -1,8 +1,9 @@
 module Api
   module Admin
     class CompaniesController < BaseController
-      before_action :authenticate_user!,
-                    :find_company,
+      before_action :authenticate_user!
+      before_action :authorize_admin!, only: [:index, :show, :change_status]
+      before_action :find_company,
                     except: [:index]
 
       api :GET,

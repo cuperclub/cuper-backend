@@ -60,6 +60,10 @@ module Api
 
 
     def current_view
+      unless current_user.employees.exists?(company_id: params[:company_id], status: "approved")
+        return render json: { error: "Company is not available to this user" }, status: :forbidden
+      end
+
       setting = current_user.setting
       if setting
         setting.current_company = params[:company_id]
@@ -119,6 +123,8 @@ module Api
 
     def validate_plan(company_id)
       current_plan = PlanCompany.find_by_company_id(company_id)
+      return false unless current_plan
+
       day_in_seconds = 86400
       expired_date = current_plan.created_at + (current_plan.plan.days * day_in_seconds)
       expired_plan = expired_date < DateTime.now
