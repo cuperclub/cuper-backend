@@ -12,5 +12,10 @@
 require 'rails_helper'
 
 RSpec.describe Setting, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  it "belongs to a user" do
+    setting = build(:setting, user: nil)
+
+    expect(setting).not_to be_valid
+    expect(setting.errors[:user]).to be_present
+  end
 end

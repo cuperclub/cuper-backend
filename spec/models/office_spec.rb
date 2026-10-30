@@ -18,5 +18,10 @@
 require 'rails_helper'
 
 RSpec.describe Office, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  it "requires a company, name, and address" do
+    office = build(:office, company: nil, name: nil, address: nil)
+
+    expect(office).not_to be_valid
+    expect(office.errors.attribute_names).to include(:company, :name, :address)
+  end
 end

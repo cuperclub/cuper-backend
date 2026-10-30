@@ -21,5 +21,10 @@
 require 'rails_helper'
 
 RSpec.describe Promotion, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  it "requires the fields needed to identify and price a promotion" do
+    promotion = build(:promotion, title: nil, terms: nil, points_required: nil)
+
+    expect(promotion).not_to be_valid
+    expect(promotion.errors.attribute_names).to include(:title, :terms, :points_required)
+  end
 end
