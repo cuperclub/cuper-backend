@@ -15,14 +15,18 @@ module Api
     end
 
     def create
-      transaction_input_params = params[:transaction_input]
-      user = User.find_by(id: transaction_input_params[:user_id])
+      transaction_input_params = params.require(:transaction_input)
+      user = transaction_input_params[:user_id] ?
+        User.find_by(id: transaction_input_params[:user_id]) :
+        User.find_by(national_id: transaction_input_params[:national_id])
       points = final_points
-      transaction_input = TransactionInput.new(user: user,
-                          employee: @employee,
-                          points: points,
-                          invoice_number: transaction_input_params[:invoice_number])
-      if transaction_input.save
+      transaction_input, saved = TransactionInput.accrue(
+        user: user,
+        employee: @employee,
+        points: points,
+        invoice_number: transaction_input_params[:invoice_number]
+      )
+      if saved
         UtilService.new(user,
                         current_user,
                         {
@@ -43,9 +47,9 @@ module Api
     private
 
     def find_employee
-      @employee = Employee.where(company: get_company,
-                                  user: current_user
-                                ).first
+      @employee = current_user.employees
+        .where(company: get_company, status: "approved")
+        .first!
     end
 
     def get_company
@@ -59,8 +63,14 @@ module Api
 
     def final_points
       transaction_input_params = params[:transaction_input]
-      points = transaction_input_params[:points]
-      points * get_points_per_dollar
+      points = Float(transaction_input_params[:points], exception: false)
+      return unless points&.finite?
+
+      multiplier = get_points_per_dollar
+      return unless multiplier.is_a?(Integer)
+
+      result = points * multiplier
+      result if result.finite?
     end
   end
 end

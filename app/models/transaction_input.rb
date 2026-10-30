@@ -27,9 +27,21 @@ class TransactionInput < ApplicationRecord
     after_create :update_user_points
   end
 
+  def self.accrue(user:, employee:, points:, invoice_number:)
+    input = new(user: user, employee: employee, points: points, invoice_number: invoice_number)
+    saved = if user
+      transaction do
+        user.with_lock { input.save }
+      end
+    else
+      input.save
+    end
+
+    [input, saved]
+  end
+
   def update_user_points
-    user.points = user.points + points
-    user.save
+    user.update!(points: (user.points || 0) + points)
   end
 
   def cannot_assign_yourself
